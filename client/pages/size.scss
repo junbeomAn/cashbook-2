@@ -1,0 +1,50 @@
+$heading-large: 48px;
+$heading-small: 24px;
+
+$text-large: 22px;
+$text-medium: 18px;
+$text-regular: 16px;
+$text-small: 14px $text-xsmall 12px;
+
+$text-weight: 400;
+$text-weight-bold: 500;
+
+@mixin display-small() {
+  font-size: $heading-small;
+  font-weight: $text-weight;
+}
+
+@mixin display-large() {
+  font-size: $heading-large;
+  font-weight: $text-weight;
+}
+
+@mixin body-regular() {
+  font-size: $text-regular;
+  font-weight: $text-weight;
+}
+
+@mixin body-medium() {
+  font-size: $text-medium;
+  font-weight: $text-weight;
+}
+
+@mixin body-large() {
+  font-size: $text-large;
+  font-weight: $text-weight;
+}
+
+@mixin bold-small() {
+  font-size: $text-xsmall;
+  font-weight: $text-weight-bold;
+}
+
+@mixin bold-medium() {
+  font-size: $text-small;
+  font-weight: $text-weight-bold;
+}
+
+@mixin bold-large() {
+  font-size: $text-regular;
+  font-weight: $text-weight-bold;
+}
