@@ -1,7 +1,5 @@
-import "./index.scss";
+import './index.scss';
 
-const hello = () => {
-  return "hello";
-};
+const hello = () => 'hello';
 
 console.log(hello());
