@@ -8,6 +8,7 @@
     "no-console": "off",
     "import/no-unresolved": "off",
     "no-underscore-dangle": "off",
+    "class-methods-use-this": "off",
     "prettier/prettier": [
       "error",
       {
