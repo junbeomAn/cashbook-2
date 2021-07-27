@@ -7,6 +7,7 @@
   "rules": {
     "no-console": "off",
     "import/no-unresolved": "off",
+    "no-underscore-dangle": "off",
     "prettier/prettier": [
       "error",
       {
