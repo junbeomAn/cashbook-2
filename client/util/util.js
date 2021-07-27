@@ -1,3 +1,5 @@
+const RANDOM_ID_NUMBER_COUNT = 8;
+
 function deepCopy(obj) {
   const clone = {};
   obj.keys().forEach((key) => {
@@ -10,10 +12,16 @@ function deepCopy(obj) {
   return clone;
 }
 
+function getUniqueId(componentName) {
+  return `${componentName}-id${Math.floor(
+    Math.random() * (10 * RANDOM_ID_NUMBER_COUNT)
+  )}`;
+}
+
 const $ = {
   qs: (query) => document.querySelector(query),
   qsa: (query) => document.querySelectorAll(query),
   create: (element) => document.createElement(element),
 };
 
-export { deepCopy, $ };
+export { deepCopy, $, getUniqueId };
