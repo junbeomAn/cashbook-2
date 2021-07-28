@@ -139,13 +139,13 @@ export default class Component {
     if (typeof query === 'number') {
       for (let i = 0; i < keys.length; i += 1) {
         if (i === query) {
-          return this.childs[keys[i]];
+          return this.childs[keys[i]].getTemplate();
         }
       }
     } else if (typeof query === 'string') {
-      return this.childs[query];
+      return this.childs[query].getTemplate();
     }
-    return null;
+    return '';
   }
 
   defineTemplate() {
