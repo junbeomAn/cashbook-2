@@ -61,13 +61,22 @@ export default class Header extends Component {
         onClick: () => {
           const nowState = this.componentState;
           let { year, month } = nowState;
+          const $month = this.querySelector('.header-date-month');
+          const $year = this.querySelector('.header-date-year');
           if (month === 1) {
             year -= 1;
             month = 12;
+            $year.classList.add('date-rotate-transform');
+            $month.classList.add('date-rotate-transform');
           } else {
             month -= 1;
+            $month.classList.add('date-rotate-transform');
           }
-          this.componentState = { year, month };
+          setTimeout(() => {
+            $year.classList.remove('date-rotate-transform');
+            $month.classList.remove('date-rotate-transform');
+            this.componentState = { year, month };
+          }, 300);
         },
       },
     });
@@ -79,13 +88,22 @@ export default class Header extends Component {
         onClick: () => {
           const nowState = this.componentState;
           let { year, month } = nowState;
+          const $month = this.querySelector('.header-date-month');
+          const $year = this.querySelector('.header-date-year');
           if (month === 12) {
             year += 1;
             month = 1;
+            $year.classList.add('date-rotate-transform');
+            $month.classList.add('date-rotate-transform');
           } else {
             month += 1;
+            $month.classList.add('date-rotate-transform');
           }
-          this.componentState = { year, month };
+          setTimeout(() => {
+            $year.classList.remove('date-rotate-transform');
+            $month.classList.remove('date-rotate-transform');
+            this.componentState = { year, month };
+          }, 300);
         },
       },
     });

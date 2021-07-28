@@ -160,6 +160,10 @@ export default class Component {
     return '';
   }
 
+  querySelector(query) {
+    return this.innerNode.querySelector(query);
+  }
+
   defineTemplate() {
     // 상속받은곳에서 직접 구현해야 하는 Template을 return 하는 함수.
     // useEvent도 여기서 사용해서 event 를 정의해줘야한다.
