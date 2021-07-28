@@ -12,7 +12,6 @@ export default class TestComponent extends Component {
 
   defineTemplate() {
     this.addEvent('.helloText', 'click', () => {
-      console.log('Clicked');
       const { count } = this.componentState;
       this.componentState = { count: count + 1 };
     });

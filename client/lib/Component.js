@@ -47,12 +47,27 @@ export default class Component {
 
   update(prevState, newState) {
     if (this.shouldComponentUpdate(prevState, newState)) {
-      if (this.innerNode instanceof HTMLElement) {
-        if (this.$target instanceof HTMLElement) {
-          this.$target.removeChild(this.innerNode);
-        }
+      let $this = null;
+      if (this.innerNode.parentNode) {
+        $this = this.innerNode;
+      } else {
+        $this = document.querySelector(`#${this.id}`);
+        this.$target = $this.parentNode;
       }
-      this.render();
+
+      this.preTemplate();
+      const $container = $.create('div');
+      this.innerHTML = this.defineTemplate();
+      $container.innerHTML = this.innerHTML;
+      $container.id = this.id;
+      this.innerNode = $container;
+
+      if (this.$target) {
+        this.$target.replaceChild(this.innerNode, $this);
+      }
+
+      // Event 재등록
+      this.setEvent(this.innerNode);
     }
   }
 
@@ -81,8 +96,12 @@ export default class Component {
   setEvent($eventDest) {
     // 이벤트 등록은 반드시 render이후에 실행되어야 한다.
     // 자신의 내부에 있는 객체에만 등록한다.
-    // const $this = $eventDest.querySelector(`#${this.id}`);
+    this.childs.forEach((child) => {
+      child.setEvent($eventDest);
+    });
+
     const $this = $eventDest;
+
     for (let j = 0; j < this.eventList.length; j += 1) {
       const { target, type, callback } = this.eventList[j];
       if (target instanceof HTMLElement) {
@@ -90,7 +109,7 @@ export default class Component {
         target.addEventListener(type, callback);
       } else if (typeof target === 'string') {
         // 만약 등록된 목표 객체가 문자열이면 Query 문으로 "모두" 찾아서 등록
-        const $eventTarget = $this.querySelectorAll(target);
+        const $eventTarget = $this.querySelectorAll(`#${this.id} ${target}`); // 자신의 자손중 목표 선택자를 찾아냄.
         for (let i = 0; i < $eventTarget.length; i += 1) {
           $eventTarget[i].addEventListener(type, callback);
         }
@@ -122,6 +141,7 @@ export default class Component {
     const $container = $.create('div');
     this.innerHTML = this.defineTemplate();
     $container.innerHTML = this.innerHTML;
+    $container.id = this.id;
     this.innerNode = $container;
 
     // Event 재등록
