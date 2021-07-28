@@ -3,12 +3,8 @@ import { deepCopy, getUniqueId } from '../util/util';
 export default class Component extends HTMLElement {
   constructor(params) {
     super();
-    if (!params) {
-      // innerHTML에 <test-component> 같이 추가하게 되면 현재 Constructor를 호출한다 ( params는 null로.. )
-      // 따라서 innerHTML에서 Parsing하는 동작은 무시해주기 위해서 이렇게 사용한다.
-      return this;
-    }
-
+    // innerHTML에 <test-component> 같이 추가하게 되면 현재 Constructor를 호출한다 ( params는 null로.. )
+    // 따라서 innerHTML에서 Parsing하는 동작은 무시해주기 위해서 이렇게 사용한다.
     const { parent, $target, componentName } = params;
     this.componentName = componentName;
     try {
@@ -49,7 +45,6 @@ export default class Component extends HTMLElement {
   }
 
   update(prevState, newState) {
-    console.log(this.componentState);
     if (this.shouldComponentUpdate(prevState, newState)) {
       this.innerHTML = this.defineTemplate();
       /*
@@ -86,8 +81,6 @@ export default class Component extends HTMLElement {
   }
 
   setEvent() {
-    this.childs.forEach((child) => child.setEvent());
-
     for (let j = 0; j < this.eventList.length; j += 1) {
       const { target, type, callback } = this.eventList[j];
       if (target instanceof HTMLElement) {
@@ -101,6 +94,12 @@ export default class Component extends HTMLElement {
         }
       }
     }
+  }
+
+  preTemplate() {}
+
+  resolveChild(index) {
+    return this.childs[index];
   }
 
   defineTemplate() {
@@ -117,7 +116,9 @@ export default class Component extends HTMLElement {
 
   render() {
     // Caution! 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
+    this.preTemplate();
     this.innerHTML = this.defineTemplate();
+    // <test-component> </test-component>
     this.setEvent();
   }
 

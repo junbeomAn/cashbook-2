@@ -22,7 +22,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "webpack",
-    "build:watch": "nodemon -e js --exec 'webpack'"
+    "build:watch": "nodemon -e js,scss --exec 'webpack'"
   },
   "author": "",
   "license": "ISC"
