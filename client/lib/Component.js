@@ -1,18 +1,24 @@
 import { deepCopy, $, getUniqueId } from '../util/util';
 
 export default class Component extends HTMLElement {
-  constructor({ parent, controller = null, $target = null }) {
+  constructor(params) {
     super();
+    const { parent, controller, $target } = params;
     this._componentState = {};
     this.componentName = 'default-component';
     this.eventList = [];
-    this.children = [];
+    this.childs = [];
+    console.log(parent);
+
     if (parent instanceof Component) {
-      parent.children.push(this);
+      this.parent = parent;
+      this.parent.childs.push(this);
     }
+
     this.controller = controller;
     this.$target = $target;
     this.id = getUniqueId(this.componentName);
+    console.log(this);
     this.generateTemplate();
   }
 
@@ -35,10 +41,7 @@ export default class Component extends HTMLElement {
       // Component 내의 객체들은 literal 로 추가되기 때문에 id로 찾아주어야 한다.
       const $documentDest = $parent.querySelector(this.id);
       $documentDest.innerHTML = this.innerHTML;
-      $parent.replaceChild(this, $documentDest);
-      this.addEvent();
-
-      this.componentDidUpdate();
+      this.setEvent();
     }
   }
 
@@ -57,7 +60,7 @@ export default class Component extends HTMLElement {
     console.log('Changed!', this, attrName, oldVal, newVal);
   }
 
-  useEvent(target, type, callback) {
+  addEvent(target, type, callback) {
     /**
      *  target: [String][HTMLElement] 이벤트가 붙을 대상.
      *  type: [String] Event String ex ) click.
@@ -66,11 +69,11 @@ export default class Component extends HTMLElement {
     this.eventList.push({ target, type, callback });
   }
 
-  addEvent() {
-    this.children.forEach((child) => child.addEvent());
+  setEvent() {
+    this.childs.forEach((child) => child.setEvent());
 
-    this.eventList.keys().forEach((eventObject) => {
-      const { target, type, callback } = eventObject;
+    for (let j = 0; j < this.eventList.length; j += 1) {
+      const { target, type, callback } = this.eventList[j];
       if (target instanceof HTMLElement) {
         // 만약 등록된 목표 객체가 HTMLElement 라면 바로 등록
         target.addEventListener(type, callback);
@@ -81,7 +84,7 @@ export default class Component extends HTMLElement {
           $eventTarget[i].addEventListener(type, callback);
         }
       }
-    });
+    }
   }
 
   defineTemplate() {
@@ -99,13 +102,14 @@ export default class Component extends HTMLElement {
   generateTemplate() {
     const $template = $.create(this.componentName);
     $template.innerHTML = this.defineTemplate();
-    this.addEvent();
+    this.setEvent();
+    console.log('Called1');
   }
 
   render() {
     // Caution! 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
     this.generateTemplate();
-    this.addEvent();
+    this.setEvent();
   }
 
   register() {
@@ -118,7 +122,7 @@ export default class Component extends HTMLElement {
 
   componentDidMount() {}
 
-  static componentShouldUpdate(prevState, newState) {
+  static shouldComponentUpdate(prevState, newState) {
     // 더 자세한 비교 방법은 재정의하여 정의한다.
     if (prevState !== newState) {
       return true;
@@ -126,7 +130,3 @@ export default class Component extends HTMLElement {
     return false;
   }
 }
-
-// 위의 Component를 상속받은 Class를 사용하려면 다음의 등록과정이 반드시 필요합니다.
-// customElements.define('component-com', Component); // "-" 가 반드시 포함된 이름이어야 합니다.
-// 그러나 2번 실행하면 오류가 생기므로, 반드시 모든 파일에서 1회만 수행되어야 합니다.
