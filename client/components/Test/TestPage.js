@@ -3,6 +3,14 @@ import TestComponent from './TestComponent';
 import './Test.scss';
 
 export default class TestPage extends Component {
+  constructor(params) {
+    super({
+      ...params,
+      componentName: 'test-page',
+      componentState: { count: 0 },
+    });
+  }
+
   defineTemplate() {
     const $testComponent1 = new TestComponent({
       parent: this,

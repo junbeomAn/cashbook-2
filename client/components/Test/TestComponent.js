@@ -3,7 +3,11 @@ import './Test.scss';
 
 export default class TestComponent extends Component {
   constructor(params) {
-    super({ ...params, componentState: { count: 0 } });
+    super({
+      ...params,
+      componentName: 'test-component',
+      componentState: { count: 0 },
+    });
   }
 
   defineTemplate() {
