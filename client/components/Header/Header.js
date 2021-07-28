@@ -2,7 +2,10 @@ import Component from '@/lib/Component';
 import leftArrow from '@/asset/left-arrow.svg';
 import rightArrow from '@/asset/right-arrow.svg';
 import Button from '@/components/Button/Button';
-import { CALENDAR_NUMBER_CHANGE_ANIMATION_TIME } from '@/util/constant';
+import {
+  CALENDAR_NUMBER_CHANGE_ANIMATION_TIME,
+  HEADER_TEXT,
+} from '@/util/constant';
 import './Header.scss';
 
 export default class Header extends Component {
@@ -104,7 +107,7 @@ export default class Header extends Component {
     <div class="header-container">
       <div class="header-contents-container">
         <div class="logo-container">
-          <p class="logo-text">우아한 가계부</p>
+          <p class="logo-text">${HEADER_TEXT}</p>
         </div>
         <div class="header-total-date-container">
           ${this.resolveChild('left-arrow')}
