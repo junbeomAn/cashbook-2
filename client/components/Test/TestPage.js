@@ -7,7 +7,6 @@ export default class TestPage extends Component {
     super({
       ...params,
       componentName: 'test-page',
-      componentState: { count: 0 },
     });
   }
 
