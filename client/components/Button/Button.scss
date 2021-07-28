@@ -1,0 +1,63 @@
+@import '../../pages/color';
+@import '../../pages/size';
+* {
+  margin: 0px;
+  padding: 0px;
+}
+.button-text {
+  &-white {
+    color: $off-white;
+  }
+  &-mint {
+    color: $baemin-primary;
+  }
+  &-white {
+    color: $off-white;
+  }
+  &-small {
+    @include body-small();
+  }
+  &-regular {
+    @include body-regular();
+  }
+  &-middle {
+    @include body-medium();
+  }
+  &-large {
+    @include body-large();
+  }
+}
+
+.button-background {
+  &-transparent {
+    background-color: rgba(0,0,0,0);
+  }
+  &-transparent:hover {
+    background-color: rgba(0,0,0,0.5);
+  }
+  &-white {
+    background-color: $off-white;
+  }
+  &-white:hover {
+    background-color: darken($off-white, 10%);
+  }
+  &-mint {
+    background-color: $baemin-primary;
+  }
+  &-mint:hover {
+    background-color: $baemin-third;
+  }
+}
+
+.button-default {
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  min-width: 200px;
+  min-height: 50px;
+  transition-duration: .2s;
+}

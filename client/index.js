@@ -5,7 +5,7 @@ import Controller from './lib/Controller';
 window.onload = () => {
   const model = new Model();
   const controller = new Controller({ model });
-  const $TestPage = new TestPage({
+  new TestPage({
     parent: null,
     $target: document.body,
     controller,
