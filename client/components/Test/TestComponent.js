@@ -13,7 +13,7 @@ export default class TestComponent extends Component {
   defineTemplate() {
     this.addEvent('.helloText', 'click', () => {
       const { count } = this.componentState;
-      this.setComponentState({ count: count + 1 });
+      this.componentState = { count: count + 1 };
     });
     return `
       <div class="container">

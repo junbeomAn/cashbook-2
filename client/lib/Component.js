@@ -42,20 +42,23 @@ export default class Component extends HTMLElement {
   }
 
   set componentState(changedState) {
-    const prevState = this.getComponentState();
+    const prevState = this.componentState;
     this._componentState = { ...this._componentState, ...changedState };
-    const newState = this.getComponentState();
+    const newState = this.componentState;
     this.update(prevState, newState);
   }
 
   update(prevState, newState) {
+    console.log(this.componentState);
     if (this.shouldComponentUpdate(prevState, newState)) {
-      this.generateTemplate();
+      this.innerHTML = this.defineTemplate();
+      /*
       const $parent = this.parentElement;
 
       // Component 내의 객체들은 literal 로 추가되기 때문에 id로 찾아주어야 한다.
       const $documentDest = $parent.querySelector(this.id);
       $documentDest.textContent = this.innerHTML;
+      */
       this.setEvent();
     }
   }
@@ -66,7 +69,20 @@ export default class Component extends HTMLElement {
      *  type: [String] Event String ex ) click.
      *  callback: [Function] 이벤트 발생시 실행할 함수.
      * */
-    this.eventList.push({ target, type, callback });
+    let i = 0;
+    for (i = 0; i < this.eventList.length; i += 1) {
+      // 이벤트 리스트에 있다면 갱신.
+      if (
+        this.eventList[i].target === target &&
+        this.eventList[i].type === type
+      ) {
+        this.eventList[i].callback = callback;
+      }
+    }
+    if (i === this.eventList.length) {
+      // 만약 eventList에 없으면 등록.
+      this.eventList.push({ target, type, callback });
+    }
   }
 
   setEvent() {
@@ -123,7 +139,7 @@ export default class Component extends HTMLElement {
 
   componentDidMount() {}
 
-  static shouldComponentUpdate(prevState, newState) {
+  shouldComponentUpdate(prevState, newState) {
     // 더 자세한 비교 방법은 재정의하여 정의한다.
     if (prevState !== newState) {
       return true;
