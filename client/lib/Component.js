@@ -19,6 +19,7 @@ export default class Component {
     this.childs = {}; // 이벤트 등록, update시 필요한 자식들
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
     this.innerHTML = null; // innerNode의 또 다른 innerHTML 표현 ( Template 표현 )
+    this.containerClass = params.containerClass || 'adjustFit';
 
     // Parent는 Component가 붙어있을 또 다른 Component 객체입니다. 최상위 객체는 null을 가집니다.
     if (parent !== null && !(parent instanceof Component)) {
@@ -143,7 +144,13 @@ export default class Component {
         }
       }
     } else if (typeof query === 'string') {
-      return this.childs[query].getTemplate();
+      try {
+        return this.childs[query].getTemplate();
+      } catch (error) {
+        throw new Error(
+          `Component : resolveChild 에 keyword : ${query}에 해당하는 값이 없습니다.`
+        );
+      }
     }
     return '';
   }
@@ -158,12 +165,13 @@ export default class Component {
 
   getTemplate() {
     // innerNode의 HTML 문자열을 반환합니다. id를 붙여서 반환합니다.
-    return `<div id=${this.id}> ${this.innerHTML} </div>`;
+    return `<div class=${this.containerClass} id=${this.id}> ${this.innerHTML} </div>`;
   }
 
   setTemplate() {
     // 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
     const $container = $.create('div');
+    $container.classList.add(this.containerClass);
     this.innerHTML = this.defineTemplate();
     $container.innerHTML = this.innerHTML;
     $container.id = this.id;
