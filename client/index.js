@@ -10,7 +10,6 @@ window.onload = () => {
     $target: document.body,
     controller,
   }); // View
-  $TestPage.registerPage();
 };
 /*
 model.initData();

@@ -27,7 +27,6 @@ export default class TestPage extends Component {
     });
     new TestComponent({
       parent: this,
-      keyword: 'third-test-component',
     });
   }
 

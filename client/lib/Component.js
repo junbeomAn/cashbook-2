@@ -68,13 +68,13 @@ export default class Component {
       let $this = null;
       if (this.innerNode.parentNode) {
         $this = this.innerNode;
+        this.$target = $this.parentNode;
       } else {
         $this = document.querySelector(`#${this.id}`);
         this.$target = $this.parentNode;
       }
 
       this.setTemplate();
-
       if (this.$target) {
         this.$target.replaceChild(this.innerNode, $this);
       }
@@ -98,6 +98,7 @@ export default class Component {
         this.eventList[i].type === type
       ) {
         this.eventList[i].callback = callback;
+        break;
       }
     }
     if (i === this.eventList.length) {
@@ -161,16 +162,19 @@ export default class Component {
   }
 
   setTemplate() {
-    // Caution! 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
-    this.preTemplate();
+    // 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
     const $container = $.create('div');
     this.innerHTML = this.defineTemplate();
     $container.innerHTML = this.innerHTML;
     $container.id = this.id;
     this.innerNode = $container;
+    Object.keys(this.childs).forEach((key) => {
+      this.childs[key].setTemplate();
+    });
   }
 
   render() {
+    this.preTemplate();
     this.setTemplate();
 
     // Event 재등록
