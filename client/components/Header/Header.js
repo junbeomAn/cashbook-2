@@ -1,4 +1,4 @@
-import Component from '../../lib/Component';
+import Component from '@/lib/Component';
 
 export default class Header extends Component {
   constructor(params) {

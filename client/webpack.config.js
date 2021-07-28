@@ -1,15 +1,14 @@
-const fs = require("fs");
-const path = require("path");
-const webpack = require("webpack");
-const DirectoryNamedWebpackPlugin = require("directory-named-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const path = require('path');
+const webpack = require('webpack');
+const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
-  mode: "development",
-  entry: [path.resolve(__dirname, `index.js`)] /* Loading Script Need */,
+  mode: 'development',
+  entry: [path.resolve(__dirname, 'index.js')] /* Loading Script Need */,
   output: {
-    path: path.resolve(__dirname, "../public/dist"),
-    filename: "index.js" /* [name].js */,
+    path: path.resolve(__dirname, '../public/dist'),
+    filename: 'index.js' /* [name].js */,
   },
   module: {
     rules: [
@@ -17,15 +16,15 @@ const config = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/env"],
+            presets: ['@babel/env'],
           },
         },
       },
       {
         test: /\.s[ac]ss$/,
-        use: ["style-loader", "css-loader", "sass-loader"],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
@@ -33,18 +32,21 @@ const config = {
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       API_END_POINT:
-        process.env.NODE_ENV === "development"
-          ? JSON.stringify("http://localhost:3000")
-          : JSON.stringify(""),
+        process.env.NODE_ENV === 'development'
+          ? JSON.stringify('http://localhost:3000')
+          : JSON.stringify(''),
     }),
   ],
   optimization: {},
   resolve: {
-    modules: ["node_modules"],
-    extensions: [".js", ".json", ".jsx", ".css"],
+    modules: ['node_modules'],
+    alias: {
+      '@': path.resolve(__dirname, ''),
+    },
+    extensions: ['.js', '.json', '.jsx', '.css'],
     plugins: [new DirectoryNamedWebpackPlugin()],
   },
-  devtool: "eval-cheap-source-map",
+  devtool: 'eval-cheap-source-map',
 };
 
 module.exports = config;

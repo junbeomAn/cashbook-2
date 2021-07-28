@@ -1,4 +1,4 @@
-import Component from '../../lib/Component';
+import Component from '@/lib/Component';
 import './Test.scss';
 
 export default class TestComponent extends Component {
