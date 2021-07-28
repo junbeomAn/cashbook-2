@@ -17,36 +17,77 @@ export default class Header extends Component {
     new Button({
       parent: this,
       keyword: 'history',
-      text: '내역',
-      textSize: 'small',
-      textColor: 'mint',
-      backgroundColor: 'white',
+      props: {
+        text: '내역',
+        textSize: 'small',
+        textColor: 'mint',
+        backgroundColor: 'white',
+        onClick: () => {
+          console.log('TODO : move to History');
+        },
+      },
     });
     new Button({
       parent: this,
       keyword: 'calendar',
-      text: '달력',
-      textSize: 'small',
-      textColor: 'mint',
-      backgroundColor: 'white',
+      props: {
+        text: '달력',
+        textSize: 'small',
+        textColor: 'mint',
+        backgroundColor: 'white',
+        onClick: () => {
+          console.log('TODO : move to calendar');
+        },
+      },
     });
     new Button({
       parent: this,
       keyword: 'chart',
-      text: '통계',
-      textSize: 'small',
-      textColor: 'mint',
-      backgroundColor: 'white',
+      props: {
+        text: '통계',
+        textSize: 'small',
+        textColor: 'mint',
+        backgroundColor: 'white',
+        onClick: () => {
+          console.log('TODO : move to chart');
+        },
+      },
     });
     new Button({
       parent: this,
       keyword: 'left-arrow',
-      imgSrc: leftArrow,
+      props: {
+        imgSrc: leftArrow,
+        onClick: () => {
+          const nowState = this.componentState;
+          let { year, month } = nowState;
+          if (month === 1) {
+            year -= 1;
+            month = 12;
+          } else {
+            month -= 1;
+          }
+          this.componentState = { year, month };
+        },
+      },
     });
     new Button({
       parent: this,
       keyword: 'right-arrow',
-      imgSrc: rightArrow,
+      props: {
+        imgSrc: rightArrow,
+        onClick: () => {
+          const nowState = this.componentState;
+          let { year, month } = nowState;
+          if (month === 12) {
+            year += 1;
+            month = 1;
+          } else {
+            month += 1;
+          }
+          this.componentState = { year, month };
+        },
+      },
     });
   }
 

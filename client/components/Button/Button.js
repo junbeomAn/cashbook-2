@@ -7,21 +7,21 @@ export default class Header extends Component {
       ...params,
       componentName: 'button',
       containerClass: 'smallFit',
-      componentState: {
-        text: params.text || '',
-        textSize: params.textSize || 'small',
-        imgSrc: params.imgSrc || '',
-        backgroundColor: params.backgroundColor || 'transparent',
-        textColor: params.textColor || 'white',
-      },
     });
   }
 
-  preTemplate() {}
+  preTemplate() {
+    if (this.props.onClick) {
+      this.addEvent('button', 'click', this.props.onClick);
+    }
+  }
 
   defineTemplate() {
-    const { backgroundColor, imgSrc, textColor, textSize, text } =
-      this.componentState;
+    const backgroundColor = this.props.backgroundColor || 'transparent';
+    const imgSrc = this.props.imgSrc || '';
+    const textColor = this.props.textColor || 'white';
+    const textSize = this.props.textColor || 'small';
+    const text = this.props.textColor || '';
     return `
       <button
         class="button-default button-background-${backgroundColor}" 
