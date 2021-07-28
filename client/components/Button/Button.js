@@ -6,6 +6,7 @@ export default class Header extends Component {
     super({
       ...params,
       componentName: 'button',
+      containerClass: 'smallFit',
       componentState: {
         text: params.text || '',
         textSize: params.textSize || 'small',
@@ -24,7 +25,7 @@ export default class Header extends Component {
     return `
       <button
         class="button-default button-background-${backgroundColor}" 
-        style="background-image: ${imgSrc}">
+        style="background-image: url(${imgSrc})">
           <p class="button-text-${textColor} button-text-${textSize}">${text}</p>
       </button>
     `;

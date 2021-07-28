@@ -1,9 +1,7 @@
 @import '../../pages/color';
 @import '../../pages/size';
-* {
-  margin: 0px;
-  padding: 0px;
-}
+@import '../../pages/reset';
+
 .button-text {
   &-white {
     color: $off-white;
@@ -20,7 +18,7 @@
   &-regular {
     @include body-regular();
   }
-  &-middle {
+  &-medium {
     @include body-medium();
   }
   &-large {
@@ -31,9 +29,6 @@
 .button-background {
   &-transparent {
     background-color: rgba(0,0,0,0);
-  }
-  &-transparent:hover {
-    background-color: rgba(0,0,0,0.5);
   }
   &-white {
     background-color: $off-white;
@@ -57,7 +52,9 @@
   text-align: center;
   cursor: pointer;
   border-radius: 10px;
-  min-width: 200px;
-  min-height: 50px;
+  padding: 4px 12px 4px 12px;
+  min-width: 20px;
+  min-height: 20px;
+  background-repeat: no-repeat;
   transition-duration: .2s;
 }
