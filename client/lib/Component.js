@@ -2,28 +2,41 @@ import { deepCopy, getUniqueId, $ } from '../util/util';
 
 export default class Component {
   constructor(params) {
-    const { parent, $target, componentName } = params;
+    const { parent, $target } = params;
+    let { componentName } = params;
 
     // Component 외부 요소 정의
     this.controller = params.controller;
 
     // Component 내부 상태 정의
+    if (!componentName) {
+      componentName = getUniqueId();
+    }
+    this.componentName = componentName; // Unique ID를 만들기 위한 용도
     this.id = getUniqueId(this.componentName);
     this._componentState = params.componentState;
     this.eventList = [];
-    this.childs = {};
-    this.innerNode = {};
-    this.innerHTML = null;
-    this.componentName = componentName; // Unique ID를 만들기 위한 용도
+    this.childs = {}; // 이벤트 등록, update시 필요한 자식들
+    this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
+    this.innerHTML = null; // innerNode의 또 다른 innerHTML 표현 ( Template 표현 )
 
+    // Parent는 Component가 붙어있을 또 다른 Component 객체입니다. 최상위 객체는 null을 가집니다.
+    if (parent !== null && !(parent instanceof Component)) {
+      throw new Error('Component : 옳바르지 못한 parent가 설정되었습니다.');
+    }
     this.parent = parent;
+    // 부모의 자식으로 자신을 설정.
     if (parent instanceof Component) {
       if (params.keyword) {
+        // query keyword 설정시 해당 keyword를 key로 자신을 설정.
         this.parent.childs[params.keyword] = this;
       } else {
+        // query keyword 설정하지 않을 시 자신의 ID를 key로 설정.
         this.parent.childs[this.id] = this;
       }
     }
+
+    // target은 Component Node 객체를 붙일 HTMLelement입니다.
     if ($target && !($target instanceof HTMLElement)) {
       throw new Error(
         'Component : $target은 반드시 HTMLelement거나 null 혹은 undefined 이어야합니다.'
@@ -50,6 +63,7 @@ export default class Component {
   }
 
   update(prevState, newState) {
+    // 변경 사항이 있을 때에만 update.
     if (this.shouldComponentUpdate(prevState, newState)) {
       let $this = null;
       if (this.innerNode.parentNode) {
@@ -59,12 +73,7 @@ export default class Component {
         this.$target = $this.parentNode;
       }
 
-      this.preTemplate();
-      const $container = $.create('div');
-      this.innerHTML = this.defineTemplate();
-      $container.innerHTML = this.innerHTML;
-      $container.id = this.id;
-      this.innerNode = $container;
+      this.setTemplate();
 
       if (this.$target) {
         this.$target.replaceChild(this.innerNode, $this);
@@ -124,6 +133,7 @@ export default class Component {
   preTemplate() {}
 
   resolveChild(query) {
+    // preTemplate에서 정의한 자식을 query 문자열이나 숫자로 가져오는 함수.
     const keys = Object.keys(this.childs);
     if (typeof query === 'number') {
       for (let i = 0; i < keys.length; i += 1) {
@@ -146,10 +156,11 @@ export default class Component {
   }
 
   getTemplate() {
+    // innerNode의 HTML 문자열을 반환합니다. id를 붙여서 반환합니다.
     return `<div id=${this.id}> ${this.innerHTML} </div>`;
   }
 
-  render() {
+  setTemplate() {
     // Caution! 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
     this.preTemplate();
     const $container = $.create('div');
@@ -157,6 +168,10 @@ export default class Component {
     $container.innerHTML = this.innerHTML;
     $container.id = this.id;
     this.innerNode = $container;
+  }
+
+  render() {
+    this.setTemplate();
 
     // Event 재등록
     this.setEvent(this.innerNode);
@@ -184,8 +199,7 @@ export default class Component {
   componentDidMount() {}
 
   shouldComponentUpdate(prevState, newState) {
-    // 더 자세한 비교 방법은 재정의하여 정의한다.
-
+    // 필요하다면 더 자세한 비교 방법은 재정의하여 정의한다.
     for (const key in prevState) {
       if (newState[key] !== prevState[key]) {
         return true;
