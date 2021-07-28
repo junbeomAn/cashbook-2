@@ -3,25 +3,29 @@ import { deepCopy, getUniqueId } from '../util/util';
 export default class Component extends HTMLElement {
   constructor(params) {
     super();
-    // innerHTML에 <test-component> 같이 추가하게 되면 현재 Constructor를 호출한다 ( params는 null로.. )
-    // 따라서 innerHTML에서 Parsing하는 동작은 무시해주기 위해서 이렇게 사용한다.
     if (!params) {
+      // innerHTML에 <test-component> 같이 추가하게 되면 현재 Constructor를 호출한다 ( params는 null로.. )
+      // 따라서 innerHTML에서 Parsing하는 동작은 무시해주기 위해서 이렇게 사용한다.
       return this;
     }
 
-    const { parent, controller, $target, componentName, componentState } =
-      params;
+    const { parent, $target, componentName } = params;
     this.componentName = componentName;
+    try {
+      customElements.define(componentName, this);
+    } catch (error) {
+      /* 2번 정의시 아무것도 하지 않음 */
+    }
 
     this.parent = parent;
     if (parent instanceof Component) {
       this.parent.childs.push(this);
     }
 
-    this.controller = controller;
+    this.controller = params.controller;
     this.$target = $target;
     this.id = getUniqueId(this.componentName);
-    this._componentState = componentState;
+    this._componentState = params.componentState;
     this.eventList = [];
     this.childs = [];
     this.render();
