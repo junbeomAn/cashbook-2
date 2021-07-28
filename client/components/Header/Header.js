@@ -2,6 +2,7 @@ import Component from '@/lib/Component';
 import leftArrow from '@/asset/left-arrow.svg';
 import rightArrow from '@/asset/right-arrow.svg';
 import Button from '@/components/Button/Button';
+import { CALENDAR_NUMBER_CHANGE_ANIMATION_TIME } from '@/util/constant';
 import './Header.scss';
 
 export default class Header extends Component {
@@ -11,6 +12,29 @@ export default class Header extends Component {
       componentName: 'header',
       componentState: { year: 2021, month: 7 },
     });
+    this.changeDate = this.changeDate.bind(this);
+  }
+
+  changeDate(amount) {
+    const nowState = this.componentState;
+    let { year, month } = nowState;
+    const $month = this.querySelector('.header-date-month');
+    const $year = this.querySelector('.header-date-year');
+
+    month += amount;
+    if (month === 0) {
+      year -= 1;
+      month = 12;
+      $year.classList.add('date-rotate-transform');
+    } else if (month === 13) {
+      year += 1;
+      month = 1;
+      $year.classList.add('date-rotate-transform');
+    }
+    $month.classList.add('date-rotate-transform');
+    setTimeout(() => {
+      this.componentState = { year, month };
+    }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
   }
 
   preTemplate() {
@@ -59,22 +83,7 @@ export default class Header extends Component {
       props: {
         imgSrc: leftArrow,
         onClick: () => {
-          const nowState = this.componentState;
-          let { year, month } = nowState;
-          const $month = this.querySelector('.header-date-month');
-          const $year = this.querySelector('.header-date-year');
-          if (month === 1) {
-            year -= 1;
-            month = 12;
-            $year.classList.add('date-rotate-transform');
-            $month.classList.add('date-rotate-transform');
-          } else {
-            month -= 1;
-            $month.classList.add('date-rotate-transform');
-          }
-          setTimeout(() => {
-            this.componentState = { year, month };
-          }, 300);
+          this.changeDate(-1);
         },
       },
     });
@@ -84,22 +93,7 @@ export default class Header extends Component {
       props: {
         imgSrc: rightArrow,
         onClick: () => {
-          const nowState = this.componentState;
-          let { year, month } = nowState;
-          const $month = this.querySelector('.header-date-month');
-          const $year = this.querySelector('.header-date-year');
-          if (month === 12) {
-            year += 1;
-            month = 1;
-            $year.classList.add('date-rotate-transform');
-            $month.classList.add('date-rotate-transform');
-          } else {
-            month += 1;
-            $month.classList.add('date-rotate-transform');
-          }
-          setTimeout(() => {
-            this.componentState = { year, month };
-          }, 300);
+          this.changeDate(1);
         },
       },
     });
