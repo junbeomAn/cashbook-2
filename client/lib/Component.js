@@ -168,6 +168,8 @@ export default class Component {
     $container.innerHTML = this.innerHTML;
     $container.id = this.id;
     this.innerNode = $container;
+
+    // 하위 node가 있다면 하위 node의 innerHTML과 innerNode도 최신으로 갱신합니다.
     Object.keys(this.childs).forEach((key) => {
       this.childs[key].setTemplate();
     });

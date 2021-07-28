@@ -13,6 +13,8 @@ export default class TestPage extends Component {
 
   preTemplate() {
     // addEvent의 경우는 어디에서 해줘도 상관 없습니다. preTemplate, defineTemplate에서만 수행하면 됩니다.
+    // 만약 defineTemplate에 addEvent를 하면 template을 다시 만들 때 마다 event가 추가되지만,
+    // 중복으로 추가한 것은 무시하게 개발되었습니다.
     this.addEvent('.totalContainer > p', 'click', () => {
       const { count } = this.componentState;
       this.componentState = { count: count + 1 };
