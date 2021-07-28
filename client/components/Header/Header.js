@@ -73,8 +73,6 @@ export default class Header extends Component {
             $month.classList.add('date-rotate-transform');
           }
           setTimeout(() => {
-            $year.classList.remove('date-rotate-transform');
-            $month.classList.remove('date-rotate-transform');
             this.componentState = { year, month };
           }, 300);
         },
@@ -100,8 +98,6 @@ export default class Header extends Component {
             $month.classList.add('date-rotate-transform');
           }
           setTimeout(() => {
-            $year.classList.remove('date-rotate-transform');
-            $month.classList.remove('date-rotate-transform');
             this.componentState = { year, month };
           }, 300);
         },

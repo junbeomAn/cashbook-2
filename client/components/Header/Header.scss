@@ -58,8 +58,6 @@
 .header-date-month {
   color: $off-white;
   @include display-large();
-  transition-duration: 1.0s;
-  transition-timing-function: ease-in-out;
 }
 
 .header-date-year {
@@ -74,11 +72,11 @@
 }
 
 @include keyframes(rotateNumber) {
-  0% { transform: rotate3d(1, 0, 0, 0deg) }
+  0% { transform: rotate3d(1, 0, 0, 0deg); opacity: 1; }
   25% { transform: rotate3d(1, 0, 0, 180deg) }
-  50% { transform: rotate3d(1, 0, 0, 0deg) }
+  50% { transform: rotate3d(1, 0, 0, 0deg);}
   75% { transform: rotate3d(1, 0, 0, 180deg) }
-  100% { transform: rotate3d(1, 0, 0, 0deg) }
+  100% { transform: rotate3d(1, 0, 0, 0deg); opacity: 0.3; }
 }
 
 

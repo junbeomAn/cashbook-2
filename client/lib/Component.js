@@ -68,17 +68,24 @@ export default class Component {
     this.update(prevState, newState);
   }
 
+  adjustWithDocumentNode() {
+    let $this = null;
+    if (this.innerNode.parentNode) {
+      $this = this.innerNode;
+      this.$target = $this.parentNode;
+    } else {
+      $this = document.querySelector(`#${this.id}`);
+      if ($this) {
+        this.$target = $this.parentNode;
+      }
+    }
+    return $this;
+  }
+
   update(prevState, newState) {
     // 변경 사항이 있을 때에만 update.
     if (this.shouldComponentUpdate(prevState, newState)) {
-      let $this = null;
-      if (this.innerNode.parentNode) {
-        $this = this.innerNode;
-        this.$target = $this.parentNode;
-      } else {
-        $this = document.querySelector(`#${this.id}`);
-        this.$target = $this.parentNode;
-      }
+      const $this = this.adjustWithDocumentNode();
 
       this.setTemplate();
       if (this.$target) {
@@ -161,6 +168,7 @@ export default class Component {
   }
 
   querySelector(query) {
+    this.innerNode = this.adjustWithDocumentNode();
     return this.innerNode.querySelector(query);
   }
 
@@ -185,8 +193,8 @@ export default class Component {
     $container.innerHTML = this.innerHTML;
     $container.id = this.id;
     this.innerNode = $container;
-
     // 하위 node가 있다면 하위 node의 innerHTML과 innerNode도 최신으로 갱신합니다.
+
     Object.keys(this.childs).forEach((key) => {
       this.childs[key].setTemplate();
     });
