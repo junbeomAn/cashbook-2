@@ -13,6 +13,7 @@
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-loader": "^6.2.0",
     "directory-named-webpack-plugin": "^4.0.1",
+    "nodemon": "^2.0.12",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "webpack": "^5.46.0",
@@ -20,7 +21,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "webpack"
+    "build:dev": "webpack",
+    "build:watch": "nodemon -e js,scss --exec 'webpack'"
   },
   "author": "",
   "license": "ISC"
