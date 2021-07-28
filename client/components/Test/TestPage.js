@@ -7,7 +7,7 @@ export default class TestPage extends Component {
     super({
       ...params,
       componentName: 'test-page',
-      componentState: { count: 0, childCount: [0, 0, 0] },
+      componentState: { count: 0 },
     });
   }
 
@@ -19,21 +19,24 @@ export default class TestPage extends Component {
 
     new TestComponent({
       parent: this,
+      keyword: 'first-test-component',
     });
     new TestComponent({
       parent: this,
     });
     new TestComponent({
       parent: this,
+      keyword: 'third-test-component',
     });
   }
 
-  // innerHTML에서 Tag를 만나면 새로운 객체를 생성하는게 문제.
   defineTemplate() {
+    // Define Template에서 하위 Component를 사용하고 싶다면 preTemplate에서 먼저 선언해야 합니다.
+    // 이후 resolveChild(${선언한 순서}) 혹은 를 통해서 찾을 수 있습니다.
     return `<div class="totalContainer">
       <p>${this.componentState.count}</p>
       <div class="testContainer">
-        ${this.resolveChild(0).getTemplate()}
+        ${this.resolveChild('first-test-component').getTemplate()}
         ${this.resolveChild(1).getTemplate()}
         ${this.resolveChild(2).getTemplate()}
       </div>

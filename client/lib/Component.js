@@ -3,18 +3,6 @@ import { deepCopy, getUniqueId, $ } from '../util/util';
 export default class Component {
   constructor(params) {
     const { parent, $target, componentName } = params;
-    this.componentName = componentName; // Unique ID를 만들기 위한 용도
-
-    this.parent = parent;
-    if (parent instanceof Component) {
-      this.parent.childs.push(this);
-    }
-    if ($target && !($target instanceof HTMLElement)) {
-      throw new Error(
-        'Component : $target은 반드시 HTMLelement거나 null 혹은 undefined 이어야합니다.'
-      );
-    }
-    this.$target = $target; // HTMLElements
 
     // Component 외부 요소 정의
     this.controller = params.controller;
@@ -23,9 +11,25 @@ export default class Component {
     this.id = getUniqueId(this.componentName);
     this._componentState = params.componentState;
     this.eventList = [];
-    this.childs = [];
+    this.childs = {};
     this.innerNode = {};
     this.innerHTML = null;
+    this.componentName = componentName; // Unique ID를 만들기 위한 용도
+
+    this.parent = parent;
+    if (parent instanceof Component) {
+      if (params.keyword) {
+        this.parent.childs[params.keyword] = this;
+      } else {
+        this.parent.childs[this.id] = this;
+      }
+    }
+    if ($target && !($target instanceof HTMLElement)) {
+      throw new Error(
+        'Component : $target은 반드시 HTMLelement거나 null 혹은 undefined 이어야합니다.'
+      );
+    }
+    this.$target = $target; // HTMLElements
     this.render();
   }
 
@@ -96,8 +100,8 @@ export default class Component {
   setEvent($eventDest) {
     // 이벤트 등록은 반드시 render이후에 실행되어야 한다.
     // 자신의 내부에 있는 객체에만 등록한다.
-    this.childs.forEach((child) => {
-      child.setEvent($eventDest);
+    Object.keys(this.childs).forEach((child) => {
+      this.childs[child].setEvent($eventDest);
     });
 
     const $this = $eventDest;
@@ -119,8 +123,18 @@ export default class Component {
 
   preTemplate() {}
 
-  resolveChild(index) {
-    return this.childs[index];
+  resolveChild(query) {
+    const keys = Object.keys(this.childs);
+    if (typeof query === 'number') {
+      for (let i = 0; i < keys.length; i += 1) {
+        if (i === query) {
+          return this.childs[keys[i]];
+        }
+      }
+    } else if (typeof query === 'string') {
+      return this.childs[query];
+    }
+    return null;
   }
 
   defineTemplate() {
