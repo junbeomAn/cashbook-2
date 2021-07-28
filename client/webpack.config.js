@@ -26,6 +26,12 @@ const config = {
         test: /\.s[ac]ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
+      {
+        test: /\.(jpe?g|png|svg|gif)$/,
+        use: {
+          loader: 'file-loader',
+        },
+      },
     ],
   },
   plugins: [
