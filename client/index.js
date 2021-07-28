@@ -31,5 +31,5 @@ controller.use('TestPageInputEvent', (e) => {
 */
 
 window.onload = () => {
-  document.body.innerHTML = $TestPage.getTemplate();
+  $TestPage.registerPage();
 };

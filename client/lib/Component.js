@@ -1,25 +1,36 @@
-import { deepCopy, $, getUniqueId } from '../util/util';
+import { deepCopy, getUniqueId } from '../util/util';
 
 export default class Component extends HTMLElement {
   constructor(params) {
     super();
-    const { parent, controller, $target } = params;
-    this._componentState = {};
-    this.componentName = 'default-component';
-    this.eventList = [];
-    this.childs = [];
-    console.log(parent);
+    // innerHTML에 <test-component> 같이 추가하게 되면 현재 Constructor를 호출한다 ( params는 null로.. )
+    // 따라서 innerHTML에서 Parsing하는 동작은 무시해주기 위해서 이렇게 사용한다.
+    if (!params) {
+      return this;
+    }
 
+    const { parent, controller, $target, componentName, componentState } =
+      params;
+    this.componentName = componentName;
+
+    this.parent = parent;
     if (parent instanceof Component) {
-      this.parent = parent;
       this.parent.childs.push(this);
     }
 
     this.controller = controller;
     this.$target = $target;
     this.id = getUniqueId(this.componentName);
-    console.log(this);
-    this.generateTemplate();
+    this._componentState = componentState;
+    this.eventList = [];
+    this.childs = [];
+    this.render();
+  }
+
+  initState(componentState = {}, modelState = {}) {
+    console.log(componentState, modelState);
+    this._componentState = componentState;
+    this._modelState = modelState;
   }
 
   get componentState() {
@@ -40,24 +51,9 @@ export default class Component extends HTMLElement {
 
       // Component 내의 객체들은 literal 로 추가되기 때문에 id로 찾아주어야 한다.
       const $documentDest = $parent.querySelector(this.id);
-      $documentDest.innerHTML = this.innerHTML;
+      $documentDest.textContent = this.innerHTML;
       this.setEvent();
     }
-  }
-
-  connectedCallback() {
-    // DOM에 Component 추가, 기본 제공 함수
-    console.log('Attached!', this);
-  }
-
-  disconnectedCallback() {
-    // DOM에서 Component 제거, 기본 제공 함수
-    console.log('Detached!', this);
-  }
-
-  attributeChangedCallback(attrName, oldVal, newVal) {
-    // Component의 속성이 변경, 기본 제공 함수
-    console.log('Changed!', this, attrName, oldVal, newVal);
   }
 
   addEvent(target, type, callback) {
@@ -79,7 +75,7 @@ export default class Component extends HTMLElement {
         target.addEventListener(type, callback);
       } else if (typeof target === 'string') {
         // 만약 등록된 목표 객체가 문자열이면 Query 문으로 "모두" 찾아서 등록
-        const $eventTarget = $.qsa(target);
+        const $eventTarget = this.querySelectorAll(target);
         for (let i = 0; i < $eventTarget.length; i += 1) {
           $eventTarget[i].addEventListener(type, callback);
         }
@@ -99,23 +95,24 @@ export default class Component extends HTMLElement {
     return this.outerHTML;
   }
 
-  generateTemplate() {
-    const $template = $.create(this.componentName);
-    $template.innerHTML = this.defineTemplate();
-    this.setEvent();
-    console.log('Called1');
-  }
-
   render() {
     // Caution! 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
-    this.generateTemplate();
+    this.innerHTML = this.defineTemplate();
     this.setEvent();
   }
 
-  register() {
+  registerPage() {
+    // Component가 직접 어딘가 붙어야 할 때 사용하는 함수.
     // $target : HTMLElement, PageElement의 경우 반드시 Root를 지정해서 붙여주어야 합니다.
-    const $thisComponent = this.generateTemplate();
-    this.$target.appendChild($thisComponent);
+    if (this.$target) {
+      this.$target.appendChild(this);
+    } else if (this.parent) {
+      this.parent.appendChild(this);
+    } else {
+      throw new Error(
+        'Component : Component에 등록된 register 대상이 없습니다.'
+      );
+    }
   }
 
   componentDidUpdate() {}

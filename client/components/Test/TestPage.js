@@ -3,10 +3,6 @@ import TestComponent from './TestComponent';
 import './Test.scss';
 
 export default class TestPage extends Component {
-  constructor(params) {
-    super(params);
-  }
-
   defineTemplate() {
     const $testComponent1 = new TestComponent({
       parent: this,
@@ -17,7 +13,6 @@ export default class TestPage extends Component {
     const $testComponent3 = new TestComponent({
       parent: this,
     }).getTemplate();
-
     return `<div class="totalContainer">
       ${$testComponent1}
       ${$testComponent2}

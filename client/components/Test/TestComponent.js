@@ -3,16 +3,17 @@ import './Test.scss';
 
 export default class TestComponent extends Component {
   constructor(params) {
-    super(params);
+    super({ ...params, componentState: { count: 0 } });
   }
 
   defineTemplate() {
-    this.addEvent('input .text-input', 'input', () => {});
+    this.addEvent('.helloText', 'click', () => {
+      const { count } = this.componentState;
+      this.setComponentState({ count: count + 1 });
+    });
     return `
       <div class="container">
-        <p class="helloText">HELLO WORD!</p>
+        <p class="helloText">HELLO WORLD ${this.componentState.count}!</p>
       </div>`;
   }
-
-  shouldComponentUpdate(prevState, newState) {}
 }
