@@ -1,34 +1,35 @@
-import { deepCopy, getUniqueId } from '../util/util';
+import { deepCopy, getUniqueId, $ } from '../util/util';
 
-export default class Component extends HTMLElement {
+export default class Component {
   constructor(params) {
-    super();
-    // innerHTML에 <test-component> 같이 추가하게 되면 현재 Constructor를 호출한다 ( params는 null로.. )
-    // 따라서 innerHTML에서 Parsing하는 동작은 무시해주기 위해서 이렇게 사용한다.
     const { parent, $target, componentName } = params;
-    this.componentName = componentName;
-    try {
-      customElements.define(componentName, this);
-    } catch (error) {
-      /* 2번 정의시 아무것도 하지 않음 */
-    }
+    this.componentName = componentName; // Unique ID를 만들기 위한 용도
 
     this.parent = parent;
     if (parent instanceof Component) {
       this.parent.childs.push(this);
     }
+    if ($target && !($target instanceof HTMLElement)) {
+      throw new Error(
+        'Component : $target은 반드시 HTMLelement거나 null 혹은 undefined 이어야합니다.'
+      );
+    }
+    this.$target = $target; // HTMLElements
 
+    // Component 외부 요소 정의
     this.controller = params.controller;
-    this.$target = $target;
+
+    // Component 내부 상태 정의
     this.id = getUniqueId(this.componentName);
     this._componentState = params.componentState;
     this.eventList = [];
     this.childs = [];
+    this.innerNode = {};
+    this.innerHTML = null;
     this.render();
   }
 
   initState(componentState = {}, modelState = {}) {
-    console.log(componentState, modelState);
     this._componentState = componentState;
     this._modelState = modelState;
   }
@@ -46,15 +47,12 @@ export default class Component extends HTMLElement {
 
   update(prevState, newState) {
     if (this.shouldComponentUpdate(prevState, newState)) {
-      this.innerHTML = this.defineTemplate();
-      /*
-      const $parent = this.parentElement;
-
-      // Component 내의 객체들은 literal 로 추가되기 때문에 id로 찾아주어야 한다.
-      const $documentDest = $parent.querySelector(this.id);
-      $documentDest.textContent = this.innerHTML;
-      */
-      this.setEvent();
+      if (this.innerNode instanceof HTMLElement) {
+        if (this.$target instanceof HTMLElement) {
+          this.$target.removeChild(this.innerNode);
+        }
+      }
+      this.render();
     }
   }
 
@@ -80,7 +78,11 @@ export default class Component extends HTMLElement {
     }
   }
 
-  setEvent() {
+  setEvent($eventDest) {
+    // 이벤트 등록은 반드시 render이후에 실행되어야 한다.
+    // 자신의 내부에 있는 객체에만 등록한다.
+    // const $this = $eventDest.querySelector(`#${this.id}`);
+    const $this = $eventDest;
     for (let j = 0; j < this.eventList.length; j += 1) {
       const { target, type, callback } = this.eventList[j];
       if (target instanceof HTMLElement) {
@@ -88,7 +90,7 @@ export default class Component extends HTMLElement {
         target.addEventListener(type, callback);
       } else if (typeof target === 'string') {
         // 만약 등록된 목표 객체가 문자열이면 Query 문으로 "모두" 찾아서 등록
-        const $eventTarget = this.querySelectorAll(target);
+        const $eventTarget = $this.querySelectorAll(target);
         for (let i = 0; i < $eventTarget.length; i += 1) {
           $eventTarget[i].addEventListener(type, callback);
         }
@@ -111,24 +113,31 @@ export default class Component extends HTMLElement {
   }
 
   getTemplate() {
-    return this.outerHTML;
+    return `<div id=${this.id}> ${this.innerHTML} </div>`;
   }
 
   render() {
     // Caution! 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
     this.preTemplate();
+    const $container = $.create('div');
     this.innerHTML = this.defineTemplate();
-    // <test-component> </test-component>
-    this.setEvent();
+    $container.innerHTML = this.innerHTML;
+    this.innerNode = $container;
+
+    // Event 재등록
+    this.setEvent(this.innerNode);
+    if (this.$target) {
+      this.$target.appendChild(this.innerNode);
+    }
   }
 
   registerPage() {
     // Component가 직접 어딘가 붙어야 할 때 사용하는 함수.
     // $target : HTMLElement, PageElement의 경우 반드시 Root를 지정해서 붙여주어야 합니다.
     if (this.$target) {
-      this.$target.appendChild(this);
+      this.$target.appendChild(this.innerNode);
     } else if (this.parent) {
-      this.parent.appendChild(this);
+      this.parent.appendChild(this.innerNode);
     } else {
       throw new Error(
         'Component : Component에 등록된 register 대상이 없습니다.'
@@ -142,8 +151,11 @@ export default class Component extends HTMLElement {
 
   shouldComponentUpdate(prevState, newState) {
     // 더 자세한 비교 방법은 재정의하여 정의한다.
-    if (prevState !== newState) {
-      return true;
+
+    for (const key in prevState) {
+      if (newState[key] !== prevState[key]) {
+        return true;
+      }
     }
     return false;
   }

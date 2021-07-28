@@ -10,14 +10,15 @@ export default class TestComponent extends Component {
     });
   }
 
-  defineTemplate(props) {
+  defineTemplate() {
     this.addEvent('.helloText', 'click', () => {
+      console.log('Clicked');
       const { count } = this.componentState;
       this.componentState = { count: count + 1 };
     });
     return `
       <div class="container">
-        <p class="helloText">HELLO WORLD ${props.count}!</p>
+        <p class="helloText">HELLO WORLD ${this.componentState.count}!</p>
       </div>`;
   }
 }

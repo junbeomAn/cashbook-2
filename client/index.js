@@ -13,7 +13,7 @@ customElements.define(componentName, TestPage);
 
 const model = new Model();
 const controller = new Controller({ model });
-const $TestPage = new TestPage({ parent: document.body, controller }); // View
+const $TestPage = new TestPage({ $target: document.body, controller }); // View
 
 /*
 model.initData();

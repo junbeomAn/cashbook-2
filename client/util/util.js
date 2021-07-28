@@ -15,7 +15,7 @@ function deepCopy(obj) {
 
 function getUniqueId(componentName) {
   return `${componentName}-id${Math.floor(
-    Math.random() * (10 * RANDOM_ID_NUMBER_COUNT)
+    Math.random() * 10 ** RANDOM_ID_NUMBER_COUNT
   )}`;
 }
 

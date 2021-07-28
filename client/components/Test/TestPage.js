@@ -9,7 +9,6 @@ export default class TestPage extends Component {
       componentName: 'test-page',
       componentState: { count: 0, childCount: [0, 0, 0] },
     });
-    console.log('Call Page');
   }
 
   preTemplate() {
