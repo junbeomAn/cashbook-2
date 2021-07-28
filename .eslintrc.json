@@ -11,6 +11,9 @@
     "class-methods-use-this": "off",
     "comma-dangle" : "off",
     "object-curly-newline": "off",
+    "operator-linebreak" : "off",
+    "no-new": "off",
+    "no-restricted-syntax": "off",
     "prettier/prettier": [
       "error",
       {
