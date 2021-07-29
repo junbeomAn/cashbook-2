@@ -1,5 +1,6 @@
 import Component from '@/lib/Component';
 import { moneyFormat } from '@/util/util';
+import History from './History';
 import './History.scss';
 
 export default class InfoBar extends Component {
@@ -10,13 +11,25 @@ export default class InfoBar extends Component {
     });
   }
 
-  preTemplate() {}
+  assembleHistoryTemplate() {
+    let historyTemplate = '';
+    Object.keys(this.props.data.history).forEach((key) => {
+      historyTemplate += this.resolveChild(`history-${key}`);
+    });
+    return historyTemplate;
+  }
 
-  calcTotal() {
-    return {
-      income: 50000,
-      outtage: 20000,
-    };
+  preTemplate() {
+    Object.keys(this.props.data.history).forEach((key) => {
+      const history = this.props.data.history[key];
+      new History({
+        parent: this,
+        keyword: `history-${key}`,
+        props: {
+          history,
+        },
+      });
+    });
   }
 
   defineTemplate() {
@@ -41,6 +54,7 @@ export default class InfoBar extends Component {
           ${amountText}
         </div>
       </div>
+      ${this.assembleHistoryTemplate()}
     </div>`;
   }
 }
