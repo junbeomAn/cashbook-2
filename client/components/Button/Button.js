@@ -20,8 +20,8 @@ export default class Header extends Component {
     const backgroundColor = this.props.backgroundColor || 'transparent';
     const imgSrc = this.props.imgSrc || '';
     const textColor = this.props.textColor || 'white';
-    const textSize = this.props.textColor || 'small';
-    const text = this.props.textColor || '';
+    const textSize = this.props.textSize || 'small';
+    const text = this.props.text || '';
     return `
       <button
         class="button-default button-background-${backgroundColor}" 
