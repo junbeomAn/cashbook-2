@@ -16,14 +16,16 @@ export default class Modal extends Component {
     const cancelText = this.props.cancelText || '';
     const submitText = this.props.submitText || '';
     const placeholder = this.props.placeholder || '';
+    const cancelColor = this.props.cancelColor || 'grey';
+    const submitColor = this.props.submitColor || 'mint';
     return `
     <div class="modal-background-black">
       <div class="modal-container">
-        <p>${title}</p>
-        <input type="text" placeholder=${placeholder}>
+        <p class="modal-title-text">${title}</p>
+        <input class="modal-input" type="text" placeholder=${placeholder}>
         <div class="modal-button-container">
-          <p class="modal-cancel-text">${cancelText}</p>
-          <p class="modal-submit-text">${submitText}</p>
+          <p class="modal-cancel-text modal-cancel-text-${cancelColor}">${cancelText}</p>
+          <p class="modal-submit-text modal-submit-text-${submitColor}">${submitText}</p>
         </div>
       </div>
     </div>`;
