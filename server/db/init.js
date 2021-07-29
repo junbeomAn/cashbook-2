@@ -23,7 +23,7 @@ const userMockData =   {
 const historyMockData = [{
     date: new Date(),
     contents: "이마트 장보기",
-    amount: 30000,
+    amount: -30000,
     UserId: 1,
     CategoryId: 1,
     PaymentId: 1
@@ -31,19 +31,70 @@ const historyMockData = [{
   {
     date: new Date(),
     contents: "선크림 구매",
-    amount: 23000,
+    amount: -23000,
     UserId: 1,
     CategoryId: 3,
     PaymentId: 2
-  },{
+  },
+  {
     date: new Date(),
     contents: "주유소 자차 급유",
-    amount: 50000,
+    amount: -50000,
     UserId: 1,
     CategoryId: 2,
     PaymentId: 2
-  }
+  },
+  {
+    date: new Date("2021-06-25 13:45:26"),
+    contents: "토너 구매",
+    amount: -18000,
+    UserId: 1,
+    CategoryId: 3,
+    PaymentId: 2
+  },
+  {
+    date: new Date("2021-05-10 20:25:26"),
+    contents: "향수 구매",
+    amount: -23000,
+    UserId: 1,
+    CategoryId: 3,
+    PaymentId: 2
+  },
+  {
+    date: new Date("2021-06-12 13:45:26"),
+    contents: "마스크 삼",
+    amount: -5000,
+    UserId: 1,
+    CategoryId: 3,
+    PaymentId: 1
+  },
+  {
+    date: new Date("2021-06-2 13:45:26"),
+    contents: "흉터 제거 밴드 삼",
+    amount: -40000,
+    UserId: 1,
+    CategoryId: 3,
+    PaymentId: 1
+  },
+  {
+    date: new Date("2021-02-15 14:20:33"),
+    contents: "치실 삼",
+    amount: -3600,
+    UserId: 1,
+    CategoryId: 3,
+    PaymentId: 1
+  },
+  {
+    date: new Date("2021-02-13 14:20:33"),
+    contents: "치실 삼",
+    amount: 3600,
+    UserId: 1,
+    CategoryId: 3,
+    PaymentId: 1
+  },
 ]
+
+// console.log(sequelize)
 
 async function init() {
   await Category.bulkCreate(categoryMockData);
@@ -53,7 +104,8 @@ async function init() {
   await Payment.bulkCreate(paymentMockData);
   console.log("payments 테이블 초기화")
   await History.bulkCreate(historyMockData);
-  console.log("history 테이블 초기화")
+  console.log("history 테이블 초기화");
+
 }
 
 init();
