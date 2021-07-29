@@ -1,0 +1,96 @@
+@import '../../pages/color';
+@import '../../pages/size';
+@import '../../pages/reset';
+
+.input-bar-background {
+  position: absolute;
+  top: 152px;
+  left: calc(50% - 452px);
+
+  width: 904px;
+  height: 76px;
+  border: 1px solid #C1C5C5;
+  
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: $off-white;
+  padding: 16px 16px 16px 32px;
+
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-bar-vertical-line {
+  width: 0px;
+  height: 100%;
+  border: .5px solid $placeholder-grey;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.input-bar-section {
+  & {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  & > p {
+    color: $baemin-primary;
+    @include body-xsmall();
+    line-height: 17px;
+    margin-bottom: 4px;
+  }
+
+  & input {
+    @include body-regular();
+    color: $title-active-black;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    background-color: $off-white;
+  }
+  & input::placeholder{
+    color: $placeholder-grey;
+  }
+  & input:focus {
+    outline: none;
+    border: none;
+  }
+}
+
+.input-bar-price-input {
+  & {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  & > input {
+    margin-left: 8px;
+    margin-right: 8px;
+    direction:rtl;
+  }
+}
+
+.input-bar-dropdown-section {
+  & {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100px;
+    padding-top: 4px;
+    cursor: pointer;
+  }
+}
+
+.input-bar-save-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin: 2px 0px 2px 24px;
+  cursor: pointer;
+}
