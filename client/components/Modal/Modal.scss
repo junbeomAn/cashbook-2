@@ -77,11 +77,22 @@
 }
 
 .modal-input {
-  padding: 10px;
-  @include body-medium();
-  color: $placeholder-grey;
-  width: 320px;
-  margin-bottom: 40px;
+  & {
+    padding: 10px;
+    @include body-medium();
+    color: $title-active-black;
+    width: 320px;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    border: 1px solid $line-grey;
+  }
+  &::placeholder{
+    color: $placeholder-grey;
+  }
+  &:focus {
+    outline: none;
+    border: 1px solid $baemin-primary;
+  }
 }
 
 .modal-button-container {

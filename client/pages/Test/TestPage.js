@@ -57,6 +57,7 @@ export default class TestPage extends Component {
       },
     }); // 모달을 재사용할 경우는 많지 않겠지만, 재사용하는 경우 input을 비워서 재사용해야하게 때문에 여기에 생성합니다.
 
+    // 여기선 Modal을 바로 띄워줬지만, modal 같은 경우는 동적으로 app 사용중에 가운데 DOM API를 사용해 끼워넣는편이 좋아보입니다.
     return `<div class="totalContainer">
       ${this.resolveChild('alert-modal')}
       <p>${this.componentState.count}</p>
