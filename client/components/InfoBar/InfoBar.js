@@ -1,6 +1,7 @@
 import Component from '@/lib/Component';
 import toggleOn from '@/asset/toggleOn.png';
 import toggleOff from '@/asset/toggleOff.png';
+import { moneyFormat } from '@/util/util';
 
 import './InfoBar.scss';
 
@@ -40,11 +41,11 @@ export default class InfoBar extends Component {
       <div class="info-bar-amount-total-container">
         <div class="info-bar-amount-container">
           <img class="incomeToggle" src="${incomeImage}"/>
-          <p>수입 ${totalIncome}</p>
+          <p>수입 ${moneyFormat(totalIncome)}</p>
         </div>
         <div class="info-bar-amount-container">
           <img class="outageToggle" src="${outageImage}"/>
-          <p>지출 ${totalOutage}</p>
+          <p>지출 ${moneyFormat(totalOutage)}</p>
         </div>
       </div>
     </div>`;

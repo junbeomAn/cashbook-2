@@ -32,14 +32,30 @@ export default class Main extends Component {
         navigationLocation: 0,
       },
     });
-
     new InputBar({
       parent: this,
       keyword: 'input-bar',
     });
+
+    let totalIncome = 0;
+    let totalOutage = 0;
+    let totalCount = 0;
+
+    historyData.forEach((histories) => {
+      totalCount += Object.keys(histories.history).length;
+      totalIncome += histories.income;
+      totalOutage += histories.expenditure;
+    });
+    totalOutage *= -1;
+
     new InfoBar({
       parent: this,
       keyword: 'info-bar',
+      props: {
+        totalCount,
+        totalIncome,
+        totalOutage,
+      },
     });
 
     historyData.forEach((histories, index) => {
