@@ -13,6 +13,22 @@ function deepCopy(obj) {
   return clone;
 }
 
+function deepCompare(prev, next) {
+  if (typeof prev === 'object' && typeof next === 'object') {
+    for (const key in prev) {
+      if (next[prev]) {
+        if (!deepCompare(prev[key], next[key])) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 function moneyFormat(num) {
   return Number(num.toFixed(1)).toLocaleString();
 }
@@ -29,4 +45,4 @@ const $ = {
   create: (element) => document.createElement(element),
 };
 
-export { deepCopy, moneyFormat, $, getUniqueId };
+export { deepCopy, deepCompare, moneyFormat, $, getUniqueId };

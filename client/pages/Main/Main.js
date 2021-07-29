@@ -12,7 +12,7 @@ export default class Main extends Component {
     super({
       ...params,
       componentName: 'main-page',
-      componentState: { count: 0 },
+      componentState: { selectedData: {}, selectedDate: {} },
     });
   }
 
@@ -31,10 +31,6 @@ export default class Main extends Component {
       props: {
         navigationLocation: 0,
       },
-    });
-    new InputBar({
-      parent: this,
-      keyword: 'input-bar',
     });
 
     let totalIncome = 0;
@@ -64,12 +60,30 @@ export default class Main extends Component {
         keyword: `history-container-${index}`,
         props: {
           data: histories,
+          historyIndex: index,
+          onClick: (historyIndex, contentsIndex) => {
+            this.componentState = {
+              selectedDate: historyData[historyIndex].date,
+              selectedData: historyData[historyIndex].history[contentsIndex],
+            };
+          },
         },
       });
     });
   }
 
   defineTemplate() {
+    const { selectedData, selectedDate } = this.componentState;
+
+    new InputBar({
+      parent: this,
+      keyword: 'input-bar',
+      props: {
+        selectedDate,
+        selectedData,
+      },
+    });
+
     return `
     <div class="app-background">
       ${this.resolveChild('header')}

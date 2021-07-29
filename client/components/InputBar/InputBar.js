@@ -1,6 +1,7 @@
 import Component from '@/lib/Component';
 import down from '@/asset/down.svg';
 import saveEmpty from '@/asset/saveEmpty.png';
+import { moneyFormat } from '../../util/util';
 import './InputBar.scss';
 
 export default class InputBar extends Component {
@@ -11,14 +12,31 @@ export default class InputBar extends Component {
     });
   }
 
-  preTemplate() {}
+  makeDate(selectedDate) {
+    return `${selectedDate.year}${`${selectedDate.month}`.padStart(2, '0')}${
+      selectedDate.day
+    }`;
+  }
 
   defineTemplate() {
-    const date = this.props.date || '';
-    const category = this.props.category || '선택하세요';
-    const content = this.props.content || '';
-    const payment = this.props.payment || '선택하세요';
-    const amount = this.props.amount || '';
+    const { selectedData, selectedDate } = this.props;
+    let date = '';
+    let category = '선택하세요';
+    let content = '';
+    let payment = '선택하세요';
+    let amount = '';
+    let sign = '-';
+    if (selectedDate.year) {
+      console.log(selectedData.amount);
+      date = this.makeDate(selectedDate);
+      category = selectedData.category;
+      content = selectedData.content;
+      payment = selectedData.payment;
+      if (selectedData.amount > 0) {
+        sign = '+';
+      }
+      amount = `${moneyFormat(Math.abs(selectedData.amount))}`;
+    }
     return `
     <div class="input-bar-background">
       <div class="input-bar-section">
@@ -50,8 +68,8 @@ export default class InputBar extends Component {
       <div class="input-bar-section">
         <p>금액</p>
         <div class="input-bar-price-input">
-          <p>-</p>
-          <input type="text" placeholder="입력하세요" vale=${amount}>
+          <p>${sign}</p>
+          <input type="text" placeholder="입력하세요" value=${amount}>
           <p>원</p>
         </div>
       </div>
