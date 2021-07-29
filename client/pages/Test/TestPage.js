@@ -54,6 +54,11 @@ export default class TestPage extends Component {
         cancelText: PAYMENT_MODAL_CANCEL_TEXT,
         submitText: PAYMENT_MODAL_SUBMIT_TEXT,
         placeholder: PAYMENT_MODAL_PLACEHOLDER,
+        submitColor: 'red',
+        defaultValue: '이것저것',
+        onSubmitClick: (data) => {
+          console.log(data);
+        },
       },
     }); // 모달을 재사용할 경우는 많지 않겠지만, 재사용하는 경우 input을 비워서 재사용해야하게 때문에 여기에 생성합니다.
 

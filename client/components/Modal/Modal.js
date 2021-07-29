@@ -34,9 +34,10 @@ export default class Modal extends Component {
       }
     });
     this.addEvent('.modal-submit-text', 'click', async () => {
+      const inputValue = this.querySelector('.modal-input').value;
       await this.outAnimation();
       if (this.props.onSubmitClick) {
-        this.props.onSubmitClick();
+        this.props.onSubmitClick(inputValue);
       }
     });
   }
@@ -48,11 +49,12 @@ export default class Modal extends Component {
     const placeholder = this.props.placeholder || '';
     const cancelColor = this.props.cancelColor || 'grey';
     const submitColor = this.props.submitColor || 'mint';
+    const defaultValue = this.props.defaultValue || '';
     return `
     <div class="modal-background-black modal-background-black-start">
       <div class="modal-container modal-container-start">
         <p class="modal-title-text">${title}</p>
-        <input class="modal-input" type="text" placeholder=${placeholder}>
+        <input class="modal-input" type="text" value="${defaultValue}" placeholder=${placeholder}>
         <div class="modal-button-container">
           <p class="modal-cancel-text modal-cancel-text-${cancelColor}">${cancelText}</p>
           <p class="modal-submit-text modal-submit-text-${submitColor}">${submitText}</p>
