@@ -79,8 +79,6 @@
   100% { transform: rotate3d(1, 0, 0, 0deg); opacity: 0.3; }
 }
 
-
-
 .header-nav-container {
   flex: 1;
   display: flex;
@@ -91,4 +89,8 @@
 
 .header-nav-container button{
   margin-left: 10px;
+}
+
+.header-nav-container>div:first-child{
+  margin-left: -10px;
 }
