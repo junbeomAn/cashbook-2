@@ -1,5 +1,6 @@
 import Component from '@/lib/Component';
 import Header from '@/components/Header/Header';
+import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import './Main.scss';
 import '@/pages/global.scss';
@@ -26,6 +27,10 @@ export default class Main extends Component {
       parent: this,
       keyword: 'input-bar',
     });
+    new InfoBar({
+      parent: this,
+      keyword: 'info-bar',
+    });
   }
 
   defineTemplate() {
@@ -33,6 +38,9 @@ export default class Main extends Component {
     <div class="app-background">
       ${this.resolveChild('header')}
       ${this.resolveChild('input-bar')}
+      <div class="main-contents-container">
+        ${this.resolveChild('info-bar')}
+      </div>
     </div>`;
   }
 }

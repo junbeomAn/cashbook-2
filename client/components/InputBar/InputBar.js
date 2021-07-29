@@ -8,7 +8,6 @@ export default class InputBar extends Component {
     super({
       ...params,
       componentName: 'input-bar',
-      componentState: { count: 0 },
     });
   }
 
