@@ -13,6 +13,10 @@ function deepCopy(obj) {
   return clone;
 }
 
+function moneyFormat(num) {
+  return Number(num.toFixed(1)).toLocaleString();
+}
+
 function getUniqueId(componentName) {
   return `${componentName}-id${Math.floor(
     Math.random() * 10 ** RANDOM_ID_NUMBER_COUNT
@@ -25,4 +29,4 @@ const $ = {
   create: (element) => document.createElement(element),
 };
 
-export { deepCopy, $, getUniqueId };
+export { deepCopy, moneyFormat, $, getUniqueId };
