@@ -14,6 +14,7 @@ export default class Header extends Component {
       ...params,
       componentName: 'header',
       componentState: { year: 2021, month: 7, navigation: 0 },
+      props: params.props || {},
     });
     this.changeDate = this.changeDate.bind(this);
     this.navigateTo = this.navigateTo.bind(this);
@@ -67,54 +68,29 @@ export default class Header extends Component {
   }
 
   preTemplate() {
-    new Button({
-      parent: this,
-      keyword: 'history',
-      props: {
-        text: '내역',
-        textSize: 'small',
-        textColor: 'white',
-        backgroundColor: 'mint',
-        toggleTextColor: 'mint',
-        toggleBackColor: 'white',
-        highlight: true,
-        onClick: () => {
-          console.log('TODO : move to History');
-          this.navigateTo(0);
+    const navigateHighlightLocation = this.props.navigationLocation || 0;
+    const navigateText = ['내역', '달력', '통계'];
+    const navigateKeyword = ['history', 'calendar', 'chart'];
+
+    // Make 3 navigation btn
+    navigateText.forEach((text, index) => {
+      new Button({
+        parent: this,
+        keyword: navigateKeyword[index],
+        props: {
+          text,
+          textSize: 'small',
+          textColor: 'white',
+          backgroundColor: 'mint',
+          toggleTextColor: 'mint',
+          toggleBackColor: 'white',
+          highlight: navigateHighlightLocation === index,
+          onClick: () => {
+            console.log(`TODO : move to ${navigateKeyword[index]}`);
+            this.navigateTo(index);
+          },
         },
-      },
-    });
-    new Button({
-      parent: this,
-      keyword: 'calendar',
-      props: {
-        text: '달력',
-        textSize: 'small',
-        textColor: 'white',
-        backgroundColor: 'mint',
-        toggleTextColor: 'mint',
-        toggleBackColor: 'white',
-        onClick: () => {
-          console.log('TODO : move to calendar');
-          this.navigateTo(1);
-        },
-      },
-    });
-    new Button({
-      parent: this,
-      keyword: 'chart',
-      props: {
-        text: '통계',
-        textSize: 'small',
-        textColor: 'white',
-        backgroundColor: 'mint',
-        toggleTextColor: 'mint',
-        toggleBackColor: 'white',
-        onClick: () => {
-          console.log('TODO : move to chart');
-          this.navigateTo(2);
-        },
-      },
+      });
     });
 
     new Button({
