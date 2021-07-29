@@ -4,47 +4,65 @@ $heading-small: 24px;
 $text-large: 22px;
 $text-medium: 18px;
 $text-regular: 16px;
-$text-small: 14px $text-xsmall 12px;
+$text-small: 14px;
+$text-xsmall: 12px;
 
 $text-weight: 400;
 $text-weight-bold: 500;
 
+$display-font: 'Do Hyeon', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+$body-font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
 @mixin display-small() {
   font-size: $heading-small;
   font-weight: $text-weight;
+  font-family: $display-font;
 }
 
 @mixin display-large() {
   font-size: $heading-large;
   font-weight: $text-weight;
+  font-family: $display-font;
+}
+
+@mixin body-small() {
+  font-size: $text-small;
+  font-weight: $text-weight;
+  font-family: $body-font;
 }
 
 @mixin body-regular() {
   font-size: $text-regular;
   font-weight: $text-weight;
+  font-family: $body-font;
 }
 
 @mixin body-medium() {
   font-size: $text-medium;
   font-weight: $text-weight;
+  font-family: $body-font;
 }
 
 @mixin body-large() {
   font-size: $text-large;
   font-weight: $text-weight;
+  font-family: $body-font;
 }
 
 @mixin bold-small() {
   font-size: $text-xsmall;
   font-weight: $text-weight-bold;
+  font-family: $body-font;
 }
 
 @mixin bold-medium() {
   font-size: $text-small;
   font-weight: $text-weight-bold;
+  font-family: $body-font;
 }
 
 @mixin bold-large() {
   font-size: $text-regular;
   font-weight: $text-weight-bold;
+  font-family: $body-font;
 }
