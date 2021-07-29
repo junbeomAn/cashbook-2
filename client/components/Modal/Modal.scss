@@ -15,10 +15,59 @@
   align-items: center;
 }
 
+.modal-background-black-start {
+  animation-name: opacityIn;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+.modal-background-black-end {
+  animation-name: opacityOut;
+  animation-delay: .2s;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+@include keyframes(opacityIn) {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@include keyframes(opacityOut) {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 .modal-container {
   border-radius: 10px;
   background-color: $off-white;
   padding: 40px;
+  transform: scale(0);
+}
+
+.modal-container-start {
+  animation-name: zoomOut;
+  animation-delay: .3s;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
+}
+
+.modal-container-end {
+  animation-name: zoomIn;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
+}
+
+@include keyframes(zoomOut) {
+  0% { transform: scale(0); }
+  80% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@include keyframes(zoomIn) {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.2); }
+  100% { transform: scale(0); }
 }
 
 .modal-title-text {
@@ -43,8 +92,10 @@
 }
 
 .modal-cancel-text {
-  color: $label-grey;
-  cursor: pointer;
+  & {
+    color: $label-grey;
+    cursor: pointer;
+  }
   &-grey{
     color: $label-grey;
   }
@@ -57,8 +108,10 @@
 }
 
 .modal-submit-text {
-  color: $baemin-primary;
-  cursor: pointer;
+  & {
+    color: $baemin-primary;
+    cursor: pointer;
+  }
   &-grey{
     color: $label-grey;
   }

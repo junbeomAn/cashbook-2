@@ -19,8 +19,8 @@ export default class Modal extends Component {
     const cancelColor = this.props.cancelColor || 'grey';
     const submitColor = this.props.submitColor || 'mint';
     return `
-    <div class="modal-background-black">
-      <div class="modal-container">
+    <div class="modal-background-black modal-background-black-start">
+      <div class="modal-container modal-container-start">
         <p class="modal-title-text">${title}</p>
         <input class="modal-input" type="text" placeholder=${placeholder}>
         <div class="modal-button-container">
