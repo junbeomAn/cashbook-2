@@ -19,6 +19,8 @@ export default class Component {
     this.childs = {}; // 이벤트 등록, update시 필요한 자식들
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
     this.innerHTML = null; // innerNode의 또 다른 innerHTML 표현 ( Template 표현 )
+    this.containerClass = params.containerClass || 'adjustFit';
+    this._props = params.props;
 
     // Parent는 Component가 붙어있을 또 다른 Component 객체입니다. 최상위 객체는 null을 가집니다.
     if (parent !== null && !(parent instanceof Component)) {
@@ -51,6 +53,10 @@ export default class Component {
     this._modelState = modelState;
   }
 
+  get props() {
+    return deepCopy(this._props);
+  }
+
   get componentState() {
     return deepCopy(this._componentState);
   }
@@ -62,17 +68,24 @@ export default class Component {
     this.update(prevState, newState);
   }
 
+  adjustWithDocumentNode() {
+    let $this = null;
+    if (this.innerNode.parentNode) {
+      $this = this.innerNode;
+      this.$target = $this.parentNode;
+    } else {
+      $this = document.querySelector(`#${this.id}`);
+      if ($this) {
+        this.$target = $this.parentNode;
+      }
+    }
+    return $this;
+  }
+
   update(prevState, newState) {
     // 변경 사항이 있을 때에만 update.
     if (this.shouldComponentUpdate(prevState, newState)) {
-      let $this = null;
-      if (this.innerNode.parentNode) {
-        $this = this.innerNode;
-        this.$target = $this.parentNode;
-      } else {
-        $this = document.querySelector(`#${this.id}`);
-        this.$target = $this.parentNode;
-      }
+      const $this = this.adjustWithDocumentNode();
 
       this.setTemplate();
       if (this.$target) {
@@ -139,13 +152,24 @@ export default class Component {
     if (typeof query === 'number') {
       for (let i = 0; i < keys.length; i += 1) {
         if (i === query) {
-          return this.childs[keys[i]];
+          return this.childs[keys[i]].getTemplate();
         }
       }
     } else if (typeof query === 'string') {
-      return this.childs[query];
+      try {
+        return this.childs[query].getTemplate();
+      } catch (error) {
+        throw new Error(
+          `Component : resolveChild 에 keyword : ${query}에 해당하는 값이 없습니다.`
+        );
+      }
     }
-    return null;
+    return '';
+  }
+
+  querySelector(query) {
+    this.innerNode = this.adjustWithDocumentNode();
+    return this.innerNode.querySelector(query);
   }
 
   defineTemplate() {
@@ -158,18 +182,19 @@ export default class Component {
 
   getTemplate() {
     // innerNode의 HTML 문자열을 반환합니다. id를 붙여서 반환합니다.
-    return `<div id=${this.id}> ${this.innerHTML} </div>`;
+    return `<div class=${this.containerClass} id=${this.id}> ${this.innerHTML} </div>`;
   }
 
   setTemplate() {
     // 이 함수는 변경사항이 없더라도 Template을 재생성합니다!
     const $container = $.create('div');
+    $container.classList.add(this.containerClass);
     this.innerHTML = this.defineTemplate();
     $container.innerHTML = this.innerHTML;
     $container.id = this.id;
     this.innerNode = $container;
-
     // 하위 node가 있다면 하위 node의 innerHTML과 innerNode도 최신으로 갱신합니다.
+
     Object.keys(this.childs).forEach((key) => {
       this.childs[key].setTemplate();
     });

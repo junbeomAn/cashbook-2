@@ -1,4 +1,5 @@
-import Component from '../../lib/Component';
+import Component from '@/lib/Component';
+import Header from '@/components/Header/Header';
 import TestComponent from './TestComponent';
 import './Test.scss';
 
@@ -30,6 +31,9 @@ export default class TestPage extends Component {
     new TestComponent({
       parent: this,
     });
+    new Header({
+      parent: this,
+    });
   }
 
   defineTemplate() {
@@ -37,10 +41,11 @@ export default class TestPage extends Component {
     // 이후 resolveChild(${선언한 순서}) 혹은 keyword, 혹은 해당 Component의 id string을 통해서 찾을 수 있습니다.
     return `<div class="totalContainer">
       <p>${this.componentState.count}</p>
+      ${this.resolveChild(3)}
       <div class="testContainer">
-        ${this.resolveChild('first-test-component').getTemplate()}
-        ${this.resolveChild(1).getTemplate()}
-        ${this.resolveChild(2).getTemplate()}
+        ${this.resolveChild('first-test-component')}
+        ${this.resolveChild(1)}
+        ${this.resolveChild(2)}
       </div>
     </div>`;
   }
