@@ -146,18 +146,20 @@ export default class Component {
 
   preTemplate() {}
 
-  resolveChild(query) {
+  resolveChild(query, template = true) {
     // preTemplate에서 정의한 자식을 query 문자열이나 숫자로 가져오는 함수.
     const keys = Object.keys(this.childs);
     if (typeof query === 'number') {
       for (let i = 0; i < keys.length; i += 1) {
         if (i === query) {
-          return this.childs[keys[i]].getTemplate();
+          if (template) return this.childs[keys[i]].getTemplate();
+          return this.childs[keys[i]];
         }
       }
     } else if (typeof query === 'string') {
       try {
-        return this.childs[query].getTemplate();
+        if (template) return this.childs[query].getTemplate();
+        return this.childs[query];
       } catch (error) {
         throw new Error(
           `Component : resolveChild 에 keyword : ${query}에 해당하는 값이 없습니다.`

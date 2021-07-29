@@ -10,9 +10,57 @@ export default class Header extends Component {
     });
   }
 
+  toggleText() {
+    if (this.props.toggleTextColor) {
+      const textColor = this.props.textColor || 'white';
+      const backgroundColor = this.props.backgroundColor || 'transparent';
+      const textToggleColor = this.props.toggleTextColor || 'mint';
+      const backgroundToggleColor = this.props.toggleBackColor || 'transparent';
+      const $text = this.querySelector('.button-text');
+      const $back = this.querySelector('.button-default');
+
+      $text.classList.toggle(`button-text-${textColor}`);
+      $text.classList.toggle(`button-text-${textToggleColor}`);
+      $back.classList.toggle(`button-background-${backgroundColor}`);
+      $back.classList.toggle(`button-background-${backgroundToggleColor}`);
+    }
+  }
+
+  textOn() {
+    if (this.props.toggleTextColor) {
+      const textColor = this.props.textColor || 'white';
+      const backgroundColor = this.props.backgroundColor || 'transparent';
+      const textToggleColor = this.props.toggleTextColor || 'mint';
+      const backgroundToggleColor = this.props.toggleBackColor || 'transparent';
+      const $text = this.querySelector('.button-text');
+      const $back = this.querySelector('.button-default');
+
+      $text.classList.remove(`button-text-${textColor}`);
+      $text.classList.add(`button-text-${textToggleColor}`);
+      $back.classList.remove(`button-background-${backgroundColor}`);
+      $back.classList.add(`button-background-${backgroundToggleColor}`);
+    }
+  }
+
+  textOff() {
+    if (this.props.toggleTextColor) {
+      const textColor = this.props.textColor || 'white';
+      const backgroundColor = this.props.backgroundColor || 'transparent';
+      const textToggleColor = this.props.toggleTextColor || 'mint';
+      const backgroundToggleColor = this.props.toggleBackColor || 'transparent';
+      const $text = this.querySelector('.button-text');
+      const $back = this.querySelector('.button-default');
+
+      $text.classList.add(`button-text-${textColor}`);
+      $text.classList.remove(`button-text-${textToggleColor}`);
+      $back.classList.add(`button-background-${backgroundColor}`);
+      $back.classList.remove(`button-background-${backgroundToggleColor}`);
+    }
+  }
+
   preTemplate() {
     if (this.props.onClick) {
-      this.addEvent('button', 'click', this.props.onClick);
+      this.addEvent('button', 'click', () => this.props.onClick());
     }
   }
 
@@ -26,7 +74,7 @@ export default class Header extends Component {
       <button
         class="button-default button-background-${backgroundColor}" 
         style="background-image: url(${imgSrc})">
-          <p class="button-text-${textColor} button-text-${textSize}">${text}</p>
+          <p class="button-text button-text-${textColor} button-text-${textSize}">${text}</p>
       </button>
     `;
   }

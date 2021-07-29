@@ -3,6 +3,9 @@
 @import '../../pages/reset';
 
 .button-text {
+  & {
+    transition-duration: 0.3s;
+  }
   &-white {
     color: $off-white;
   }
@@ -27,6 +30,9 @@
 }
 
 .button-background {
+  & {
+    transition-duration: .3s;
+  }
   &-transparent {
     background-color: rgba(0,0,0,0);
   }
@@ -54,5 +60,4 @@
   border-radius: 10px;
   padding: 4px 12px 4px 12px;
   background-repeat: no-repeat;
-  transition-duration: .2s;
 }
