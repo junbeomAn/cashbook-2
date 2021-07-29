@@ -1,5 +1,14 @@
 import Component from '@/lib/Component';
+import Header from '@/components/Header/Header';
+import Modal from '@/components/Modal/Modal';
+import {
+  PAYMENT_MODAL_TITLE,
+  PAYMENT_MODAL_CANCEL_TEXT,
+  PAYMENT_MODAL_SUBMIT_TEXT,
+  PAYMENT_MODAL_PLACEHOLDER,
+} from '@/util/constant';
 import './Main.scss';
+import '@/pages/global.scss';
 
 export default class Main extends Component {
   constructor(params) {
@@ -10,9 +19,17 @@ export default class Main extends Component {
     });
   }
 
-  preTemplate() {}
+  preTemplate() {
+    new Header({
+      parent: this,
+      keyword: 'header',
+    });
+  }
 
   defineTemplate() {
-    return '<div></div>';
+    return `
+    <div class="app-background">
+      ${this.resolveChild('header')}
+    </div>`;
   }
 }
