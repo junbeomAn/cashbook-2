@@ -134,5 +134,6 @@
     color: $title-active-black;
     @include body-medium();
     min-width: 0px;
+    margin-right: -10px;
   }
 }
