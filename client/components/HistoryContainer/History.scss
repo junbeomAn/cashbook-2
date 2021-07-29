@@ -1,0 +1,52 @@
+@import '../../pages/color';
+@import '../../pages/size';
+@import '../../pages/reset';
+
+.history-section-container {
+  margin-top: 32px;
+  width: 100%;
+}
+
+.history-section-info-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $line-grey;
+}
+
+.history-section-date-container {
+  & {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  & > p {
+    @include body-small();
+    color: $title-active-black;
+    margin-right: 8px;
+  }
+  & > p:nth-child(2) {
+    @include body-small();
+    color: $body-grey;
+    margin-right: 0px;
+  }
+}
+
+.history-section-amount-container {
+  & {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  & > p {
+    @include body-small();
+    color: $body-grey;
+    margin-right: 8px;
+  }
+  & > p:last-child {
+    margin-right: 0px;
+  }
+}

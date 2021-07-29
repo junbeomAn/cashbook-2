@@ -2,6 +2,8 @@ import Component from '@/lib/Component';
 import Header from '@/components/Header/Header';
 import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
+import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
+import historyData from '@/util/tempHistory';
 import './Main.scss';
 import '@/pages/global.scss';
 
@@ -12,6 +14,14 @@ export default class Main extends Component {
       componentName: 'main-page',
       componentState: { count: 0 },
     });
+  }
+
+  assembleHistoryData() {
+    let historyTemplate = '';
+    historyData.forEach((histories, index) => {
+      historyTemplate += this.resolveChild(`history-container-${index}`);
+    });
+    return historyTemplate;
   }
 
   preTemplate() {
@@ -31,6 +41,16 @@ export default class Main extends Component {
       parent: this,
       keyword: 'info-bar',
     });
+
+    historyData.forEach((histories, index) => {
+      new HistoryContainer({
+        parent: this,
+        keyword: `history-container-${index}`,
+        props: {
+          data: histories,
+        },
+      });
+    });
   }
 
   defineTemplate() {
@@ -40,6 +60,7 @@ export default class Main extends Component {
       ${this.resolveChild('input-bar')}
       <div class="main-contents-container">
         ${this.resolveChild('info-bar')}
+        ${this.assembleHistoryData()}
       </div>
     </div>`;
   }
