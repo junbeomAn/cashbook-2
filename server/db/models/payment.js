@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Payment.init({
-    method: DataTypes.TEXT
+    method: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    }
   }, {
     sequelize,
     underscored: false,
