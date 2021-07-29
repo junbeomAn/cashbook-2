@@ -41,6 +41,11 @@ export default class TestPage extends Component {
     new Header({
       parent: this,
     });
+  }
+
+  defineTemplate() {
+    // Define Template에서 하위 Component를 사용하고 싶다면 preTemplate에서 먼저 선언해야 합니다.
+    // 이후 resolveChild(${선언한 순서}) 혹은 keyword, 혹은 해당 Component의 id string을 통해서 찾을 수 있습니다.
     new Modal({
       parent: this,
       keyword: 'alert-modal',
@@ -50,12 +55,8 @@ export default class TestPage extends Component {
         submitText: PAYMENT_MODAL_SUBMIT_TEXT,
         placeholder: PAYMENT_MODAL_PLACEHOLDER,
       },
-    });
-  }
+    }); // 모달을 재사용할 경우는 많지 않겠지만, 재사용하는 경우 input을 비워서 재사용해야하게 때문에 여기에 생성합니다.
 
-  defineTemplate() {
-    // Define Template에서 하위 Component를 사용하고 싶다면 preTemplate에서 먼저 선언해야 합니다.
-    // 이후 resolveChild(${선언한 순서}) 혹은 keyword, 혹은 해당 Component의 id string을 통해서 찾을 수 있습니다.
     return `<div class="totalContainer">
       ${this.resolveChild('alert-modal')}
       <p>${this.componentState.count}</p>
