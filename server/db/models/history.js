@@ -16,9 +16,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   History.init({
-    date: DataTypes.DATE,
-    contents: DataTypes.STRING,
-    amount: DataTypes.INTEGER
+    date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    contents: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     underscored: false,
