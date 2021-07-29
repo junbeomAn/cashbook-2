@@ -21,6 +21,7 @@ export default class Component {
     this.innerHTML = null; // innerNode의 또 다른 innerHTML 표현 ( Template 표현 )
     this.containerClass = params.containerClass || 'adjustFit';
     this._props = params.props;
+    this.isComponentMounted = false;
 
     // Parent는 Component가 붙어있을 또 다른 Component 객체입니다. 최상위 객체는 null을 가집니다.
     if (parent !== null && !(parent instanceof Component)) {
@@ -94,6 +95,10 @@ export default class Component {
 
       // Event 재등록
       this.setEvent(this.innerNode);
+      Object.keys(this.childs).forEach((el) => {
+        this.childs[el].componentDidUpdate();
+      });
+      this.componentDidUpdate();
     }
   }
 
@@ -146,18 +151,20 @@ export default class Component {
 
   preTemplate() {}
 
-  resolveChild(query) {
+  resolveChild(query, template = true) {
     // preTemplate에서 정의한 자식을 query 문자열이나 숫자로 가져오는 함수.
     const keys = Object.keys(this.childs);
     if (typeof query === 'number') {
       for (let i = 0; i < keys.length; i += 1) {
         if (i === query) {
-          return this.childs[keys[i]].getTemplate();
+          if (template) return this.childs[keys[i]].getTemplate();
+          return this.childs[keys[i]];
         }
       }
     } else if (typeof query === 'string') {
       try {
-        return this.childs[query].getTemplate();
+        if (template) return this.childs[query].getTemplate();
+        return this.childs[query];
       } catch (error) {
         throw new Error(
           `Component : resolveChild 에 keyword : ${query}에 해당하는 값이 없습니다.`
@@ -209,6 +216,7 @@ export default class Component {
     if (this.$target) {
       this.$target.appendChild(this.innerNode);
     }
+    this.isComponentMounted = true;
   }
 
   registerPage() {

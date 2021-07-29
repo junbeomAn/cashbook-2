@@ -1,0 +1,136 @@
+@import '../../pages/color';
+@import '../../pages/size';
+@import '../../pages/reset';
+
+.modal-background-black {
+  z-index: 99;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-background-black-start {
+  animation-name: opacityIn;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+.modal-background-black-end {
+  animation-name: opacityOut;
+  animation-delay: .2s;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+@include keyframes(opacityIn) {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@include keyframes(opacityOut) {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.modal-container {
+  border-radius: 10px;
+  background-color: $off-white;
+  padding: 40px;
+  transform: scale(0);
+}
+
+.modal-container-start {
+  animation-name: zoomOut;
+  animation-delay: .3s;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
+}
+
+.modal-container-end {
+  animation-name: zoomIn;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
+}
+
+@include keyframes(zoomOut) {
+  0% { transform: scale(0); }
+  80% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@include keyframes(zoomIn) {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.2); }
+  100% { transform: scale(0); }
+}
+
+.modal-title-text {
+  @include body-large();
+  color: $title-active-black;
+  margin-bottom: 24px;
+}
+
+.modal-input {
+  & {
+    padding: 10px;
+    @include body-medium();
+    color: $title-active-black;
+    width: 320px;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    border: 1px solid $line-grey;
+  }
+  &::placeholder{
+    color: $placeholder-grey;
+  }
+  &:focus {
+    outline: none;
+    border: 1px solid $baemin-primary;
+  }
+}
+
+.modal-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-cancel-text {
+  & {
+    color: $label-grey;
+    cursor: pointer;
+  }
+  &-grey{
+    color: $label-grey;
+  }
+  &-red{
+    color: $baemin-error;
+  }
+  &-mint{
+    color: $baemin-primary;
+  }
+}
+
+.modal-submit-text {
+  & {
+    color: $baemin-primary;
+    cursor: pointer;
+  }
+  &-grey{
+    color: $label-grey;
+  }
+  &-red{
+    color: $baemin-error;
+  }
+  &-mint{
+    color: $baemin-primary;
+  }
+}

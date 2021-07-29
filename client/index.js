@@ -1,4 +1,4 @@
-import TestPage from './components/Test/TestPage';
+import TestPage from './pages/Test/TestPage';
 import Model from './lib/Model';
 import Controller from './lib/Controller';
 

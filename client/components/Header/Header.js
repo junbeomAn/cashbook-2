@@ -13,9 +13,10 @@ export default class Header extends Component {
     super({
       ...params,
       componentName: 'header',
-      componentState: { year: 2021, month: 7 },
+      componentState: { year: 2021, month: 7, navigation: 0 },
     });
     this.changeDate = this.changeDate.bind(this);
+    this.navigateTo = this.navigateTo.bind(this);
   }
 
   changeDate(amount) {
@@ -40,6 +41,31 @@ export default class Header extends Component {
     }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
   }
 
+  navigateTo(index) {
+    this.componentState = { navigation: index };
+    const navigateList = [
+      this.resolveChild('history', false),
+      this.resolveChild('calendar', false),
+      this.resolveChild('chart', false),
+    ];
+    navigateList.forEach((el, elIndex) => {
+      if (elIndex === index) el.textOn();
+      else el.textOff();
+    });
+  }
+
+  componentDidUpdate() {
+    const navigateList = [
+      this.resolveChild('history', false),
+      this.resolveChild('calendar', false),
+      this.resolveChild('chart', false),
+    ];
+    navigateList.forEach((el, elIndex) => {
+      if (elIndex === this.componentState.navigation) el.textOn();
+      else el.textOff();
+    });
+  }
+
   preTemplate() {
     new Button({
       parent: this,
@@ -47,10 +73,14 @@ export default class Header extends Component {
       props: {
         text: '내역',
         textSize: 'small',
-        textColor: 'mint',
-        backgroundColor: 'white',
+        textColor: 'white',
+        backgroundColor: 'mint',
+        toggleTextColor: 'mint',
+        toggleBackColor: 'white',
+        highlight: true,
         onClick: () => {
           console.log('TODO : move to History');
+          this.navigateTo(0);
         },
       },
     });
@@ -60,10 +90,13 @@ export default class Header extends Component {
       props: {
         text: '달력',
         textSize: 'small',
-        textColor: 'mint',
-        backgroundColor: 'white',
+        textColor: 'white',
+        backgroundColor: 'mint',
+        toggleTextColor: 'mint',
+        toggleBackColor: 'white',
         onClick: () => {
           console.log('TODO : move to calendar');
+          this.navigateTo(1);
         },
       },
     });
@@ -73,13 +106,17 @@ export default class Header extends Component {
       props: {
         text: '통계',
         textSize: 'small',
-        textColor: 'mint',
-        backgroundColor: 'white',
+        textColor: 'white',
+        backgroundColor: 'mint',
+        toggleTextColor: 'mint',
+        toggleBackColor: 'white',
         onClick: () => {
           console.log('TODO : move to chart');
+          this.navigateTo(2);
         },
       },
     });
+
     new Button({
       parent: this,
       keyword: 'left-arrow',

@@ -1,6 +1,13 @@
 import Component from '@/lib/Component';
 import Header from '@/components/Header/Header';
-import TestComponent from './TestComponent';
+import Modal from '@/components/Modal/Modal';
+import TestComponent from '@/components/Test/TestComponent';
+import {
+  PAYMENT_MODAL_TITLE,
+  PAYMENT_MODAL_CANCEL_TEXT,
+  PAYMENT_MODAL_SUBMIT_TEXT,
+  PAYMENT_MODAL_PLACEHOLDER,
+} from '@/util/constant';
 import './Test.scss';
 
 export default class TestPage extends Component {
@@ -39,7 +46,25 @@ export default class TestPage extends Component {
   defineTemplate() {
     // Define Template에서 하위 Component를 사용하고 싶다면 preTemplate에서 먼저 선언해야 합니다.
     // 이후 resolveChild(${선언한 순서}) 혹은 keyword, 혹은 해당 Component의 id string을 통해서 찾을 수 있습니다.
+    new Modal({
+      parent: this,
+      keyword: 'alert-modal',
+      props: {
+        title: PAYMENT_MODAL_TITLE,
+        cancelText: PAYMENT_MODAL_CANCEL_TEXT,
+        submitText: PAYMENT_MODAL_SUBMIT_TEXT,
+        placeholder: PAYMENT_MODAL_PLACEHOLDER,
+        submitColor: 'red',
+        defaultValue: '이것저것',
+        onSubmitClick: (data) => {
+          console.log(data);
+        },
+      },
+    }); // 모달을 재사용할 경우는 많지 않겠지만, 재사용하는 경우 input을 비워서 재사용해야하게 때문에 여기에 생성합니다.
+
+    // 여기선 Modal을 바로 띄워줬지만, modal 같은 경우는 동적으로 app 사용중에 가운데 DOM API를 사용해 끼워넣는편이 좋아보입니다.
     return `<div class="totalContainer">
+      ${this.resolveChild('alert-modal')}
       <p>${this.componentState.count}</p>
       ${this.resolveChild(3)}
       <div class="testContainer">
