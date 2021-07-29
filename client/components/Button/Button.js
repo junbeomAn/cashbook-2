@@ -70,12 +70,22 @@ export default class Header extends Component {
     const textColor = this.props.textColor || 'white';
     const textSize = this.props.textSize || 'small';
     const text = this.props.text || '';
+    const textToggleColor = this.props.toggleTextColor || 'mint';
+    const backgroundToggleColor = this.props.toggleBackColor || 'transparent';
+    let textColorClass = textColor;
+    let backgroundColorClass = backgroundColor;
+
+    if (!this.isComponentMounted && this.props.highlight) {
+      textColorClass = textToggleColor;
+      backgroundColorClass = backgroundToggleColor;
+    }
+
     return `
-      <button
-        class="button-default button-background-${backgroundColor}" 
-        style="background-image: url(${imgSrc})">
-          <p class="button-text button-text-${textColor} button-text-${textSize}">${text}</p>
-      </button>
-    `;
+        <button
+          class="button-default button-background-${backgroundColorClass}" 
+          style="background-image: url(${imgSrc})">
+            <p class="button-text button-text-${textColorClass} button-text-${textSize}">${text}</p>
+        </button>
+      `;
   }
 }

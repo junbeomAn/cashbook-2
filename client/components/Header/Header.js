@@ -54,6 +54,18 @@ export default class Header extends Component {
     });
   }
 
+  componentDidUpdate() {
+    const navigateList = [
+      this.resolveChild('history', false),
+      this.resolveChild('calendar', false),
+      this.resolveChild('chart', false),
+    ];
+    navigateList.forEach((el, elIndex) => {
+      if (elIndex === this.componentState.navigation) el.textOn();
+      else el.textOff();
+    });
+  }
+
   preTemplate() {
     new Button({
       parent: this,
@@ -65,6 +77,7 @@ export default class Header extends Component {
         backgroundColor: 'mint',
         toggleTextColor: 'mint',
         toggleBackColor: 'white',
+        highlight: true,
         onClick: () => {
           console.log('TODO : move to History');
           this.navigateTo(0);
