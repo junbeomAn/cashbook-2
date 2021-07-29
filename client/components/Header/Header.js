@@ -14,7 +14,6 @@ export default class Header extends Component {
       ...params,
       componentName: 'header',
       componentState: { year: 2021, month: 7, navigation: 0 },
-      props: params.props || {},
     });
     this.changeDate = this.changeDate.bind(this);
     this.navigateTo = this.navigateTo.bind(this);

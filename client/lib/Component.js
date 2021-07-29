@@ -20,7 +20,7 @@ export default class Component {
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
     this.innerHTML = null; // innerNode의 또 다른 innerHTML 표현 ( Template 표현 )
     this.containerClass = params.containerClass || 'adjustFit';
-    this._props = params.props;
+    this._props = params.props || {};
     this.isComponentMounted = false;
 
     // Parent는 Component가 붙어있을 또 다른 Component 객체입니다. 최상위 객체는 null을 가집니다.
