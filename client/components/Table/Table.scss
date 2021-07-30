@@ -1,0 +1,48 @@
+@import '../../pages/color.scss';
+@import '../../pages/size.scss';
+@import '../../pages/reset.scss';
+
+$calendar-height: 604px;
+$box-radius: 10px;
+$cell-record-postion-bottom: 10px;
+$cell-record-line-height: 20px;
+
+.calendar-table {
+  width: 100%;
+  height: $calendar-height;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: $off-white;
+  border-radius: $box-radius;
+  border: 1px solid $line-grey;
+  @include box-shadow();
+
+  .table-cell {
+    color: $label-grey;
+    text-align: right;
+    padding: 8px 9px;
+    border-radius: $box-radius;
+    position: relative;
+    @include body-small();
+    &:hover {
+      background-color: rgba($line-grey, 0.3);
+    }
+    .record {
+      display: flex;
+      flex-direction: column;
+      text-align: left; 
+      position: absolute;
+      bottom: $cell-record-postion-bottom;
+      line-height: $cell-record-line-height;
+    }
+    .income {
+      color: $baemin-third;
+    }
+    .expenditure {
+      color: $baemin-error;
+    }
+    .total {
+      color: $title-active-black;
+    }
+  }
+}
