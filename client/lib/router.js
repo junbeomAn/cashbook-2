@@ -6,7 +6,6 @@
  *   .setNotFound(404PageRender)
  *   .start()
  *
- *
  */
 
 const initRouter = () => {
@@ -23,9 +22,7 @@ const initRouter = () => {
     }
     lastPathname = pathname;
 
-    const currentRoute = routes.find((route) => {
-      return route.url === pathname;
-    });
+    const currentRoute = routes.find((route) => route.url === pathname);
 
     if (!currentRoute) {
       notFound();
@@ -56,13 +53,13 @@ const initRouter = () => {
     if (path === pathname) {
       return;
     }
-    const pushEvent = new CustomEvent("push", { bubbles: true });
-    history.pushState(state, "", path);
+    const pushEvent = new CustomEvent('push', { bubbles: true });
+    window.history.pushState(state, '', path);
     document.dispatchEvent(pushEvent);
   };
 
   router.start = () => {
-    document.addEventListener("push", checkRoutes);
+    document.addEventListener('push', checkRoutes);
     return router;
   };
 

@@ -11,6 +11,8 @@ $item-gap: 20px;
 .cashbook-calendar {
   width: $calendar-width;
   height: $calendar-height;
+  margin-top: -140px;
+
   .calendar-day-bar {
     width: 100%;
     height: $calendar-day-bar-height;
@@ -43,7 +45,7 @@ $item-gap: 20px;
       // width: 200px;
       display: flex;
       justify-content: flex-start;
-      span:first-child {
+      p:first-child {
         margin-right: 15px;
       }
     }

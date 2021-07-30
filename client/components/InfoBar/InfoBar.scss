@@ -1,0 +1,42 @@
+@import '../../pages/color';
+@import '../../pages/size';
+@import '../../pages/reset';
+
+.info-bar-container {
+  & {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  & > p {
+    color: $baemin-third;
+    @include body-large();
+  }
+}
+.info-bar-amount-total-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.info-bar-amount-container {
+  & {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 12px
+  }
+  & > img {
+    width: 28px;
+    height: 28px;
+    margin: 0px;
+    cursor: pointer;
+  }
+  & > p {
+    margin-left: 8px;
+    margin-top: -4px;
+    line-height: 22px;
+    color: $baemin-third;
+    @include body-regular();}
+}

@@ -1,4 +1,4 @@
-import { deepCopy, getUniqueId, $ } from '../util/util';
+import { deepCopy, deepCompare, getUniqueId, $ } from '../util/util';
 
 export default class Component {
   constructor(params) {
@@ -20,7 +20,7 @@ export default class Component {
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
     this.innerHTML = null; // innerNode의 또 다른 innerHTML 표현 ( Template 표현 )
     this.containerClass = params.containerClass || 'adjustFit';
-    this._props = params.props;
+    this.props = params.props || {};
     this.isComponentMounted = false;
 
     // Parent는 Component가 붙어있을 또 다른 Component 객체입니다. 최상위 객체는 null을 가집니다.
@@ -52,10 +52,6 @@ export default class Component {
   initState(componentState = {}, modelState = {}) {
     this._componentState = componentState;
     this._modelState = modelState;
-  }
-
-  get props() {
-    return deepCopy(this._props);
   }
 
   get componentState() {
@@ -239,11 +235,6 @@ export default class Component {
 
   shouldComponentUpdate(prevState, newState) {
     // 필요하다면 더 자세한 비교 방법은 재정의하여 정의한다.
-    for (const key in prevState) {
-      if (newState[key] !== prevState[key]) {
-        return true;
-      }
-    }
-    return false;
+    return !deepCompare(prevState, newState);
   }
 }
