@@ -73,9 +73,18 @@ export default class Table extends Component {
     ];
   }
 
+  fillLeadingZeros(num) {
+    if (num < 10) {
+      return '0' + num;
+    } else {
+      return '' + num;
+    }
+  }
+
   makeCalendarTableWithCell() {
     const { currentMonth, currentYear, histories } = this.props;
-    const firstDate = new Date(`${currentYear}-${currentMonth}-1`);
+    const fullCurrMonth = this.fillLeadingZeros(currentMonth);
+    const firstDate = new Date(`${currentYear}-${fullCurrMonth}-01`);
     const addDayCountFront = firstDate.getDay();
     const lastDay = this.getLastDayOfMonth(currentMonth);
     const emptyCell = "<div class='table-cell'></div>";

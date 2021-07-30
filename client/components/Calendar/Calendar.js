@@ -10,7 +10,7 @@ export default class Calendar extends Component {
       parent: this,
       keyword: 'table',
       props: {
-        currentMonth: 10,
+        currentMonth: 7,
         currentYear: 2021,
         histories: [
           {
@@ -32,6 +32,7 @@ export default class Calendar extends Component {
     const mockIncome = 1822480;
     const mockExpendit = 834640;
     const mockTotal = 987840;
+    console.log("render??")
     return `
       <section class="cashbook-calendar">
         <div class="calendar-day-bar">

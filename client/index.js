@@ -1,17 +1,35 @@
 import CalendarPage from '@/pages/Calendar/CalendarPage';
 import Main from '@/pages/Main/Main';
+import router from '@/lib/router';
 import Model from '@/lib/Model';
 import Controller from '@/lib/Controller';
 
 window.onload = () => {
   const model = new Model();
   const controller = new Controller({ model });
-  new CalendarPage({
+   new Main({
     parent: null,
     $target: document.body,
     controller,
-  }); // View
-
+  });
+  const defaultProps = {
+    parent: null,
+    $target: document.body,
+    controller,
+  };
+  const cleanUpPageMiddleware = () => {
+    document.body.innerHTML = '';
+    return true;
+  }
+  router
+    .addRoute('/history', Main, { ...defaultProps }, cleanUpPageMiddleware)
+    .addRoute('/calendar', CalendarPage, { ...defaultProps }, cleanUpPageMiddleware)
+    .start()
+  /* new CalendarPage({
+     parent: null,
+     $target: document.body,
+     controller,
+   }); // View */
   /* new Main({
     parent: null,
     $target: document.body,

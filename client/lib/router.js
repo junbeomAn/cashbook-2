@@ -17,27 +17,30 @@ const initRouter = () => {
 
   const checkRoutes = () => {
     const { pathname } = window.location;
+
     if (lastPathname === pathname) {
       return;
     }
     lastPathname = pathname;
 
-    const currentRoute = routes.find((route) => route.url === pathname);
-
+    // const currentRoute = routes.find((route) => route.url === pathname);
+    const currentRoute = routes.find((route) => route.url === `/${pathname.split('/')[2]}`);
+    
     if (!currentRoute) {
       notFound();
       return;
     }
     if (currentRoute.middleware && currentRoute.middleware() === false) return;
-
-    new currentRoute.component();
+    
+    new currentRoute.component(currentRoute.defaultProps);
   };
 
-  router.addRoute = (url, component, middleware) => {
+  router.addRoute = (url, component, defaultProps, middleware) => {
     routes.push({
       url,
       component,
       middleware,
+      defaultProps
     });
 
     return router;
