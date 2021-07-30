@@ -1,15 +1,22 @@
-import Main from './pages/Main/Main';
-import Model from './lib/Model';
-import Controller from './lib/Controller';
+import CalendarPage from '@/pages/Calendar/CalendarPage';
+import Main from '@/pages/Main/Main';
+import Model from '@/lib/Model';
+import Controller from '@/lib/Controller';
 
 window.onload = () => {
   const model = new Model();
   const controller = new Controller({ model });
-  new Main({
+  new CalendarPage({
     parent: null,
     $target: document.body,
     controller,
   }); // View
+
+  /* new Main({
+    parent: null,
+    $target: document.body,
+    controller,
+  }); */
 };
 /*
 model.initData();
