@@ -7,6 +7,7 @@ import {
   HEADER_TEXT,
 } from '@/util/constant';
 import './Header.scss';
+import router from '@/lib/router';
 
 export default class Header extends Component {
   constructor(params) {
@@ -86,6 +87,7 @@ export default class Header extends Component {
           highlight: navigateHighlightLocation === index,
           onClick: () => {
             console.log(`TODO : move to ${navigateKeyword[index]}`);
+            router.push(navigateKeyword[index]);
             this.navigateTo(index);
           },
         },
