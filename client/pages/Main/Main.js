@@ -4,6 +4,13 @@ import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
+import Modal from '@/components/Modal/Modal';
+import {
+  PAYMENT_MODAL_TITLE,
+  PAYMENT_MODAL_CANCEL_TEXT,
+  PAYMENT_MODAL_SUBMIT_TEXT,
+  PAYMENT_MODAL_PLACEHOLDER,
+} from '@/util/constant';
 import './Main.scss';
 import '@/pages/global.scss';
 
@@ -81,6 +88,25 @@ export default class Main extends Component {
       props: {
         selectedDate,
         selectedData,
+        popUpModal: () => {
+          const $modalParent = this.querySelector('.app-background');
+          const $modal = new Modal({
+            parent: null,
+            keyword: 'alert-modal',
+            props: {
+              title: PAYMENT_MODAL_TITLE,
+              cancelText: PAYMENT_MODAL_CANCEL_TEXT,
+              submitText: PAYMENT_MODAL_SUBMIT_TEXT,
+              placeholder: PAYMENT_MODAL_PLACEHOLDER,
+              submitColor: 'mint',
+              onSubmitClick: (data) => {
+                console.log(data);
+              },
+            },
+          });
+
+          $modalParent.appendChild($modal.innerNode);
+        },
       },
     });
 

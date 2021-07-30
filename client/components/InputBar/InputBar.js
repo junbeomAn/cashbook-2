@@ -18,6 +18,11 @@ export default class InputBar extends Component {
     }`;
   }
 
+  preTemplate() {
+    console.log(this.props);
+    this.addEvent('.dropdown-add-img', 'click', () => this.props.popUpModal());
+  }
+
   defineTemplate() {
     const { selectedData, selectedDate } = this.props;
     let date = '';
@@ -61,7 +66,7 @@ export default class InputBar extends Component {
         <p>결제수단</p>
         <div class="input-bar-dropdown-section">
           <p>${payment}</p>
-          <img src=${down}/>
+          <img class="dropdown-add-img" src=${down}/>
         </div>
       </div>
       <div class="input-bar-vertical-line"></div>
