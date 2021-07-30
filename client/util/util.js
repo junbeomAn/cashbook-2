@@ -25,4 +25,8 @@ const $ = {
   create: (element) => document.createElement(element),
 };
 
-export { deepCopy, $, getUniqueId };
+const getAmountWithComma = (amount) => {
+  return Number(amount).toLocaleString();
+}
+
+export { deepCopy, $, getUniqueId, getAmountWithComma };
