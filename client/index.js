@@ -11,6 +11,12 @@ window.onload = () => {
     $target: document.body,
     controller,
   }); // View
+
+  /* new Main({
+    parent: null,
+    $target: document.body,
+    controller,
+  }); */
 };
 /*
 model.initData();
