@@ -6,7 +6,6 @@
  *   .setNotFound(404PageRender)
  *   .start()
  *
- *
  */
 
 const initRouter = () => {
@@ -55,7 +54,7 @@ const initRouter = () => {
       return;
     }
     const pushEvent = new CustomEvent('push', { bubbles: true });
-    history.pushState(state, '', path);
+    window.history.pushState(state, '', path);
     document.dispatchEvent(pushEvent);
   };
 

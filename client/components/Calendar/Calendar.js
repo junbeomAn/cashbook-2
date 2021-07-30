@@ -5,25 +5,27 @@ import Table from '../Table/Table';
 import './Calendar.scss';
 
 export default class Calendar extends Component {
-
   preTemplate() {
     new Table({
       parent: this,
       keyword: 'table',
       props: {
-        currentMonth: 7,
+        currentMonth: 10,
         currentYear: 2021,
-        histories: [{
-          date: '2021-07-03',
-          income: 1500000,
-          expenditure: -32000
-        }, {
-          date: '2021-07-08',
-          income: 0,
-          expenditure: -80000
-        }]
-      }
-    })
+        histories: [
+          {
+            date: '2021-07-03',
+            income: 1500000,
+            expenditure: -32000,
+          },
+          {
+            date: '2021-07-08',
+            income: 0,
+            expenditure: -80000,
+          },
+        ],
+      },
+    });
   }
 
   defineTemplate() {
@@ -44,10 +46,10 @@ export default class Calendar extends Component {
         ${this.resolveChild('table')}
         <div class="calendar-total">
           <div class="left">
-            <span>총 수입: ${getAmountWithComma(mockIncome)}</span>
-            <span>총 지출: ${getAmountWithComma(mockExpendit)}</span>
+            <p>총 수입: ${getAmountWithComma(mockIncome)}</p>
+            <p>총 지출: ${getAmountWithComma(mockExpendit)}</p>
           </div>
-          <div class="right">총계: ${getAmountWithComma(mockTotal)}</div>
+          <p class="right">총계: ${getAmountWithComma(mockTotal)}</p>
         </div>
       </section>
     `;
