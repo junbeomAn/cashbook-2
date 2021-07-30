@@ -29,6 +29,12 @@ $body-font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
   font-family: $display-font;
 }
 
+@mixin body-xsmall() {
+  font-size: $text-xsmall;
+  font-weight: $text-weight;
+  font-family: $body-font;
+}
+
 @mixin body-small() {
   font-size: $text-small;
   font-weight: $text-weight;

@@ -1,11 +1,11 @@
-import TestPage from './pages/Test/TestPage';
+import Main from './pages/Main/Main';
 import Model from './lib/Model';
 import Controller from './lib/Controller';
 
 window.onload = () => {
   const model = new Model();
   const controller = new Controller({ model });
-  new TestPage({
+  new Main({
     parent: null,
     $target: document.body,
     controller,
