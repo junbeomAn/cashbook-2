@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { sequelize } = require('../db/models');
+const { PAYMENT_FETCH_SUCCESS, PAYMENT_POST_SUCCESS, PAYMENT_DELETE_SUCCESS } = require('../utils/constant');
 
 const { Payment } = sequelize.models
 
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
         UserId: userId
       },
     });
-    res.send({ ok: true, result, message: "결제수단 조회 완료" });
+    res.send({ ok: true, result, message: PAYMENT_FETCH_SUCCESS });
   } catch(err) {
     console.error(err);
   }
@@ -25,7 +26,7 @@ router.post('/', async (req, res) => {
       method,
       UserId: userId
     });
-    res.send({ ok: true, message: "결제수단 등록 완료" });
+    res.send({ ok: true, message: PAYMENT_POST_SUCCESS });
   } catch(err) {
     console.error(err);
   }
@@ -40,7 +41,7 @@ router.delete('/', async (req, res) => {
         method
       }
     })
-    res.send({ ok: true, message: "결제수단 삭제 완료" })
+    res.send({ ok: true, message: PAYMENT_DELETE_SUCCESS })
   } catch(err) {
     console.error(err);
   }
