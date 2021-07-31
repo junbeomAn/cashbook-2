@@ -1,7 +1,7 @@
 import Component from '@/lib/Component';
 import './Button.scss';
 
-export default class Header extends Component {
+export default class Button extends Component {
   constructor(params) {
     super({
       ...params,
