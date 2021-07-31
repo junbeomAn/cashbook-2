@@ -59,9 +59,20 @@ export default class Component {
   }
 
   set componentState(changedState) {
-    const prevState = this.componentState;
+    const prevState = this.getComponentState();
     this._componentState = { ...this._componentState, ...changedState };
-    const newState = this.componentState;
+    const newState = this.getComponentState();
+    this.update(prevState, newState);
+  }
+
+  getComponentState() { // 명확한 메서드 이름을 위해서 getter, setter 대신 메서드로 리팩토링
+    return deepCopy(this._componentState);
+  }
+
+  setComponentState(changedState) {
+    const prevState = this.getComponentState();
+    this._componentState = { ...this._componentState, ...changedState };
+    const newState = this.getComponentState();
     this.update(prevState, newState);
   }
 
