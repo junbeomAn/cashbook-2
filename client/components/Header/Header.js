@@ -18,7 +18,12 @@ export default class Header extends Component {
       ...params,
       componentName: 'header',
       componentState: { navigation: 0 },
-      modelState: { date: { year: 2021, month: 7 } },
+      modelState: {
+        date: {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+        },
+      },
     });
     this.changeDate = this.changeDate.bind(this);
     this.navigateTo = this.navigateTo.bind(this);
