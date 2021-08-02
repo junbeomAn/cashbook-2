@@ -32,14 +32,6 @@ export default class Main extends Component {
   }
 
   preTemplate() {
-    new Header({
-      parent: this,
-      keyword: 'header',
-      props: {
-        navigationLocation: 0,
-      },
-    });
-
     let totalIncome = 0;
     let totalOutage = 0;
     let totalCount = 0;
@@ -109,15 +101,10 @@ export default class Main extends Component {
         },
       },
     });
-
     return `
-    <div class="app-background">
-      ${this.resolveChild('header')}
       ${this.resolveChild('input-bar')}
-      <div class="main-contents-container">
-        ${this.resolveChild('info-bar')}
-        ${this.assembleHistoryData()}
-      </div>
-    </div>`;
+      ${this.resolveChild('info-bar')}
+      ${this.assembleHistoryData()}
+    `;
   }
 }
