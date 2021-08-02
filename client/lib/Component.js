@@ -58,10 +58,10 @@ export default class Component {
     return deepCopy(this._componentState);
   }
 
-  set componentState(changedState) {
-    const prevState = this.componentState;
+  setComponentState(changedState) {
+    const prevState = this.getComponentState();
     this._componentState = { ...this._componentState, ...changedState };
-    const newState = this.componentState;
+    const newState = this.getComponentState();
     this.update(prevState, newState);
   }
 

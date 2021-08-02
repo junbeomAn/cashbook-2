@@ -3,38 +3,46 @@ import Main from '@/pages/Main/Main';
 import router from '@/lib/router';
 import Model from '@/lib/Model';
 import Controller from '@/lib/Controller';
+import { $ } from './util/util';
+import Header from './components/Header/Header';
 
 window.onload = () => {
   const model = new Model();
   const controller = new Controller({ model });
+
+  const $target = $.create('div');
+  const $contentsContainer = $.create('div');
+  $target.classList.add('app-background');
+  $contentsContainer.classList.add('main-contents-container');
+  
+  new Header({
+    parent: null,
+    $target,
+    controller
+  })
+
+  $target.append($contentsContainer);
+  document.body.append($target);
+  
    new Main({
     parent: null,
-    $target: document.body,
+    $target: $contentsContainer,
     controller,
   });
   const defaultProps = {
     parent: null,
-    $target: document.body,
+    $target: $contentsContainer,
     controller,
   };
   const cleanUpPageMiddleware = () => {
-    document.body.innerHTML = '';
+    $contentsContainer.innerHTML = '';
     return true;
   }
   router
     .addRoute('/history', Main, { ...defaultProps }, cleanUpPageMiddleware)
     .addRoute('/calendar', CalendarPage, { ...defaultProps }, cleanUpPageMiddleware)
     .start()
-  /* new CalendarPage({
-     parent: null,
-     $target: document.body,
-     controller,
-   }); // View */
-  /* new Main({
-    parent: null,
-    $target: document.body,
-    controller,
-  }); */
+
 };
 /*
 model.initData();

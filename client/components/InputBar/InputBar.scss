@@ -5,8 +5,9 @@
 .input-bar-background {
   position: absolute;
   top: 152px;
-  left: calc(50% - 452px);
-
+  // left: calc(50% - 452px);
+  left: 50%;
+  transform: translateX(-50%);
   width: 904px;
   height: 76px;
   border: 1px solid #C1C5C5;

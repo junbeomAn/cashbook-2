@@ -38,12 +38,12 @@ export default class Header extends Component {
     }
     $month.classList.add('date-rotate-transform');
     setTimeout(() => {
-      this.componentState = { year, month };
+      this.setComponentState({ year, month });
     }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
   }
 
   navigateTo(index) {
-    this.componentState = { navigation: index };
+    this.setComponentState({ navigation: index });
     const navigateList = [
       this.resolveChild('history', false),
       this.resolveChild('calendar', false),

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { sequelize, Sequelize } = require('../db/models');
+const { HISTORIES_FETCH_SUCCESS, HISTORIES_POST_SUCCESS, HISTORIES_BY_CATEGORY_FETCH_SUCCESS } = require('../utils/constant');
 const { arrangeByDate, getDateRange, formatDate, encodeHTML } = require('../utils/routes');
 
 const { History, Payment } = sequelize.models;
@@ -22,8 +23,9 @@ const { History, Payment } = sequelize.models;
  * ]
  */
 
-// const selectCategoryName = sequelize.literal(`(SELECT name åFROM categories WHERE categories.id = histories.CategoryId)`);
+
 const selectPaymentMethod = sequelize.literal(`(SELECT method FROM payments WHERE payments.id = histories.PaymentId)`);
+
 
 router.get('/', async (req, res) => {
   const { userId, year, month } = req.query;
@@ -43,7 +45,7 @@ router.get('/', async (req, res) => {
     })
     const result = arrangeByDate(histories);
 
-    res.send({ ok: true, result, message: "histories 조회 완료" });
+    res.send({ ok: true, result, message: HISTORIES_FETCH_SUCCESS });
   } catch (err) {
     console.error(err);
   }
@@ -71,7 +73,7 @@ router.get('/category/:categoryId', async (req, res) => { // 중복 제거 필�
     })
     const result = arrangeByDate(histories);
 
-    res.send({ ok: true, result, message: "histories 조회 완료" });
+    res.send({ ok: true, result, message: HISTORIES_FETCH_SUCCESS });
   } catch (err) {
     console.error(err);
   }
@@ -103,7 +105,7 @@ router.get('/graph/:categoryId', async (req, res) => {
       group: ['month'],
       order: [['month', 'DESC']]
     });
-    res.send({ ok: true, result, message: `카테고리 id: ${categoryId}, 월별 지출 histories 조회 완료` });
+    res.send({ ok: true, result, message: HISTORIES_BY_CATEGORY_FETCH_SUCCESS(categoryId) });
   } catch (err) {
     console.error(err);
   }
@@ -141,7 +143,7 @@ router.post('/', async (req, res) => {
       UserId: userId
   
     })
-    res.send({ ok: true, message: '내역 추가 완료' });
+    res.send({ ok: true, message: HISTORIES_POST_SUCCESS });
   } catch(err) {
     console.error(err);
   }
@@ -173,7 +175,7 @@ router.put('/', async (req, res) => {
         id
       }
     })
-    res.send({ ok: true, message: '내역 수정 완료' });
+    res.send({ ok: true, message: HISTORIES_PUT_SUCCESS });
   } catch(err) {
     console.error(err);
   }
