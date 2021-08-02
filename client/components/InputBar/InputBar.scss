@@ -50,7 +50,7 @@
     @include body-xsmall();
     line-height: 17px;
     margin-bottom: 4px;
-    width: 150px;
+    width: 100px;
   }
 
   & input {
@@ -77,12 +77,61 @@
     align-items: center;
   }
   & > input {
-    margin-left: 38px;
+    margin-left: 8px;
     margin-right: 8px;
     width: 80px;
   }
   & > input::placeholder {
     text-align: right;
+  }
+}
+
+.input-bar-toggle-sign-container {
+  & {
+    width: 38px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  & > div:first-child {
+    margin-right: 6px;
+  }
+}
+
+.input-bar-toggle-selected {
+  & {
+    width: 16px;
+    height: 16px;
+    border-radius: 3.6px;
+    background-color: $baemin-third;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  & > p {
+    font-size: 16px;
+    line-height: 16px;
+    color: $off-white;
+  }
+}
+
+.input-bar-toggle-non-selected {
+  & {
+    width: 16px;
+    height: 16px;
+    border-radius: 3.6px;
+    background-color: $off-white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  & > p {
+    font-size: 16px;
+    line-height: 16px;
+    color: $baemin-third;
   }
 }
 

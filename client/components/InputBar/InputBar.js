@@ -9,6 +9,9 @@ export default class InputBar extends Component {
     super({
       ...params,
       componentName: 'input-bar',
+      componentState: {
+        sign: false,
+      },
     });
   }
 
@@ -20,6 +23,12 @@ export default class InputBar extends Component {
 
   preTemplate() {
     this.addEvent('.dropdown-add-img', 'click', () => this.props.popUpModal());
+    this.addEvent('.input-bar-plus-sign', 'click', () => {
+      this.setComponentState({ sign: true });
+    });
+    this.addEvent('.input-bar-minus-sign', 'click', () => {
+      this.setComponentState({ sign: false });
+    });
   }
 
   defineTemplate() {
@@ -29,14 +38,23 @@ export default class InputBar extends Component {
     let content = '';
     let payment = '선택하세요';
     let amount = '';
-    let sign = '-';
+    let togglePlus = this.componentState.sign
+      ? 'input-bar-toggle-selected'
+      : 'input-bar-toggle-non-selected';
+    let toggleMinus = !this.componentState.sign
+      ? 'input-bar-toggle-selected'
+      : 'input-bar-toggle-non-selected';
     if (selectedDate.year) {
       date = this.makeDate(selectedDate);
       category = selectedData.category;
       content = selectedData.content;
       payment = selectedData.payment;
       if (selectedData.amount > 0) {
-        sign = '+';
+        togglePlus = 'input-bar-toggle-selected';
+        toggleMinus = 'input-bar-toggle-non-selected';
+      } else {
+        togglePlus = 'input-bar-toggle-non-selected';
+        toggleMinus = 'input-bar-toggle-selected';
       }
       amount = `${moneyFormat(Math.abs(selectedData.amount))}`;
     }
@@ -71,7 +89,14 @@ export default class InputBar extends Component {
       <div class="input-bar-section">
         <p>금액</p>
         <div class="input-bar-price-input">
-          <p>${sign}</p>
+          <div class="input-bar-toggle-sign-container">
+            <div class="input-bar-plus-sign ${togglePlus}">
+              <p> + </p>
+            </div>
+            <div class="input-bar-minus-sign ${toggleMinus}">
+              <p> - </p>
+            </div>
+          </div>
           <input type="text" placeholder="입력하세요" value=${amount}>
           <p>원</p>
         </div>
