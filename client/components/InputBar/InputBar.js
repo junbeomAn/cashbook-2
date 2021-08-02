@@ -1,6 +1,8 @@
 import Component from '@/lib/Component';
+import Dropdown from '@/components/Dropdown/Dropdown';
 import down from '@/asset/down.svg';
 import saveEmpty from '@/asset/saveEmpty.png';
+import { INPUT_DROPDOWN_ANIMATION_TIME } from '@/util/constant';
 import { moneyFormat, getToday } from '../../util/util';
 import './InputBar.scss';
 
@@ -28,6 +30,54 @@ export default class InputBar extends Component {
     });
     this.addEvent('.input-bar-minus-sign', 'click', () => {
       this.setComponentState({ sign: false });
+    });
+
+    // Dropdown 관련 이벤트
+    this.addEvent('.classification-section img', 'click', () => {
+      const $parent = this.querySelector('.classification-section');
+      const $dropdown = $parent.querySelector('.drop-down-container');
+
+      // 없을때만 붙인다.
+      if (!$dropdown) {
+        const dropdown = new Dropdown({
+          parent: this,
+          keyword: 'dropdown',
+          props: {
+            itemList: [
+              '생활',
+              '식비',
+              '교통',
+              '쇼핑/뷰티',
+              '의료/건강',
+              '문화/여가',
+              '미분류',
+            ],
+            onClick: (text) => {
+              const $animator = dropdown.querySelector(
+                '.drop-down-animator-down'
+              );
+              $animator.classList.toggle('drop-down-animator-down');
+              $animator.classList.toggle('drop-down-animator-up');
+              const $dropdownAll = this.querySelector(`#${dropdown.id}`);
+              setTimeout(() => {
+                console.log('TODO : set this to modelState : ', text);
+                $parent.removeChild($dropdownAll);
+              }, INPUT_DROPDOWN_ANIMATION_TIME);
+            },
+          },
+        });
+        $parent.appendChild(dropdown.innerNode);
+      } else {
+        // 있으면 없앤다.
+        const $animator = $dropdown.querySelector('.drop-down-animator-down');
+        $animator.classList.toggle('drop-down-animator-down');
+        $animator.classList.toggle('drop-down-animator-up');
+        setTimeout(() => {
+          const dropdown = this.resolveChild('dropdown', false);
+          const $dropdownAll = this.querySelector(`#${dropdown.id}`);
+          $parent.removeChild($dropdownAll);
+        }, INPUT_DROPDOWN_ANIMATION_TIME);
+      }
     });
   }
 
