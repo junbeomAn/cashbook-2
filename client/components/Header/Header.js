@@ -21,7 +21,7 @@ export default class Header extends Component {
   }
 
   changeDate(amount) {
-    const nowState = this.getComponentState();
+    const nowState = this.componentState;
     let { year, month } = nowState;
     const $month = this.querySelector('.header-date-month');
     const $year = this.querySelector('.header-date-year');
@@ -61,9 +61,8 @@ export default class Header extends Component {
       this.resolveChild('calendar', false),
       this.resolveChild('chart', false),
     ];
-    const componentState = this.getComponentState();
     navigateList.forEach((el, elIndex) => {
-      if (elIndex === componentState.navigation) el.textOn();
+      if (elIndex === this.componentState.navigation) el.textOn();
       else el.textOff();
     });
   }
@@ -118,7 +117,6 @@ export default class Header extends Component {
   }
 
   defineTemplate() {
-    const componentState = this.getComponentState();
     return `
     <div class="header-container">
       <div class="header-contents-container">
@@ -128,8 +126,8 @@ export default class Header extends Component {
         <div class="header-total-date-container">
           ${this.resolveChild('left-arrow')}
           <div class="header-date-container">
-            <p class="header-date-month">${componentState.month}월</p>
-            <p class="header-date-year">${componentState.year}</p>
+            <p class="header-date-month">${this.componentState.month}월</p>
+            <p class="header-date-year">${this.componentState.year}</p>
           </div>
           ${this.resolveChild('right-arrow')}
         </div>
