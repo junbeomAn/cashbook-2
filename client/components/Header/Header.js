@@ -77,6 +77,11 @@ export default class Header extends Component {
   }
 
   preTemplate() {
+    this.addEvent('.logo-container', 'click', () => {
+      router.push('history');
+      this.navigateTo(0);
+    });
+
     const navigateHighlightLocation = this.props.navigationLocation || 0;
     const navigateText = ['내역', '달력', '통계'];
     const navigateKeyword = ['history', 'calendar', 'chart'];
