@@ -60,10 +60,10 @@ export default class Main extends Component {
           data: histories,
           historyIndex: index,
           onClick: (historyIndex, contentsIndex) => {
-            this.componentState = {
+            this.setComponentState({
               selectedDate: historyData[historyIndex].date,
               selectedData: historyData[historyIndex].history[contentsIndex],
-            };
+            });
           },
         },
       });

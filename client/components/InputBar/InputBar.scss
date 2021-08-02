@@ -36,11 +36,21 @@
     justify-content: center;
     align-items: flex-start;
   }
+  &.date-section {
+    width: 80px;
+  }
+  &.classification-section {
+    width: 100px;
+  }
+  &.contents-section {
+    width: 170px;
+  }
   & > p {
     color: $baemin-primary;
     @include body-xsmall();
     line-height: 17px;
     margin-bottom: 4px;
+    width: 150px;
   }
 
   & input {
@@ -67,9 +77,12 @@
     align-items: center;
   }
   & > input {
-    margin-left: 8px;
+    margin-left: 38px;
     margin-right: 8px;
-    direction:rtl;
+    width: 80px;
+  }
+  & > input::placeholder {
+    text-align: right;
   }
 }
 
