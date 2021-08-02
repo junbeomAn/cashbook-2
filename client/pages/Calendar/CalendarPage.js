@@ -1,5 +1,4 @@
 import Component from '@/lib/Component';
-import Header from '@/components/Header/Header';
 import Calendar from '@/components/Calendar/Calendar';
 
 import './CalendarPage.scss';

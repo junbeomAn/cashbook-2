@@ -1,5 +1,4 @@
 import Component from '@/lib/Component';
-import Header from '@/components/Header/Header';
 import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
