@@ -32,7 +32,6 @@ export default class Calendar extends Component {
     const mockIncome = 1822480;
     const mockExpendit = 834640;
     const mockTotal = 987840;
-    console.log("render??")
     return `
       <section class="cashbook-calendar">
         <div class="calendar-day-bar">

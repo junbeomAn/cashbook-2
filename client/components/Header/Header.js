@@ -86,7 +86,6 @@ export default class Header extends Component {
           toggleBackColor: 'white',
           highlight: navigateHighlightLocation === index,
           onClick: () => {
-            console.log(`TODO : move to ${navigateKeyword[index]}`);
             router.push(navigateKeyword[index]);
             this.navigateTo(index);
           },

@@ -59,9 +59,9 @@ export default class Component {
   }
 
   setComponentState(changedState) {
-    const prevState = this.getComponentState();
+    const prevState = this.componentState;
     this._componentState = { ...this._componentState, ...changedState };
-    const newState = this.getComponentState();
+    const newState = this.componentState;
     this.update(prevState, newState);
   }
 

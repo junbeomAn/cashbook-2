@@ -23,15 +23,21 @@ const initRouter = () => {
     }
     lastPathname = pathname;
 
-    // const currentRoute = routes.find((route) => route.url === pathname);
-    const currentRoute = routes.find((route) => route.url === `/${pathname.split('/')[2]}`);
-    
+    let currentRoute;
+    if (process.env.NODE_ENV === 'development') {
+      currentRoute = routes.find((route) => route.url === pathname);
+    } else {
+      currentRoute = routes.find(
+        (route) => route.url === `/${pathname.split('/')[2]}`
+      );
+    }
+
     if (!currentRoute) {
       notFound();
       return;
     }
     if (currentRoute.middleware && currentRoute.middleware() === false) return;
-    
+
     new currentRoute.component(currentRoute.defaultProps);
   };
 
@@ -40,9 +46,8 @@ const initRouter = () => {
       url,
       component,
       middleware,
-      defaultProps
+      defaultProps,
     });
-
     return router;
   };
 

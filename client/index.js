@@ -14,17 +14,17 @@ window.onload = () => {
   const $contentsContainer = $.create('div');
   $target.classList.add('app-background');
   $contentsContainer.classList.add('main-contents-container');
-  
+
   new Header({
     parent: null,
     $target,
-    controller
-  })
+    controller,
+  });
 
   $target.append($contentsContainer);
   document.body.append($target);
-  
-   new Main({
+
+  new Main({
     parent: null,
     $target: $contentsContainer,
     controller,
@@ -37,12 +37,16 @@ window.onload = () => {
   const cleanUpPageMiddleware = () => {
     $contentsContainer.innerHTML = '';
     return true;
-  }
+  };
   router
     .addRoute('/history', Main, { ...defaultProps }, cleanUpPageMiddleware)
-    .addRoute('/calendar', CalendarPage, { ...defaultProps }, cleanUpPageMiddleware)
-    .start()
-
+    .addRoute(
+      '/calendar',
+      CalendarPage,
+      { ...defaultProps },
+      cleanUpPageMiddleware
+    )
+    .start();
 };
 /*
 model.initData();
