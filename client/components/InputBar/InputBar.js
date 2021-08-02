@@ -66,7 +66,7 @@ export default class InputBar extends Component {
         <p>결제수단</p>
         <div class="input-bar-dropdown-section">
           <p>${payment}</p>
-          <img class="dropdown-add-img" src=${down}/>
+          <img class="dropdown-add-img" src="${down}"/>
         </div>
       </div>
       <div class="input-bar-vertical-line"></div>
@@ -78,7 +78,7 @@ export default class InputBar extends Component {
           <p>원</p>
         </div>
       </div>
-      <img class="input-bar-save-img" src=${saveEmpty}/>
+      <img class="input-bar-save-img" src="${saveEmpty}"/>
     </div>`;
   }
 }
