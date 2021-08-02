@@ -18,9 +18,11 @@ export default class InputBar extends Component {
   }
 
   makeDate(selectedDate) {
-    return `${selectedDate.year}${`${selectedDate.month}`.padStart(2, '0')}${
-      selectedDate.day
-    }`;
+    return `
+    ${selectedDate.year}${`${selectedDate.month}`.padStart(
+      2,
+      '0'
+    )}${`${selectedDate.day}`.padStart(2, '0')}`;
   }
 
   preTemplate() {
