@@ -45,8 +45,13 @@ const $ = {
   create: (element) => document.createElement(element),
 };
 
-const getAmountWithComma = (amount) => {
-  return Number(amount).toLocaleString();
-}
+const getAmountWithComma = (amount) => Number(amount).toLocaleString();
 
-export { deepCopy, deepCompare, moneyFormat,getAmountWithComma, $, getUniqueId };
+export {
+  deepCopy,
+  deepCompare,
+  moneyFormat,
+  getAmountWithComma,
+  $,
+  getUniqueId,
+};

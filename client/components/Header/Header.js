@@ -9,20 +9,29 @@ import {
 import './Header.scss';
 import router from '@/lib/router';
 
+const DATE_UP_EVENT = 'DATE_UP_EVENT';
+const DATE_DOWN_EVENT = 'DATE_DOWN_EVENT';
+
 export default class Header extends Component {
   constructor(params) {
     super({
       ...params,
       componentName: 'header',
-      componentState: { year: 2021, month: 7, navigation: 0 },
+      componentState: { navigation: 0 },
+      modelState: {
+        date: {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+        },
+      },
     });
     this.changeDate = this.changeDate.bind(this);
     this.navigateTo = this.navigateTo.bind(this);
   }
 
-  changeDate(amount) {
-    const nowState = this.componentState;
-    let { year, month } = nowState;
+  async changeDate(amount) {
+    const nowState = this.modelState;
+    let { year, month } = nowState.date;
     const $month = this.querySelector('.header-date-month');
     const $year = this.querySelector('.header-date-year');
 
@@ -37,9 +46,14 @@ export default class Header extends Component {
       $year.classList.add('date-rotate-transform');
     }
     $month.classList.add('date-rotate-transform');
-    setTimeout(() => {
-      this.setComponentState({ year, month });
-    }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
+
+    await new Promise((res) => {
+      setTimeout(() => {
+        res();
+      }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
+    });
+
+    return { month, year };
   }
 
   navigateTo(index) {
@@ -68,6 +82,11 @@ export default class Header extends Component {
   }
 
   preTemplate() {
+    this.addEvent('.logo-container', 'click', () => {
+      router.push('history');
+      this.navigateTo(0);
+    });
+
     const navigateHighlightLocation = this.props.navigationLocation || 0;
     const navigateText = ['내역', '달력', '통계'];
     const navigateKeyword = ['history', 'calendar', 'chart'];
@@ -86,7 +105,6 @@ export default class Header extends Component {
           toggleBackColor: 'white',
           highlight: navigateHighlightLocation === index,
           onClick: () => {
-            console.log(`TODO : move to ${navigateKeyword[index]}`);
             router.push(navigateKeyword[index]);
             this.navigateTo(index);
           },
@@ -100,7 +118,7 @@ export default class Header extends Component {
       props: {
         imgSrc: leftArrow,
         onClick: () => {
-          this.changeDate(-1);
+          this.controller.emitEvent(DATE_DOWN_EVENT);
         },
       },
     });
@@ -110,9 +128,29 @@ export default class Header extends Component {
       props: {
         imgSrc: rightArrow,
         onClick: () => {
-          this.changeDate(1);
+          this.controller.emitEvent(DATE_UP_EVENT);
         },
       },
+    });
+
+    this.registerControllerEvent(DATE_UP_EVENT, async () => {
+      const state = await this.changeDate(1);
+      const e = {
+        state,
+        key: 'date',
+      };
+
+      return e;
+    });
+
+    this.registerControllerEvent(DATE_DOWN_EVENT, async () => {
+      const state = await this.changeDate(-1);
+      const e = {
+        state,
+        key: 'date',
+      };
+
+      return e;
     });
   }
 
@@ -126,8 +164,8 @@ export default class Header extends Component {
         <div class="header-total-date-container">
           ${this.resolveChild('left-arrow')}
           <div class="header-date-container">
-            <p class="header-date-month">${this.componentState.month}월</p>
-            <p class="header-date-year">${this.componentState.year}</p>
+            <p class="header-date-month">${this.modelState.date.month}월</p>
+            <p class="header-date-year">${this.modelState.date.year}</p>
           </div>
           ${this.resolveChild('right-arrow')}
         </div>

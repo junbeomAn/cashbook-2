@@ -14,7 +14,8 @@ export default class Component {
     }
     this.componentName = componentName; // Unique ID를 만들기 위한 용도
     this.id = getUniqueId(this.componentName);
-    this._componentState = params.componentState;
+    this._componentState = params.componentState || {};
+    this._modelState = params.modelState || {};
     this.eventList = [];
     this.childs = {}; // 이벤트 등록, update시 필요한 자식들
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
@@ -47,21 +48,49 @@ export default class Component {
     }
     this.$target = $target; // HTMLElements
     this.render();
+    this.addModelStateEvent(this._modelState);
   }
 
-  initState(componentState = {}, modelState = {}) {
-    this._componentState = componentState;
-    this._modelState = modelState;
+  addModelStateEvent(modelState) {
+    Object.keys(modelState).forEach((key) => {
+      this.controller.model.initData(key, modelState[key]);
+
+      // setModelState는 명시적으로 만들지 않고, 현재 eventListener에서만 사용 가능하도록 만든다.
+      this.controller.addEventCallback(key, (e) => {
+        // Set Model state from event detail.
+        const prevState = this.modelState;
+        const changedState = {};
+        changedState[key] = e.detail;
+        this._modelState = { ...this._modelState, ...changedState };
+        const newState = this.modelState;
+
+        // Check if state updatable.
+        this.update(prevState, newState);
+      });
+    });
+  }
+
+  registerControllerEvent(eventKey, callback) {
+    // Callback 형태 : callback() => { return e; }
+    /* e : [Object]
+        - state : [Object] ModelState에 들어갈 변경된 State.
+        - key : [String] ModelState에서 바뀐 state의 key.
+     */
+    this.controller.use(eventKey, callback);
   }
 
   get componentState() {
     return deepCopy(this._componentState);
   }
 
+  get modelState() {
+    return deepCopy(this._modelState);
+  }
+
   setComponentState(changedState) {
-    const prevState = this.getComponentState();
+    const prevState = this.componentState;
     this._componentState = { ...this._componentState, ...changedState };
-    const newState = this.getComponentState();
+    const newState = this.componentState;
     this.update(prevState, newState);
   }
 
@@ -177,7 +206,6 @@ export default class Component {
 
   defineTemplate() {
     // 상속받은곳에서 직접 구현해야 하는 Template을 return 하는 함수.
-    // useEvent도 여기서 사용해서 event 를 정의해줘야한다.
     throw new Error(
       '[Component] : Component를 사용하기 위해서는 Template을 반환하는 함수를 구현해야합니다.'
     );

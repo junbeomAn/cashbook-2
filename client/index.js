@@ -14,17 +14,17 @@ window.onload = () => {
   const $contentsContainer = $.create('div');
   $target.classList.add('app-background');
   $contentsContainer.classList.add('main-contents-container');
-  
+
   new Header({
     parent: null,
     $target,
-    controller
-  })
+    controller,
+  });
 
   $target.append($contentsContainer);
   document.body.append($target);
-  
-   new Main({
+
+  new Main({
     parent: null,
     $target: $contentsContainer,
     controller,
@@ -37,24 +37,14 @@ window.onload = () => {
   const cleanUpPageMiddleware = () => {
     $contentsContainer.innerHTML = '';
     return true;
-  }
+  };
   router
     .addRoute('/history', Main, { ...defaultProps }, cleanUpPageMiddleware)
-    .addRoute('/calendar', CalendarPage, { ...defaultProps }, cleanUpPageMiddleware)
-    .start()
-
+    .addRoute(
+      '/calendar',
+      CalendarPage,
+      { ...defaultProps },
+      cleanUpPageMiddleware
+    )
+    .start();
 };
-/*
-model.initData();
-
-controller.use('TestPageInputEvent', (e) => {
-  const $temp = e.model.modelState; // auto deepcopy.
-  $temp.TestPage.inputValue = e.data.inputValue;
-  controller.model.setModelState($temp); // 자동으로 TestPage에 이벤트 알람이 감. model에서 일일히 불러줄 필요 없음.
-  //$temp의 형태
-  //{
-  //  TestPage : {...},
-  //  History : {}
-  //}
-});
-*/

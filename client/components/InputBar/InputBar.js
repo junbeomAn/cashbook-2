@@ -19,7 +19,6 @@ export default class InputBar extends Component {
   }
 
   preTemplate() {
-    console.log(this.props);
     this.addEvent('.dropdown-add-img', 'click', () => this.props.popUpModal());
   }
 
@@ -32,7 +31,6 @@ export default class InputBar extends Component {
     let amount = '';
     let sign = '-';
     if (selectedDate.year) {
-      console.log(selectedData.amount);
       date = this.makeDate(selectedDate);
       category = selectedData.category;
       content = selectedData.content;
