@@ -87,8 +87,8 @@ export default class MainPage extends Component {
           historyIndex: index,
           onClick: (historyIndex, contentsIndex) => {
             this.setComponentState({
-              selectedDate: historyData[historyIndex].date,
-              selectedData: historyData[historyIndex].history[contentsIndex],
+              selectedDate: nowHistoryData[historyIndex].date,
+              selectedData: nowHistoryData[historyIndex].history[contentsIndex],
             });
           },
         },
