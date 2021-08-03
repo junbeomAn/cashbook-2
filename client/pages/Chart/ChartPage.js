@@ -1,4 +1,6 @@
 import Component from '@/lib/Component';
+import LineChart from '@/components/LineChart/LineChart';
+
 import './chart.scss';
 import '@/pages/global.scss';
 
@@ -11,11 +13,16 @@ export default class ChartPage extends Component {
     });
   }
 
-  preTemplate() {}
+  preTemplate() {
+    new LineChart({
+      parent: this,
+      keyword: 'line-chart',
+    });
+  }
 
   defineTemplate() {
     return `
-    <div></div>
+    ${this.resolveChild('line-chart')}
     `;
   }
 }
