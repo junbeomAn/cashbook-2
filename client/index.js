@@ -1,5 +1,6 @@
 import CalendarPage from '@/pages/Calendar/CalendarPage';
-import Main from '@/pages/Main/Main';
+import ChartPage from '@/pages/Chart/ChartPage';
+import MainPage from '@/pages/Main/MainPage';
 import router from '@/lib/router';
 import Model from '@/lib/Model';
 import Controller from '@/lib/Controller';
@@ -24,7 +25,7 @@ window.onload = () => {
   $target.append($contentsContainer);
   document.body.append($target);
 
-  new Main({
+  new MainPage({
     parent: null,
     $target: $contentsContainer,
     controller,
@@ -39,12 +40,13 @@ window.onload = () => {
     return true;
   };
   router
-    .addRoute('/history', Main, { ...defaultProps }, cleanUpPageMiddleware)
+    .addRoute('/history', MainPage, { ...defaultProps }, cleanUpPageMiddleware)
     .addRoute(
       '/calendar',
       CalendarPage,
       { ...defaultProps },
       cleanUpPageMiddleware
     )
+    .addRoute('/chart', ChartPage, { ...defaultProps }, cleanUpPageMiddleware)
     .start();
 };
