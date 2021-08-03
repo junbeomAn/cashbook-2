@@ -16,6 +16,7 @@ export default class Component {
     this.id = getUniqueId(this.componentName);
     this._componentState = params.componentState || {};
     this._modelState = params.modelState || {};
+    this.addModelStateEvent(this._modelState);
     this.eventList = [];
     this.childs = {}; // 이벤트 등록, update시 필요한 자식들
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
@@ -48,7 +49,6 @@ export default class Component {
     }
     this.$target = $target; // HTMLElements
     this.render();
-    this.addModelStateEvent(this._modelState);
   }
 
   addModelStateEvent(modelState) {

@@ -4,6 +4,7 @@ import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import Modal from '@/components/Modal/Modal';
+import { objectToList } from '@/util/util';
 import {
   PAYMENT_MODAL_TITLE,
   PAYMENT_MODAL_CANCEL_TEXT,
@@ -19,23 +20,48 @@ export default class MainPage extends Component {
       ...params,
       componentName: 'main-page',
       componentState: { selectedData: {}, selectedDate: {} },
+      modelState: {
+        date: {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+        },
+        historyData: {
+          data: historyData,
+        },
+      },
     });
+  }
+
+  getNowHistoryData() {
+    const { year, month } = this.modelState.date;
+    const { data } = this.modelState.historyData;
+    for (const key in this.modelState.historyData.data) {
+      if (data[key].currentMonth === month && data[key].currentYear === year) {
+        return objectToList(data[key].historyData);
+      }
+    }
+    return [];
   }
 
   assembleHistoryData() {
     let historyTemplate = '';
-    historyData.forEach((histories, index) => {
+
+    const nowHistoryData = this.getNowHistoryData();
+    nowHistoryData.forEach((histories, index) => {
       historyTemplate += this.resolveChild(`history-container-${index}`);
     });
     return historyTemplate;
   }
 
-  preTemplate() {
+  preTemplate() {}
+
+  defineTemplate() {
     let totalIncome = 0;
     let totalOutage = 0;
     let totalCount = 0;
 
-    historyData.forEach((histories) => {
+    const nowHistoryData = this.getNowHistoryData();
+    nowHistoryData.forEach((histories) => {
       totalCount += Object.keys(histories.history).length;
       totalIncome += histories.income;
       totalOutage += histories.expenditure;
@@ -52,7 +78,7 @@ export default class MainPage extends Component {
       },
     });
 
-    historyData.forEach((histories, index) => {
+    nowHistoryData.forEach((histories, index) => {
       new HistoryContainer({
         parent: this,
         keyword: `history-container-${index}`,
@@ -68,9 +94,7 @@ export default class MainPage extends Component {
         },
       });
     });
-  }
 
-  defineTemplate() {
     const { selectedData, selectedDate } = this.componentState;
 
     new InputBar({

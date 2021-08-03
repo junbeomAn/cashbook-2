@@ -23,9 +23,12 @@ export default class Controller {
     if (!this.eventRenderCallback[key]) {
       this.eventRenderCallback[key] = [];
       document.addEventListener(key, (e) => {
+        console.group('[CONTROLLER] EVENT CALLBACK RUN!');
         this.eventRenderCallback[key].forEach((cb) => {
           cb(e);
         });
+
+        console.groupEnd();
       });
     }
     this.eventRenderCallback[key].push(callback);
