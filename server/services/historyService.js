@@ -19,7 +19,7 @@ const getHistoriesOfOneMonth = async (whereOptions) => {
         'contents',
         'amount',
         'UserId',
-        'categoryId',
+        'CategoryId',
         [selectPaymentMethod, 'payment'],
       ],
       where: whereOptions,
