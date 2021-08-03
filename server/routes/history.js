@@ -114,6 +114,7 @@ router.post('/', async (req, res) => {
     method: payment,
   };
   const { result: PaymentId, err } = await getPaymentId(whereOptions);
+
   if (err) {
     res.send({ ok: false, err });
     return;

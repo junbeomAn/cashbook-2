@@ -7,7 +7,7 @@ const getPaymentId = async (whereOptions) => {
     const result = await Payment.findOne({
       where: whereOptions,
     });
-    return result;
+    return { result: result.id };
   } catch (err) {
     console.error(err);
     return err;
