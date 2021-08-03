@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Payment extends Model {
     /**
@@ -13,20 +11,23 @@ module.exports = (sequelize, DataTypes) => {
       models.Payment.hasMany(models.History);
       models.Payment.belongsTo(models.User);
     }
-  };
-  Payment.init({
-    method: {
-      type: DataTypes.TEXT,
-      allowNull: false
+  }
+  Payment.init(
+    {
+      method: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      underscored: false,
+      timestamps: false,
+      modelName: 'Payment',
+      tableName: 'payments',
+      charset: 'utf8',
+      collate: 'utf8_general_ci',
     }
-  }, {
-    sequelize,
-    underscored: false,
-    timestamps: false,
-    modelName: 'Payment',
-    tableName: 'payments',
-    charset: 'utf8',
-    collate: 'utf8_general_ci'   
-  });
+  );
   return Payment;
 };
