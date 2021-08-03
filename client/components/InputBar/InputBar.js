@@ -76,7 +76,9 @@ export default class InputBar extends Component {
           <p>원</p>
         </div>
       </div>
-      <img class="input-bar-save-img" src="${saveEmpty}"/>
+      <div class="input-bar-save-container">
+        <img class="input-bar-save-img" src="${saveEmpty}"/>
+      </div>
     </div>`;
   }
 }
