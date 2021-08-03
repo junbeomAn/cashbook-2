@@ -1,5 +1,6 @@
 import Component from '@/lib/Component';
 import { LINE_CHART } from '@/util/constant';
+import { moneyFormat } from '@/util/util';
 import './lineChart.scss';
 
 export default class LineChart extends Component {
@@ -14,12 +15,12 @@ export default class LineChart extends Component {
   preTemplate() {}
 
   horizonLine(sx, sy, ex, ey) {
-    return `<path class="line-chart-horizon-line" d="M${sx},${sy}L${ex},${ey}" stroke="#333" stroke-width="0.5" stroke-linejoin="round"/>
+    return `<path class="line-chart-horizon-line" d="M${sx},${sy}L${ex},${ey}" stroke="#aaa" stroke-width="0.5" stroke-linejoin="round"/>
     `;
   }
 
   vertiCalLine(sx, sy, ex, ey) {
-    return `<path class="line-chart-vertical-line" d="M${sx},${sy}L${ex},${ey}" stroke="#333" stroke-width="0.5" stroke-linejoin="round"/>
+    return `<path class="line-chart-vertical-line" d="M${sx},${sy}L${ex},${ey}" stroke="#aaa" stroke-width="0.5" stroke-linejoin="round"/>
     `;
   }
 
@@ -29,8 +30,12 @@ export default class LineChart extends Component {
     );
   }
 
-  makePath(coordList, height) {
-    const coordData = [{ x: 0, y: height }, ...coordList];
+  makePath(coordList, width, height) {
+    const coordData = [
+      { x: 0, y: height },
+      ...coordList,
+      { x: width, y: height },
+    ];
     let result = '<path class="graph-line" d="';
     result += `M 0, ${height} `;
     for (let i = 0; i < coordData.length - 1; i += 1) {
@@ -46,7 +51,7 @@ export default class LineChart extends Component {
       }`;
     }
 
-    result += '" stroke="#2AC1BC" stroke-width="2" stroke-linejoin="round"/>';
+    result += '" stroke="#A0E1E0" stroke-width="2" stroke-linejoin="round"/>';
 
     setTimeout(() => {
       const MAX_COUNT = coordData.length;
@@ -67,21 +72,34 @@ export default class LineChart extends Component {
     return result;
   }
 
-  makePoint(bottom, left, i) {
+  makePoint(bottom, left, i, amount) {
     let result = '<div class="line-chart-spend-point" ';
     result += `style="bottom:${bottom}px; left:${left}px;`;
     result += `animation-delay: ${
       LINE_CHART.POINT_WAIT_TIME + LINE_CHART.POINT_WAIT_INTERVAL * i
     }s;"`;
     result += '></div>';
+    result += '<p class="line-chart-label" ';
+    if (amount.length === 1) {
+      result += `style="bottom:${bottom + 15}px; left:${left + 2}px;`;
+    } else {
+      result += `style="bottom:${bottom + 15}px; left:${
+        left - 3 * amount.length + 3
+      }px;`;
+    }
+    result += `animation-delay: ${
+      LINE_CHART.POINT_WAIT_TIME + LINE_CHART.POINT_WAIT_INTERVAL * i
+    }s;"`;
+    result += `>${amount}</p>`;
+
+    result += '<p class="line-chart-label" ';
+    result += `style="width: 40px; bottom:${-20}px; left:${left - 18}px;"`;
+    result += `>${i} 월</p>`;
     return result;
   }
 
   defineTemplate() {
-    const monthlySpendAmount = [
-      600000, 1200000, 30000, 100000, 0, 2000000, 1500000, 0, 600000, 1200000,
-      30000, 100000, 0, 2000000, 1500000,
-    ];
+    const monthlySpendAmount = [38900, 21020, 300010, 20300, 9400, 67000];
     const maxAmount = Math.max(...monthlySpendAmount);
 
     const width = LINE_CHART.WIDTH;
@@ -114,11 +132,16 @@ export default class LineChart extends Component {
       });
     }
 
-    result += this.makePath(coordList, height);
+    result += this.makePath(coordList, width, height);
 
     result += '<div class="line-chart-dot-container">';
     for (let i = 0; i < monthlySpendAmount.length; i += 1) {
-      result += this.makePoint(height - coordList[i].y, coordList[i].x, i);
+      result += this.makePoint(
+        height - coordList[i].y,
+        coordList[i].x,
+        i,
+        moneyFormat(monthlySpendAmount[i])
+      );
     }
     result += '</div>';
 

@@ -42,24 +42,34 @@
 
 .line-chart-spend-point {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  transform: translate3D(-2.5px, -50px, 0px);
   opacity: 0;
-  background-color: #219A95;
   animation-name: pointOn;
   animation-duration: .5s;
   transition-duration: .5s;
   animation-fill-mode: forwards;
+
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  transform: translate3D(-2.5px, -50px, 0px);
+  background-color: #2AC1BC;
 }
 
-.line-chart-spend-point:hover {
-  width: 16px;
-  height: 16px;
-  transform: translate3d(-4px, 4px, 0px);
-  transform-origin: center;
-  border-radius: 16px;
+.line-chart-label {
+  position: absolute;
+  opacity: 0;
+  animation-name: pointOn;
+  animation-duration: .5s;
+  transition-duration: .5s;
+  animation-fill-mode: forwards;
+  color: $body-grey;
+  @include bold-small();
+}
+
+.line-chart-month-label {
+  position: absolute;
+  color: $body-grey;
+  @include bold-small();
 }
 
 @keyframes pointOn {
