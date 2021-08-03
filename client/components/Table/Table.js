@@ -75,10 +75,9 @@ export default class Table extends Component {
 
   fillLeadingZeros(num) {
     if (num < 10) {
-      return '0' + num;
-    } else {
-      return '' + num;
+      return `0${num}`;
     }
+    return `${num}`;
   }
 
   makeCalendarTableWithCell() {
@@ -98,7 +97,7 @@ export default class Table extends Component {
         historyIndex,
         i
       );
-      historyIndex = result[0];
+      [historyIndex] = result;
       ret += result[1];
       cellCount += 1;
     }

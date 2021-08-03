@@ -80,7 +80,7 @@ export default class Main extends Component {
         selectedDate,
         selectedData,
         popUpModal: () => {
-          const $modalParent = this.querySelector('.app-background');
+          const $modalParent = document.querySelector('.app-background');
           const $modal = new Modal({
             parent: null,
             keyword: 'alert-modal',
