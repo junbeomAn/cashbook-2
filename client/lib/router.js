@@ -56,18 +56,25 @@ const initRouter = () => {
     return router;
   };
 
-  router.push = (path, state = {}) => {
+  router.push = (path, back = false, state = {}) => {
     const { pathname } = window.location;
     if (path === pathname) {
       return;
     }
     const pushEvent = new CustomEvent('push', { bubbles: true });
-    window.history.pushState(state, '', path);
+    if (back) {
+      window.history.replaceState({ ...state, path }, '', path);
+    } else {
+      window.history.pushState({ ...state, path }, '', path);
+    }
     document.dispatchEvent(pushEvent);
   };
 
   router.start = () => {
-    document.addEventListener('push', checkRoutes);
+    window.addEventListener('push', checkRoutes);
+    window.addEventListener('popstate', (e) => {
+      router.push(e.state.path, true);
+    });
     return router;
   };
 
