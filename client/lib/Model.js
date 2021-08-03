@@ -25,6 +25,15 @@ export default class Model {
     // key : [String] 각 페이지를 구분하는 값.
     if (!this._data[key]) {
       this._data[key] = { ...state, ...this._data[key] };
+      return {
+        result: true,
+      };
     }
+    const obj = {};
+    obj[key] = this._data[key];
+    return {
+      result: false,
+      data: obj,
+    };
   }
 }

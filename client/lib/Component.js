@@ -53,7 +53,10 @@ export default class Component {
 
   addModelStateEvent(modelState) {
     Object.keys(modelState).forEach((key) => {
-      this.controller.model.initData(key, modelState[key]);
+      const initResult = this.controller.model.initData(key, modelState[key]);
+      if (!initResult.result) {
+        this._modelState = { ...this._modelState, ...initResult.data };
+      }
 
       // setModelState는 명시적으로 만들지 않고, 현재 eventListener에서만 사용 가능하도록 만든다.
       this.controller.addEventCallback(key, (e) => {
