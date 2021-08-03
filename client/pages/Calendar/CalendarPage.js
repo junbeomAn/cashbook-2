@@ -23,6 +23,6 @@ export default class CalendarPage extends Component {
   defineTemplate() {
     return `
        ${this.resolveChild('calendar')}
-      `
+      `;
   }
 }

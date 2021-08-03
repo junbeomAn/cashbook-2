@@ -8,14 +8,14 @@
   transform: translateX(-50%);
   width: 904px;
   height: 76px;
-  border: 1px solid #C1C5C5;
-  
+  border: 1px solid #c1c5c5;
+
   @include box-shadow();
   border-radius: 10px;
   background-color: $off-white;
   padding: 16px 32px 16px 32px;
 
-  display:flex;
+  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -24,7 +24,7 @@
 .input-bar-vertical-line {
   width: 0px;
   height: 100%;
-  border: .5px solid $placeholder-grey;
+  border: 0.5px solid $placeholder-grey;
   margin-left: 24px;
   margin-right: 24px;
 }
@@ -61,7 +61,7 @@
     border: none;
     background-color: $off-white;
   }
-  & input::placeholder{
+  & input::placeholder {
     color: $label-grey;
   }
   & input:focus {
@@ -148,10 +148,14 @@
   }
 }
 
-.input-bar-save-img {
+.input-bar-save-container {
   width: 40px;
   height: 40px;
-  object-fit: contain;
   margin: 2px 0px 2px 24px;
-  cursor: pointer;
+  .input-bar-save-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    cursor: pointer;
+  }
 }
