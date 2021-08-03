@@ -54,19 +54,23 @@ export default class LineChart extends Component {
     result += '" stroke="#A0E1E0" stroke-width="2" stroke-linejoin="round"/>';
 
     setTimeout(() => {
-      const MAX_COUNT = coordData.length;
-      const $chartLine = this.querySelector('.graph-line');
-      let lineCount = 0;
-      const drawLine = setInterval(() => {
-        const totalLength = $chartLine.getTotalLength();
-        $chartLine.style['stroke-dasharray'] = `${
-          (totalLength * lineCount) / MAX_COUNT
-        }px ${totalLength - (totalLength * lineCount) / MAX_COUNT}px`;
-        lineCount += 1;
-        if (lineCount === MAX_COUNT + 1) {
-          clearInterval(drawLine);
-        }
-      }, LINE_CHART.POINT_WAIT_INTERVAL * 1000);
+      try {
+        const MAX_COUNT = coordData.length;
+        const $chartLine = this.querySelector('.graph-line');
+        let lineCount = 0;
+        const drawLine = setInterval(() => {
+          const totalLength = $chartLine.getTotalLength();
+          $chartLine.style['stroke-dasharray'] = `${
+            (totalLength * lineCount) / MAX_COUNT
+          }px ${totalLength - (totalLength * lineCount) / MAX_COUNT}px`;
+          lineCount += 1;
+          if (lineCount === MAX_COUNT + 1) {
+            clearInterval(drawLine);
+          }
+        }, LINE_CHART.POINT_WAIT_INTERVAL * 1000);
+      } catch (error) {
+        // Do nothing, break
+      }
     }, LINE_CHART.POINT_WAIT_TIME * 1000);
 
     return result;

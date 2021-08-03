@@ -114,7 +114,7 @@ export default class Component {
       const $this = this.adjustWithDocumentNode();
 
       this.setTemplate();
-      if (this.$target) {
+      if (this.$target && this.innerNode && $this) {
         this.$target.replaceChild(this.innerNode, $this);
       }
 
