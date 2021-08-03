@@ -1,7 +1,7 @@
 import Component from '@/lib/Component';
-import './dropdownList.scss';
+import './dropdownItem.scss';
 
-export default class DropdownList extends Component {
+export default class DropdownItem extends Component {
   constructor(params) {
     super({
       ...params,

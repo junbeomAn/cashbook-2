@@ -13,7 +13,7 @@ import {
 import './Main.scss';
 import '@/pages/global.scss';
 
-export default class Main extends Component {
+export default class MainPage extends Component {
   constructor(params) {
     super({
       ...params,

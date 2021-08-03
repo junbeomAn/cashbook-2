@@ -1,5 +1,5 @@
 import Component from '@/lib/Component';
-import DropdownList from '@/components/DripdownList/DropdownList';
+import DropdownItem from '@/components/DropdownItem/DropdownItem';
 import './dropdown.scss';
 
 export default class Dropdown extends Component {
@@ -14,7 +14,7 @@ export default class Dropdown extends Component {
     const { itemList } = this.props;
 
     itemList.forEach((text, index) => {
-      new DropdownList({
+      new DropdownItem({
         parent: this,
         keyword: `list-${index}`,
         props: {
