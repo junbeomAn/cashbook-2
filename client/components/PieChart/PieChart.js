@@ -1,5 +1,6 @@
 import { COLOR_CONSTANT } from '@/util/constant';
 
+import './PieChart.scss';
 /**
  * data: []
  * [
