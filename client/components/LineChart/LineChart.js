@@ -1,14 +1,6 @@
-import Component from '../../lib/Component';
+import Component from '@/lib/Component';
+import { LINE_CHART } from '@/util/constant';
 import './lineChart.scss';
-
-const LINE_CHART_CURVE_RATIO = 0.15;
-const LINE_CHART_MIN_CURVE_VALUE = 20;
-const LINE_CHART_MAX_VALUE_RATIO = 1.2;
-const LINE_CHART_POINT_WAIT_TIME = 0.9;
-const LINE_CHART_POINT_WAIT_INTERVAL = 0.2;
-const LINE_CHART_WIDTH = 600;
-const LINE_CHART_HEIGHT = 300;
-const LINE_CAHRT_INTERVAL = 50;
 
 export default class LineChart extends Component {
   constructor(params) {
@@ -43,8 +35,8 @@ export default class LineChart extends Component {
     result += `M 0, ${height} `;
     for (let i = 0; i < coordData.length - 1; i += 1) {
       const interval = Math.min(
-        this.coordLen(coordData, i) * LINE_CHART_CURVE_RATIO,
-        LINE_CHART_MIN_CURVE_VALUE
+        this.coordLen(coordData, i) * LINE_CHART.CURVE_RATIO,
+        LINE_CHART.MIN_CURVE_VALUE
       );
 
       result += `C ${coordData[i].x + 1 + interval} ${coordData[i].y + 1}, ${
@@ -69,8 +61,8 @@ export default class LineChart extends Component {
         if (lineCount === MAX_COUNT + 1) {
           clearInterval(drawLine);
         }
-      }, LINE_CHART_POINT_WAIT_INTERVAL * 1000);
-    }, LINE_CHART_POINT_WAIT_TIME * 1000);
+      }, LINE_CHART.POINT_WAIT_INTERVAL * 1000);
+    }, LINE_CHART.POINT_WAIT_TIME * 1000);
 
     return result;
   }
@@ -79,7 +71,7 @@ export default class LineChart extends Component {
     let result = '<div class="line-chart-spend-point" ';
     result += `style="bottom:${bottom}px; left:${left}px;`;
     result += `animation-delay: ${
-      LINE_CHART_POINT_WAIT_TIME + LINE_CHART_POINT_WAIT_INTERVAL * i
+      LINE_CHART.POINT_WAIT_TIME + LINE_CHART.POINT_WAIT_INTERVAL * i
     }s;"`;
     result += '></div>';
     return result;
@@ -92,16 +84,17 @@ export default class LineChart extends Component {
     ];
     const maxAmount = Math.max(...monthlySpendAmount);
 
-    const width = LINE_CHART_WIDTH;
-    const height = LINE_CHART_HEIGHT;
-    const interval = LINE_CAHRT_INTERVAL;
+    const width = LINE_CHART.WIDTH;
+    const height = LINE_CHART.HEIGHT;
+    const interval = LINE_CHART.INTERVAL;
 
-    let result = `<div class="line-chart-container">
-    <svg 
-      class="line-chart" 
-      width="${width + 2}" height="${height + 2}" 
-      viewBox="-1 -1 ${width + 2} ${height + 2}" 
-      fill="none" xmlns="http://www.w3.org/2000/svg">`;
+    let result = `
+    <div class="line-chart-container">
+      <svg 
+        class="line-chart" 
+        width="${width + 2}" height="${height + 2}" 
+        viewBox="-1 -1 ${width + 2} ${height + 2}" 
+        fill="none" xmlns="http://www.w3.org/2000/svg">`;
 
     for (let i = 0; i < height / interval + 1; i += 1) {
       result += this.horizonLine(0, i * interval, width, i * interval);
@@ -116,7 +109,7 @@ export default class LineChart extends Component {
         y:
           height -
           height *
-            (monthlySpendAmount[i] / (maxAmount * LINE_CHART_MAX_VALUE_RATIO)),
+            (monthlySpendAmount[i] / (maxAmount * LINE_CHART.MAX_VALUE_RATIO)),
         x: width * ((i + 1) / (monthlySpendAmount.length + 1)),
       });
     }
