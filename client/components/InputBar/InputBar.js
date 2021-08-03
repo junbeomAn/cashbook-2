@@ -43,7 +43,7 @@ export default class InputBar extends Component {
       if (!$dropdown) {
         const dropdown = new Dropdown({
           parent: this,
-          keyword: 'dropdown',
+          keyword: 'category-dropdown',
           props: {
             itemList: [
               '생활',
@@ -75,7 +75,7 @@ export default class InputBar extends Component {
         $animator.classList.toggle('drop-down-animator-down');
         $animator.classList.toggle('drop-down-animator-up');
         setTimeout(() => {
-          const dropdown = this.resolveChild('dropdown', false);
+          const dropdown = this.resolveChild('category-dropdown', false);
           const $dropdownAll = this.querySelector(`#${dropdown.id}`);
           $parent.removeChild($dropdownAll);
         }, INPUT_DROPDOWN_ANIMATION_TIME);
