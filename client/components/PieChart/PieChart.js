@@ -1,4 +1,8 @@
-import { COLOR_CONSTANT } from '@/util/constant';
+import {
+  COLOR_CONSTANT,
+  PIE_CHART_TRANSITION_WAIT,
+  PIE_CHART_TRANSITION_DURATION,
+} from '@/util/constant';
 
 import './PieChart.scss';
 /**
@@ -87,10 +91,10 @@ function initPieChart(data, width, height) {
       'stroke-dasharray': `calc(${accRatio} * calc(2 * 3.14 * ${r})) calc(2 * 3.14 * ${r} * 2)`,
       'stroke-dashoffset': `calc(2 * 3.14 * ${r})`,
     });
-    $circle.style.transition = 'stroke-dashoffset 2000ms';
+    $circle.style.transition = `stroke-dashoffset ${PIE_CHART_TRANSITION_DURATION}ms`;
     setTimeout(() => {
       $circle.style['stroke-dashoffset'] = 0;
-    }, 300);
+    }, PIE_CHART_TRANSITION_WAIT);
     circles.unshift($circle);
   });
 
