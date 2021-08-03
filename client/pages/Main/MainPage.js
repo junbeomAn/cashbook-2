@@ -4,7 +4,6 @@ import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import Modal from '@/components/Modal/Modal';
-import LineChart from '@/components/LineChart/LineChart';
 import {
   PAYMENT_MODAL_TITLE,
   PAYMENT_MODAL_CANCEL_TEXT,
@@ -51,11 +50,6 @@ export default class MainPage extends Component {
         totalIncome,
         totalOutage,
       },
-    });
-
-    new LineChart({
-      parent: this,
-      keyword: 'line-chart',
     });
 
     historyData.forEach((histories, index) => {
@@ -110,7 +104,6 @@ export default class MainPage extends Component {
       ${this.resolveChild('input-bar')}
       ${this.resolveChild('info-bar')}
       ${this.assembleHistoryData()}
-      ${this.resolveChild('line-chart')}
     `;
   }
 }
