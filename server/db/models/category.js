@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     /**
@@ -13,20 +11,23 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Category.hasMany(models.History);
     }
-  };
-  Category.init({
-    name: {
-      type: DataTypes.TEXT,
-      allowNull: false
+  }
+  Category.init(
+    {
+      name: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      underscored: false,
+      timestamps: false,
+      modelName: 'Category',
+      tableName: 'categories',
+      charset: 'utf8',
+      collate: 'utf8_general_ci',
     }
-  }, {
-    sequelize,
-    underscored: false,
-    timestamps: false,
-    modelName: 'Category',
-    tableName: 'categories',
-    charset: 'utf8',
-    collate: 'utf8_general_ci'
-  });
+  );
   return Category;
 };
