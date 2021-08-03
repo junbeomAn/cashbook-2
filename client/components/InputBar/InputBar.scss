@@ -1,21 +1,19 @@
 @import '../../pages/color';
 @import '../../pages/size';
-@import '../../pages/reset';
 
 .input-bar-background {
   position: absolute;
   top: 152px;
-  // left: calc(50% - 452px);
   left: 50%;
   transform: translateX(-50%);
   width: 904px;
   height: 76px;
   border: 1px solid #C1C5C5;
   
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+  @include box-shadow();
   border-radius: 10px;
   background-color: $off-white;
-  padding: 16px 16px 16px 32px;
+  padding: 16px 32px 16px 32px;
 
   display:flex;
   flex-direction: row;
@@ -38,18 +36,28 @@
     justify-content: center;
     align-items: flex-start;
   }
+  &.date-section {
+    width: 80px;
+  }
+  &.classification-section {
+    width: 100px;
+    position: relative;
+  }
+  &.contents-section {
+    width: 170px;
+  }
   & > p {
     color: $baemin-primary;
     @include body-xsmall();
     line-height: 17px;
     margin-bottom: 4px;
+    width: 100px;
   }
 
   & input {
     @include body-regular();
     color: $title-active-black;
     width: 100%;
-    border-radius: 10px;
     border: none;
     background-color: $off-white;
   }
@@ -72,7 +80,59 @@
   & > input {
     margin-left: 8px;
     margin-right: 8px;
-    direction:rtl;
+    width: 80px;
+  }
+  & > input::placeholder {
+    text-align: right;
+  }
+}
+
+.input-bar-toggle-sign-container {
+  & {
+    width: 38px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  & > div:first-child {
+    margin-right: 6px;
+  }
+}
+
+.input-bar-toggle-selected {
+  & {
+    width: 16px;
+    height: 16px;
+    border-radius: 3.6px;
+    background-color: $baemin-third;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  & > p {
+    font-size: 16px;
+    line-height: 16px;
+    color: $off-white;
+  }
+}
+
+.input-bar-toggle-non-selected {
+  & {
+    width: 16px;
+    height: 16px;
+    border-radius: 3.6px;
+    background-color: $off-white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  & > p {
+    font-size: 16px;
+    line-height: 16px;
+    color: $baemin-third;
   }
 }
 

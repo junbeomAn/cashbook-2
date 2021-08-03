@@ -47,6 +47,16 @@ const $ = {
 
 const getAmountWithComma = (amount) => Number(amount).toLocaleString();
 
+function getToday() {
+  const nowDate = new Date();
+  return `
+    ${nowDate.getFullYear()}${`${nowDate.getMonth() + 1}`.padStart(
+    2,
+    '0'
+  )}${`${nowDate.getDate()}`.padStart(2, '0')}
+  `;
+}
+
 export {
   deepCopy,
   deepCompare,
@@ -54,4 +64,5 @@ export {
   getAmountWithComma,
   $,
   getUniqueId,
+  getToday,
 };

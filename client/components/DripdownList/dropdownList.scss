@@ -1,0 +1,18 @@
+@import '../../pages/color';
+@import '../../pages/size';
+
+.drop-down-list-container {
+  & {
+    padding: 16px 24px 16px 24px;
+    border-bottom: 1px solid $line-grey;
+    width: 100px;
+    height: 24px;
+    background-color: $off-white;
+    display: flex;
+    align-items: center; 
+  }
+  & > p {
+    @include body-regular();
+    color: $title-active-black;
+  }
+}
