@@ -32,8 +32,8 @@ export default class InfoBar extends Component {
     const totalOutage = this.props.totalOutage || 0;
     let incomeImage = toggleOn;
     let outageImage = toggleOn;
-    if (this.props.inputToggle) incomeImage = toggleOff;
-    if (this.props.outageToggle) outageImage = toggleOff;
+    if (!this.props.inputToggle) incomeImage = toggleOff;
+    if (!this.props.outageToggle) outageImage = toggleOff;
 
     return `
     <div class="info-bar-container">

@@ -37,13 +37,22 @@ export default class InfoBar extends Component {
 
   defineTemplate() {
     let amountText = '';
-    if (this.props.data.income !== 0) {
-      amountText += `<p>수입</p><p>${moneyFormat(this.props.data.income)}</p>`;
+    const { history } = this.props.data;
+    let expenditure = 0;
+    let income = 0;
+
+    Object.keys(history).forEach((key) => {
+      if (history[key].amount > 0) {
+        income += history[key].amount;
+      } else {
+        expenditure += history[key].amount;
+      }
+    });
+    if (income !== 0) {
+      amountText += `<p>수입</p><p>${moneyFormat(income)}</p>`;
     }
-    if (this.props.data.expenditure !== 0) {
-      amountText += `<p>지출</p><p>${moneyFormat(
-        this.props.data.expenditure
-      )}</p>`;
+    if (expenditure !== 0) {
+      amountText += `<p>지출</p><p>${moneyFormat(expenditure)}</p>`;
     }
 
     return `

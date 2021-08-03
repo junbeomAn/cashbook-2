@@ -19,7 +19,12 @@ export default class MainPage extends Component {
     super({
       ...params,
       componentName: 'main-page',
-      componentState: { selectedData: {}, selectedDate: {} },
+      componentState: {
+        selectedData: {},
+        selectedDate: {},
+        inputToggle: true,
+        outageToggle: true,
+      },
       modelState: {
         date: {
           year: new Date().getFullYear(),
@@ -30,6 +35,16 @@ export default class MainPage extends Component {
         },
       },
     });
+    this.toggleInput = this.toggleInput.bind(this);
+    this.toggleOutage = this.toggleOutage.bind(this);
+  }
+
+  toggleInput() {
+    this.setComponentState({ inputToggle: !this.componentState.inputToggle });
+  }
+
+  toggleOutage() {
+    this.setComponentState({ outageToggle: !this.componentState.outageToggle });
   }
 
   getNowHistoryData() {
@@ -43,11 +58,43 @@ export default class MainPage extends Component {
     return [];
   }
 
+  filterToggleOption(nowHistoryData) {
+    const result = [];
+    for (let i = 0; i < nowHistoryData.length; i += 1) {
+      const nowData = {
+        date: nowHistoryData[i].date,
+        history: [],
+        income: nowHistoryData[i].income,
+        expenditure: nowHistoryData[i].expenditure,
+      };
+      for (const historyKey in nowHistoryData[i].history) {
+        // 0보다 작은 입력은 outageToggle이 true일 때에만 추가한다.
+        if (
+          nowHistoryData[i].history[historyKey].amount <= 0 &&
+          this.componentState.outageToggle
+        ) {
+          nowData.history.push(nowHistoryData[i].history[historyKey]);
+        }
+
+        // 0보다 작은 입력은 inputToggle이 true일 때에만 추가한다.
+        if (
+          nowHistoryData[i].history[historyKey].amount >= 0 &&
+          this.componentState.inputToggle
+        ) {
+          nowData.history.push(nowHistoryData[i].history[historyKey]);
+        }
+      }
+      if (nowData.history.length !== 0) result.push(nowData);
+    }
+    return result;
+  }
+
   assembleHistoryData() {
     let historyTemplate = '';
 
     const nowHistoryData = this.getNowHistoryData();
-    nowHistoryData.forEach((histories, index) => {
+    const filteredData = this.filterToggleOption(nowHistoryData);
+    filteredData.forEach((histories, index) => {
       historyTemplate += this.resolveChild(`history-container-${index}`);
     });
     return historyTemplate;
@@ -61,10 +108,13 @@ export default class MainPage extends Component {
     let totalCount = 0;
 
     const nowHistoryData = this.getNowHistoryData();
+    const filteredData = this.filterToggleOption(nowHistoryData);
     nowHistoryData.forEach((histories) => {
-      totalCount += Object.keys(histories.history).length;
       totalIncome += histories.income;
       totalOutage += histories.expenditure;
+    });
+    filteredData.forEach((histories) => {
+      totalCount += Object.keys(histories.history).length;
     });
     totalOutage *= -1;
 
@@ -75,10 +125,18 @@ export default class MainPage extends Component {
         totalCount,
         totalIncome,
         totalOutage,
+        inputToggle: this.componentState.inputToggle,
+        outageToggle: this.componentState.outageToggle,
+        onIncomeToggleChange: () => {
+          this.toggleInput();
+        },
+        onOutageToggleChange: () => {
+          this.toggleOutage();
+        },
       },
     });
 
-    nowHistoryData.forEach((histories, index) => {
+    filteredData.forEach((histories, index) => {
       new HistoryContainer({
         parent: this,
         keyword: `history-container-${index}`,
