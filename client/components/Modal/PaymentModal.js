@@ -39,8 +39,8 @@ export default class Modal extends Component {
       await this.outAnimation();
       if (this.props.onSubmitClick) {
         this.props.onSubmitClick({
-          inputValue,
-          color: this.componentState.color,
+          kind: inputValue,
+          paymentColor: this.componentState.color || 'grey',
         });
       }
     });

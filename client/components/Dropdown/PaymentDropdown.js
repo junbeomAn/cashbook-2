@@ -21,8 +21,12 @@ export default class Dropdown extends Component {
           end: itemList.length - 1 === index,
           text: itemInfo.kind,
           paymentColor: itemInfo.paymentColor,
-          onClick: (textValue) => {
-            this.props.onClick(textValue);
+          popUpPaymentModal: this.props.popUpModal,
+          onDelete: (text) => {
+            this.props.onDelete(text);
+          },
+          onClick: (text) => {
+            this.props.onClick(text);
           },
         },
       });

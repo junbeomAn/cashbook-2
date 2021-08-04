@@ -4,7 +4,7 @@ import PaymentDropdown from '@/components/Dropdown/PaymentDropdown';
 import down from '@/asset/down.svg';
 import saveEmpty from '@/asset/saveEmpty.png';
 import { INPUT_DROPDOWN_ANIMATION_TIME } from '@/util/constant';
-import { moneyFormat, getToday } from '../../util/util';
+import { moneyFormat, getToday, getCategoryColor } from '@/util/util';
 import './InputBar.scss';
 
 export default class InputBar extends Component {
@@ -12,9 +12,6 @@ export default class InputBar extends Component {
     super({
       ...params,
       componentName: 'input-bar',
-      componentState: {
-        sign: false,
-      },
     });
   }
 
@@ -27,28 +24,24 @@ export default class InputBar extends Component {
   }
 
   preTemplate() {
-    this.addEvent('.dropdown-add-img', 'click', () => this.props.popUpModal());
     this.addEvent('.input-bar-plus-sign', 'click', () => {
-      this.setComponentState({ sign: true });
+      this.props.setSelectInfo({ sign: true });
     });
     this.addEvent('.input-bar-minus-sign', 'click', () => {
-      this.setComponentState({ sign: false });
+      this.props.setSelectInfo({ sign: false });
     });
+
+    this.addEvent('.input-bar-save-img', 'click', () => {});
 
     // Category Dropdown 관련 이벤트
     this.addEvent('.input-bar-dropdown-section-category', 'click', () => {
       const $parent = this.querySelector('.classification-section');
       const $dropdown = $parent.querySelector('.category-drop-down-container');
 
-      const categoryItemList = [
-        '생활',
-        '식비',
-        '교통',
-        '쇼핑/뷰티',
-        '의료/건강',
-        '문화/여가',
-        '미분류',
-      ];
+      const categoryItemList = [];
+      Object.keys(this.props.categoryInfo).forEach((key) => {
+        categoryItemList.push(this.props.categoryInfo[key].name);
+      });
       // 없을때만 붙인다.
       if (!$dropdown) {
         const dropdown = new Dropdown({
@@ -63,8 +56,11 @@ export default class InputBar extends Component {
               this.pullUp($animator, categoryItemList.length);
               const $dropdownAll = this.querySelector(`#${dropdown.id}`);
               setTimeout(() => {
-                console.log('TODO : set this to modelState : ', text);
                 $parent.removeChild($dropdownAll);
+                this.props.setSelectInfo({
+                  category: text,
+                  categoryColor: getCategoryColor(text),
+                });
               }, INPUT_DROPDOWN_ANIMATION_TIME);
             },
           },
@@ -88,12 +84,11 @@ export default class InputBar extends Component {
       }
     });
 
-    const paymentItemList = [
-      { kind: '현금', paymentColor: 'red' },
-      { kind: '현대카드', paymentColor: 'yellow' },
-      { kind: '비씨카드', paymentColor: 'green' },
-      { kind: '추가하기', paymentColor: 'none' },
-    ];
+    const paymentItemList = [];
+    Object.keys(this.props.payment).forEach((key) => {
+      paymentItemList.push(this.props.payment[key]);
+    });
+    paymentItemList.push({ kind: '추가하기', paymentColor: 'none' });
 
     // Payment Dropdown 관련 이벤트
     this.addEvent('.input-bar-dropdown-section-payment', 'click', () => {
@@ -107,6 +102,10 @@ export default class InputBar extends Component {
           keyword: 'payment-dropdown',
           props: {
             itemList: paymentItemList,
+            popUpModal: this.props.popUpModal,
+            onDelete: (text) => {
+              this.props.onDelete(text);
+            },
             onClick: (text) => {
               const $animator = dropdown.querySelector(
                 '.drop-down-animator-down'
@@ -115,8 +114,10 @@ export default class InputBar extends Component {
               this.pullUp($animator, paymentItemList.length);
               const $dropdownAll = this.querySelector(`#${dropdown.id}`);
               setTimeout(() => {
-                console.log('TODO : set this to modelState : ', text);
                 $parent.removeChild($dropdownAll);
+                this.props.setSelectInfo({
+                  payment: text,
+                });
               }, INPUT_DROPDOWN_ANIMATION_TIME);
             },
           },
@@ -156,16 +157,16 @@ export default class InputBar extends Component {
   }
 
   defineTemplate() {
-    const { selectedData, selectedDate } = this.props;
+    const { selectedData, selectedDate, selectInfo } = this.props;
     let date = getToday();
-    let category = '선택하세요';
-    let content = '';
-    let payment = '선택하세요';
-    let amount = '';
-    let togglePlus = this.componentState.sign
+    let category = selectInfo.category || '선택하세요';
+    let content = selectInfo.content || '';
+    let payment = selectInfo.payment || '선택하세요';
+    let amount = selectInfo.amount || '';
+    let togglePlus = selectInfo.sign
       ? 'input-bar-toggle-selected'
       : 'input-bar-toggle-non-selected';
-    let toggleMinus = !this.componentState.sign
+    let toggleMinus = !selectInfo.sign
       ? 'input-bar-toggle-selected'
       : 'input-bar-toggle-non-selected';
     if (selectedDate.year) {

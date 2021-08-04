@@ -3,6 +3,7 @@ import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
+import categoryInfo from '@/util/category';
 import PaymentModal from '@/components/Modal/PaymentModal';
 import { objectToList } from '@/util/util';
 import {
@@ -15,6 +16,10 @@ import './Main.scss';
 import arrow from '@/asset/arrow.svg';
 import '@/pages/global.scss';
 
+const PAYMENT_ADD_EVENT = 'PAYMENT_ADD_EVENT';
+const PAYMENT_DEL_EVENT = 'PAYMENT_DEL_EVENT';
+const HISTORY_ADD_EVENT = 'HISTORY_ADD_EVENT';
+
 export default class MainPage extends Component {
   constructor(params) {
     super({
@@ -23,6 +28,14 @@ export default class MainPage extends Component {
       componentState: {
         selectedData: {},
         selectedDate: {},
+        selectInfo: {
+          category: '',
+          categoryColor: '',
+          content: '',
+          payment: '',
+          amount: 0,
+          sign: false,
+        },
         inputToggle: true,
         outageToggle: true,
       },
@@ -33,6 +46,13 @@ export default class MainPage extends Component {
         },
         historyData: {
           data: historyData,
+        },
+        payment: {
+          data: [
+            { kind: '현금', paymentColor: 'red' },
+            { kind: '현대카드', paymentColor: 'yellow' },
+            { kind: '비씨카드', paymentColor: 'green' },
+          ],
         },
       },
     });
@@ -110,6 +130,40 @@ export default class MainPage extends Component {
         }
       }, 10);
     });
+    this.registerControllerEvent(PAYMENT_ADD_EVENT, (addInfo) => {
+      const paymentData = [];
+      const { data } = this.modelState.payment;
+      for (const key in data) {
+        if (data[key]) {
+          paymentData.push(data[key]);
+        }
+      }
+      paymentData.push(addInfo);
+      const state = { data: paymentData };
+      const e = {
+        state,
+        key: 'payment',
+      };
+
+      return e;
+    });
+
+    this.registerControllerEvent(PAYMENT_DEL_EVENT, (deleteKey) => {
+      const paymentData = this.modelState.payment.data;
+      for (const key in paymentData) {
+        if (paymentData[key].kind === deleteKey) {
+          delete paymentData[key];
+          break;
+        }
+      }
+      const state = { data: paymentData };
+      const e = {
+        state,
+        key: 'payment',
+      };
+
+      return e;
+    });
   }
 
   defineTemplate() {
@@ -163,7 +217,7 @@ export default class MainPage extends Component {
       });
     });
 
-    const { selectedData, selectedDate } = this.componentState;
+    const { selectedData, selectedDate, selectInfo } = this.componentState;
 
     new InputBar({
       parent: this,
@@ -171,6 +225,19 @@ export default class MainPage extends Component {
       props: {
         selectedDate,
         selectedData,
+        selectInfo,
+        categoryInfo,
+        payment: this.modelState.payment.data,
+        setSelectInfo: (data) => {
+          this.setComponentState({
+            selectInfo: { ...this.componentState.selectInfo, ...data },
+          });
+        },
+        onDelete: (kind) => {
+          // kind : "", paymentColor: ""
+          this.controller.emitEvent(PAYMENT_DEL_EVENT, kind);
+        },
+        onSubmit: () => {},
         popUpModal: () => {
           const $modalParent = document.querySelector('.app-background');
           const $modal = new PaymentModal({
@@ -183,7 +250,8 @@ export default class MainPage extends Component {
               placeholder: PAYMENT_MODAL_PLACEHOLDER,
               submitColor: 'mint',
               onSubmitClick: (data) => {
-                console.log(data);
+                // kind : "", paymentColor: ""
+                this.controller.emitEvent(PAYMENT_ADD_EVENT, data);
               },
             },
           });

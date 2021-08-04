@@ -66,7 +66,7 @@ export default class Component {
         changedState[key] = e.detail;
         this._modelState = { ...this._modelState, ...changedState };
         const newState = this.modelState;
-
+        console.log(prevState, newState);
         // Check if state updatable.
         this.update(prevState, newState);
       });

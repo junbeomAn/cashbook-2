@@ -1,3 +1,5 @@
+import categoryInfo from './category';
+
 const RANDOM_ID_NUMBER_COUNT = 8;
 
 function deepCopy(obj) {
@@ -68,6 +70,15 @@ function objectToList(obj) {
   return returnList;
 }
 
+function getCategoryColor(name) {
+  for (let i = 0; i < categoryInfo.length; i += 1) {
+    if (categoryInfo[i].name === name) {
+      return categoryInfo[i].color;
+    }
+  }
+  return false;
+}
+
 export {
   deepCopy,
   deepCompare,
@@ -77,4 +88,5 @@ export {
   getUniqueId,
   getToday,
   objectToList,
+  getCategoryColor,
 };
