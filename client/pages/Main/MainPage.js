@@ -12,6 +12,7 @@ import {
   PAYMENT_MODAL_PLACEHOLDER,
 } from '@/util/constant';
 import './Main.scss';
+import arrow from '@/asset/arrow.svg';
 import '@/pages/global.scss';
 
 export default class MainPage extends Component {
@@ -100,7 +101,16 @@ export default class MainPage extends Component {
     return historyTemplate;
   }
 
-  preTemplate() {}
+  preTemplate() {
+    this.addEvent('.main-totop-button', 'click', () => {
+      const scrollInterval = setInterval(() => {
+        document.documentElement.scrollTop -= 30;
+        if (document.documentElement.scrollTop <= 0) {
+          clearInterval(scrollInterval);
+        }
+      }, 10);
+    });
+  }
 
   defineTemplate() {
     let totalIncome = 0;
@@ -186,6 +196,9 @@ export default class MainPage extends Component {
       ${this.resolveChild('input-bar')}
       ${this.resolveChild('info-bar')}
       ${this.assembleHistoryData()}
+      <div class="main-totop-button">
+        <img src="${arrow}"/>
+      </div>
     `;
   }
 }
