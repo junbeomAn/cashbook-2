@@ -18,12 +18,16 @@ export default class Table extends Component {
     return 30;
   }
 
-  createNewCell(history, historyIndex, calerdarDate) {
+  createNewCell(history, historyIndex, calerdarDate, isToday) {
+    let todayClass = '';
+    if (isToday) {
+      todayClass = 'table-cell-today';
+    }
     if (!history) {
       return [
         historyIndex,
         `
-        <div class="table-cell">
+        <div class="table-cell ${todayClass}">
           <div class="date">${calerdarDate}</div>
         </div> 
       `,
@@ -36,7 +40,7 @@ export default class Table extends Component {
       return [
         historyIndex + 1,
         `
-        <div class="table-cell">
+        <div class="table-cell ${todayClass}">
           <div class="date">${calerdarDate}</div>
           <div class="record">
             ${
@@ -66,7 +70,7 @@ export default class Table extends Component {
     return [
       historyIndex,
       `
-        <div class="table-cell">
+        <div class="table-cell ${todayClass}">
           <div class="date">${calerdarDate}</div>
         </div> 
     `,
@@ -80,6 +84,18 @@ export default class Table extends Component {
     return `${num}`;
   }
 
+  checkDateSame(today, i) {
+    if (
+      today.year === this.props.currentYear &&
+      today.month === this.props.currentMonth &&
+      today.date === i
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   makeCalendarTableWithCell() {
     const { currentMonth, currentYear, histories } = this.props;
     const fullCurrMonth = this.fillLeadingZeros(currentMonth);
@@ -91,11 +107,19 @@ export default class Table extends Component {
     let cellCount = 0;
     let historyIndex = 0;
 
+    const nowDate = new Date();
+    const today = {
+      year: nowDate.getFullYear(),
+      month: nowDate.getMonth() + 1,
+      date: nowDate.getDate(),
+    };
+
     for (let i = 1; i <= lastDay; i += 1) {
       const result = this.createNewCell(
         histories[historyIndex],
         historyIndex,
-        i
+        i,
+        this.checkDateSame(today, i)
       );
       [historyIndex] = result;
       ret += result[1];
