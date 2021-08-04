@@ -29,6 +29,15 @@ function deepCompare(prev, next) {
   return false;
 }
 
+function isLogin() {
+  // TODO : Login 정보 확인 로직이  필요
+  const nickName = localStorage.getItem('nickName');
+  if (!nickName) {
+    return false;
+  }
+  return true;
+}
+
 function moneyFormat(num) {
   return Number(num.toFixed(1)).toLocaleString();
 }
@@ -60,6 +69,7 @@ function getToday() {
 export {
   deepCopy,
   deepCompare,
+  isLogin,
   moneyFormat,
   getAmountWithComma,
   $,

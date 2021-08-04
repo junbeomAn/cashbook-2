@@ -4,6 +4,8 @@ import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import Modal from '@/components/Modal/Modal';
+import LoginModal from '@/components/Modal/LoginModal';
+import { isLogin } from '@/util/util';
 import {
   PAYMENT_MODAL_TITLE,
   PAYMENT_MODAL_CANCEL_TEXT,
@@ -12,6 +14,11 @@ import {
 } from '@/util/constant';
 import './Main.scss';
 import '@/pages/global.scss';
+
+const SET_HISTORY_DATA = 'SET_HISTORY_DATA';
+const LOGIN_MODAL_TITLE =
+  '우아한 가계부를 사용하기 위해선 로그인이 필요합니다.';
+const LOGIN_MODAL_CANCEL_TEXT = '데모 계정으로 진행';
 
 export default class MainPage extends Component {
   constructor(params) {
@@ -68,11 +75,36 @@ export default class MainPage extends Component {
         },
       });
     });
+
+    this.registerControllerEvent(SET_HISTORY_DATA, async () => {
+      // TODO : 이 이벤트를 호출하면 History Data를 갱신.
+      const state = { data: historyData };
+      const e = {
+        state,
+        key: 'date',
+      };
+
+      return e;
+    });
   }
 
   defineTemplate() {
     const { selectedData, selectedDate } = this.componentState;
-
+    new LoginModal({
+      parent: this,
+      keyword: 'login-modal',
+      props: {
+        title: LOGIN_MODAL_TITLE,
+        cancelText: LOGIN_MODAL_CANCEL_TEXT,
+        onLogin: () => {
+          console.log('TODO : redirect to github login.');
+          // window.location.href = 'http://www.abc.com/';
+        },
+        onCancelClick: () => {
+          this.controller.emitEvent(SET_HISTORY_DATA);
+        },
+      },
+    });
     new InputBar({
       parent: this,
       keyword: 'input-bar',
@@ -100,10 +132,14 @@ export default class MainPage extends Component {
         },
       },
     });
-    return `
-      ${this.resolveChild('input-bar')}
-      ${this.resolveChild('info-bar')}
-      ${this.assembleHistoryData()}
-    `;
+    let result = '';
+    if (!isLogin()) {
+      result += this.resolveChild('login-modal');
+    }
+    return `${result}
+        ${this.resolveChild('input-bar')}
+        ${this.resolveChild('info-bar')}
+        ${this.assembleHistoryData()}
+      `;
   }
 }
