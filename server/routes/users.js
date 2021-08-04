@@ -73,7 +73,6 @@ router.post('/githubLogin', async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
     });
     res.send({ ok: true, result, message: LOGIN_SUCCESS });
   } catch (err) {
