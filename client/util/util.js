@@ -14,6 +14,7 @@ function deepCopy(obj) {
 }
 
 function deepCompare(prev, next) {
+  // return true if same.
   if (typeof prev === 'object' && typeof next === 'object') {
     for (const key in prev) {
       if (next[prev]) {
@@ -66,6 +67,16 @@ function getToday() {
   `;
 }
 
+function objectToList(obj) {
+  const returnList = [];
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      returnList.push(obj[key]);
+    }
+  }
+  return returnList;
+}
+
 export {
   deepCopy,
   deepCompare,
@@ -75,4 +86,5 @@ export {
   $,
   getUniqueId,
   getToday,
+  objectToList,
 };
