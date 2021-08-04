@@ -1,5 +1,6 @@
 import Component from '@/lib/Component';
 import Dropdown from '@/components/Dropdown/Dropdown';
+import PaymentDropdown from '@/components/Dropdown/PaymentDropdown';
 import down from '@/asset/down.svg';
 import saveEmpty from '@/asset/saveEmpty.png';
 import { INPUT_DROPDOWN_ANIMATION_TIME } from '@/util/constant';
@@ -34,32 +35,32 @@ export default class InputBar extends Component {
       this.setComponentState({ sign: false });
     });
 
-    // Dropdown 관련 이벤트
-    this.addEvent('.classification-section img', 'click', () => {
+    // Category Dropdown 관련 이벤트
+    this.addEvent('.input-bar-dropdown-section-category', 'click', () => {
       const $parent = this.querySelector('.classification-section');
-      const $dropdown = $parent.querySelector('.drop-down-container');
+      const $dropdown = $parent.querySelector('.category-drop-down-container');
 
+      const categoryItemList = [
+        '생활',
+        '식비',
+        '교통',
+        '쇼핑/뷰티',
+        '의료/건강',
+        '문화/여가',
+        '미분류',
+      ];
       // 없을때만 붙인다.
       if (!$dropdown) {
         const dropdown = new Dropdown({
           parent: this,
           keyword: 'category-dropdown',
           props: {
-            itemList: [
-              '생활',
-              '식비',
-              '교통',
-              '쇼핑/뷰티',
-              '의료/건강',
-              '문화/여가',
-              '미분류',
-            ],
+            itemList: categoryItemList,
             onClick: (text) => {
               const $animator = dropdown.querySelector(
                 '.drop-down-animator-down'
               );
-              $animator.classList.toggle('drop-down-animator-down');
-              $animator.classList.toggle('drop-down-animator-up');
+              this.pullUp($animator, categoryItemList.length);
               const $dropdownAll = this.querySelector(`#${dropdown.id}`);
               setTimeout(() => {
                 console.log('TODO : set this to modelState : ', text);
@@ -69,11 +70,16 @@ export default class InputBar extends Component {
           },
         });
         $parent.appendChild(dropdown.innerNode);
+        const $animator = dropdown.innerNode.querySelector(
+          '.classification-section .drop-down-animator-down'
+        );
+        this.pullDown($animator, categoryItemList.length);
       } else {
         // 있으면 없앤다.
-        const $animator = $dropdown.querySelector('.drop-down-animator-down');
-        $animator.classList.toggle('drop-down-animator-down');
-        $animator.classList.toggle('drop-down-animator-up');
+        const $animator = $dropdown.querySelector(
+          '.classification-section .drop-down-animator-down'
+        );
+        this.pullUp($animator, categoryItemList.length);
         setTimeout(() => {
           const dropdown = this.resolveChild('category-dropdown', false);
           const $dropdownAll = this.querySelector(`#${dropdown.id}`);
@@ -81,6 +87,72 @@ export default class InputBar extends Component {
         }, INPUT_DROPDOWN_ANIMATION_TIME);
       }
     });
+
+    const paymentItemList = [
+      { kind: '현금', paymentColor: 'red' },
+      { kind: '현대카드', paymentColor: 'yellow' },
+      { kind: '비씨카드', paymentColor: 'green' },
+      { kind: '추가하기', paymentColor: 'none' },
+    ];
+
+    // Payment Dropdown 관련 이벤트
+    this.addEvent('.input-bar-dropdown-section-payment', 'click', () => {
+      const $parent = this.querySelector('.payment-section');
+      const $dropdown = $parent.querySelector('.payment-drop-down-container');
+
+      // 없을때만 붙인다.
+      if (!$dropdown) {
+        const dropdown = new PaymentDropdown({
+          parent: this,
+          keyword: 'payment-dropdown',
+          props: {
+            itemList: paymentItemList,
+            onClick: (text) => {
+              const $animator = dropdown.querySelector(
+                '.drop-down-animator-down'
+              );
+              $animator.classList.toggle('drop-down-animator-down');
+              this.pullUp($animator, paymentItemList.length);
+              const $dropdownAll = this.querySelector(`#${dropdown.id}`);
+              setTimeout(() => {
+                console.log('TODO : set this to modelState : ', text);
+                $parent.removeChild($dropdownAll);
+              }, INPUT_DROPDOWN_ANIMATION_TIME);
+            },
+          },
+        });
+        $parent.appendChild(dropdown.innerNode);
+        const $animator = dropdown.innerNode.querySelector(
+          '.payment-section .drop-down-animator-down'
+        );
+        this.pullDown($animator, paymentItemList.length);
+      } else {
+        // 있으면 없앤다.
+        const $animator = $dropdown.querySelector(
+          '.payment-section .drop-down-animator-down'
+        );
+        this.pullUp($animator, paymentItemList.length);
+        setTimeout(() => {
+          const dropdown = this.resolveChild('payment-dropdown', false);
+          const $dropdownAll = this.querySelector(`#${dropdown.id}`);
+          $parent.removeChild($dropdownAll);
+        }, INPUT_DROPDOWN_ANIMATION_TIME);
+      }
+    });
+  }
+
+  pullUp(dest, count) {
+    dest.animate(
+      [{ marginTop: '0px' }, { marginTop: `${-1 * count * 57}px` }],
+      { duration: INPUT_DROPDOWN_ANIMATION_TIME }
+    );
+  }
+
+  pullDown(dest, count) {
+    dest.animate(
+      [{ marginTop: `${-1 * count * 57}px` }, { marginTop: '0px' }],
+      { duration: INPUT_DROPDOWN_ANIMATION_TIME }
+    );
   }
 
   defineTemplate() {
@@ -119,7 +191,7 @@ export default class InputBar extends Component {
       <div class="input-bar-vertical-line"></div>
       <div class="input-bar-section classification-section">
         <p>분류</p>
-        <div class="input-bar-dropdown-section">
+        <div class="input-bar-dropdown-section input-bar-dropdown-section-category">
           <p>${category}</p>
           <img src=${down} />
         </div>
@@ -130,9 +202,9 @@ export default class InputBar extends Component {
         <input type="text" placeholder="입력하세요" value=${content}>
       </div>
       <div class="input-bar-vertical-line"></div>
-      <div class="input-bar-section">
+      <div class="input-bar-section payment-section">
         <p>결제수단</p>
-        <div class="input-bar-dropdown-section">
+        <div class="input-bar-dropdown-section input-bar-dropdown-section-payment">
           <p>${payment}</p>
           <img class="dropdown-add-img" src="${down}"/>
         </div>

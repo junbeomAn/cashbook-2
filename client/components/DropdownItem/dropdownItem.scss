@@ -10,9 +10,71 @@
     background-color: $off-white;
     display: flex;
     align-items: center; 
+    cursor: pointer;
+  }
+}
+.payment-drop-down-list-container {
+  & {
+    padding: 16px 24px 16px 24px;
+    border-bottom: 1px solid $line-grey;
+    width: 140px;
+    height: 24px;
+    background-color: $off-white;
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: space-between;
+  }
+  & > img {
+    cursor: pointer;
+  }
+}
+
+.payment-item-kind {
+  & {
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
   }
   & > p {
     @include body-regular();
     color: $title-active-black;
+    margin-left: 14px;
+  }
+}
+
+.payment-dropdown-color {
+  & {
+    width: 18px;
+    height: 18px;
+    border-radius: 18px;
+  }
+  &-red {
+    background-color: $payment-red;
+    border: 1px solid darken($payment-red, 10%);
+  }
+  &-orange {
+    background-color: $payment-orange;
+    border: 1px solid darken($payment-orange, 10%);
+  }
+  &-yellow {
+    background-color: $payment-yellow;
+    border: 1px solid darken($payment-yellow, 10%);
+  }
+  &-green {
+    background-color: $payment-green;
+    border: 1px solid darken($payment-green, 10%);
+  }
+  &-blue {
+    background-color: $payment-blue;
+    border: 1px solid darken($payment-blue, 10%);
+  }
+  &-purple {
+    background-color: $payment-purple;
+    border: 1px solid darken($payment-purple, 10%);
+  }
+  &-grey {
+    background-color: $payment-grey;
+    border: 1px solid darken($payment-grey, 10%);
   }
 }

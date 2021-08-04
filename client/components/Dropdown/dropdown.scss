@@ -2,7 +2,7 @@
 @import '../../pages/size';
 @import '../../pages/reset';
 
-.drop-down-container {
+.category-drop-down-container {
   border: 1px solid $line-grey;
   border-radius: 10px;
   z-index: 20;
@@ -12,23 +12,12 @@
   left: -24px;
 }
 
-.drop-down-animator {
-  &-down {
-    animation-name: pullingDown;
-    animation-duration: .5s;
-  }
-  &-up {
-    animation-name: pullingUp;
-    animation-duration: .5s;
-  }
-}
-
-@include keyframes(pullingDown) {
-  0% { margin-top: -400px; }
-  100% { margin-top: 0px; }
-}
-
-@include keyframes(pullingUp) {
-  0% { margin-top: 0px; }
-  100% { margin-top: -400px; }
+.payment-drop-down-container {
+  border: 1px solid $line-grey;
+  border-radius: 10px;
+  z-index: 20;
+  position: absolute;
+  overflow: hidden;
+  top: 64px;
+  left: -40px;
 }
