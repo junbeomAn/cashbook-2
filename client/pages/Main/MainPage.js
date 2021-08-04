@@ -164,6 +164,24 @@ export default class MainPage extends Component {
 
       return e;
     });
+
+    this.registerControllerEvent(HISTORY_ADD_EVENT, (/* addData */) => {
+      /*
+      const { date, history } = addData;
+      const year = Number(date.subString(0, 4));
+      const month = Number(date.subString(4, 6));
+      const day = Number(date.subString(6, 8));
+      const historyData = this.modelState.historyData.data;
+      */
+      console.log(this.modelState.historyData.data);
+      const state = { data: this.modelState.historyData.data };
+      const e = {
+        state,
+        key: 'historyData',
+      };
+
+      return e;
+    });
   }
 
   defineTemplate() {
@@ -237,7 +255,20 @@ export default class MainPage extends Component {
           // kind : "", paymentColor: ""
           this.controller.emitEvent(PAYMENT_DEL_EVENT, kind);
         },
-        onSubmit: () => {},
+        onSubmit: (data) => {
+          // this.controller.emitEvent(HISTORY_ADD_EVENT, data);
+          console.log(data);
+          this.setComponentState({
+            selectInfo: {
+              category: '',
+              categoryColor: '',
+              content: '',
+              payment: '',
+              amount: 0,
+              sign: false,
+            },
+          });
+        },
         popUpModal: () => {
           const $modalParent = document.querySelector('.app-background');
           const $modal = new PaymentModal({

@@ -31,7 +31,9 @@ export default class InputBar extends Component {
       this.props.setSelectInfo({ sign: false });
     });
 
-    this.addEvent('.input-bar-save-img', 'click', () => {});
+    this.addEvent('.input-bar-save-img', 'click', () => {
+      this.props.onSubmit('정보들');
+    });
 
     // Category Dropdown 관련 이벤트
     this.addEvent('.input-bar-dropdown-section-category', 'click', () => {
