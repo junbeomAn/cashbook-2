@@ -16,6 +16,7 @@ export default class Component {
     this.id = getUniqueId(this.componentName);
     this._componentState = params.componentState || {};
     this._modelState = params.modelState || {};
+    this.addModelStateEvent(this._modelState);
     this.eventList = [];
     this.childs = {}; // 이벤트 등록, update시 필요한 자식들
     this.innerNode = {}; // 자신을 HTMLElement로 가지고 있음.
@@ -48,12 +49,14 @@ export default class Component {
     }
     this.$target = $target; // HTMLElements
     this.render();
-    this.addModelStateEvent(this._modelState);
   }
 
   addModelStateEvent(modelState) {
     Object.keys(modelState).forEach((key) => {
-      this.controller.model.initData(key, modelState[key]);
+      const initResult = this.controller.model.initData(key, modelState[key]);
+      if (!initResult.result) {
+        this._modelState = { ...this._modelState, ...initResult.data };
+      }
 
       // setModelState는 명시적으로 만들지 않고, 현재 eventListener에서만 사용 가능하도록 만든다.
       this.controller.addEventCallback(key, (e) => {
@@ -114,7 +117,7 @@ export default class Component {
       const $this = this.adjustWithDocumentNode();
 
       this.setTemplate();
-      if (this.$target) {
+      if (this.$target && this.innerNode && $this) {
         this.$target.replaceChild(this.innerNode, $this);
       }
 

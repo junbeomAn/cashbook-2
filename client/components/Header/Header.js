@@ -29,9 +29,21 @@ export default class Header extends Component {
     this.navigateTo = this.navigateTo.bind(this);
   }
 
-  async changeDate(amount) {
-    const nowState = this.modelState;
-    let { year, month } = nowState.date;
+  getChangedDate(amount) {
+    let { year, month } = this.modelState.date;
+    month += amount;
+    if (month === 0) {
+      year -= 1;
+      month = 12;
+    } else if (month === 13) {
+      year += 1;
+      month = 1;
+    }
+    return { year, month };
+  }
+
+  changeDate(amount) {
+    let { year, month } = this.modelState.date;
     const $month = this.querySelector('.header-date-month');
     const $year = this.querySelector('.header-date-year');
 
@@ -47,11 +59,10 @@ export default class Header extends Component {
     }
     $month.classList.add('date-rotate-transform');
 
-    await new Promise((res) => {
-      setTimeout(() => {
-        res();
-      }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
-    });
+    setTimeout(() => {
+      $year.classList.remove('date-rotate-transform');
+      $month.classList.remove('date-rotate-transform');
+    }, CALENDAR_NUMBER_CHANGE_ANIMATION_TIME);
 
     return { month, year };
   }
@@ -119,6 +130,11 @@ export default class Header extends Component {
         imgSrc: leftArrow,
         onClick: () => {
           this.controller.emitEvent(DATE_DOWN_EVENT);
+          const changedDate = this.getChangedDate(-1);
+          const $month = this.querySelector('.header-date-month');
+          $month.innerText = `${changedDate.month}월`;
+          const $year = this.querySelector('.header-date-year');
+          $year.innerText = `${changedDate.year}`;
         },
       },
     });
@@ -129,12 +145,17 @@ export default class Header extends Component {
         imgSrc: rightArrow,
         onClick: () => {
           this.controller.emitEvent(DATE_UP_EVENT);
+          const changedDate = this.getChangedDate(1);
+          const $month = this.querySelector('.header-date-month');
+          $month.innerText = `${changedDate.month}월`;
+          const $year = this.querySelector('.header-date-year');
+          $year.innerText = `${changedDate.year}`;
         },
       },
     });
 
-    this.registerControllerEvent(DATE_UP_EVENT, async () => {
-      const state = await this.changeDate(1);
+    this.registerControllerEvent(DATE_UP_EVENT, () => {
+      const state = this.changeDate(1);
       const e = {
         state,
         key: 'date',
@@ -143,8 +164,8 @@ export default class Header extends Component {
       return e;
     });
 
-    this.registerControllerEvent(DATE_DOWN_EVENT, async () => {
-      const state = await this.changeDate(-1);
+    this.registerControllerEvent(DATE_DOWN_EVENT, () => {
+      const state = this.changeDate(-1);
       const e = {
         state,
         key: 'date',
@@ -177,5 +198,11 @@ export default class Header extends Component {
       </div>
     </div>
     `;
+  }
+
+  shouldComponentUpdate() {
+    // 필요하다면 더 자세한 비교 방법은 재정의하여 정의한다.
+    return false;
+    // return !deepCompare(prevState, newState);
   }
 }

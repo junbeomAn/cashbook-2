@@ -14,6 +14,7 @@ function deepCopy(obj) {
 }
 
 function deepCompare(prev, next) {
+  // return true if same.
   if (typeof prev === 'object' && typeof next === 'object') {
     for (const key in prev) {
       if (next[prev]) {
@@ -27,6 +28,15 @@ function deepCompare(prev, next) {
     return true;
   }
   return false;
+}
+
+function isLogin() {
+  // TODO : Login 정보 확인 로직이  필요
+  const nickName = localStorage.getItem('nickName');
+  if (!nickName) {
+    return false;
+  }
+  return true;
 }
 
 function moneyFormat(num) {
@@ -57,12 +67,24 @@ function getToday() {
   `;
 }
 
+function objectToList(obj) {
+  const returnList = [];
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      returnList.push(obj[key]);
+    }
+  }
+  return returnList;
+}
+
 export {
   deepCopy,
   deepCompare,
+  isLogin,
   moneyFormat,
   getAmountWithComma,
   $,
   getUniqueId,
   getToday,
+  objectToList,
 };
