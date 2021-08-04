@@ -101,12 +101,12 @@ export default class LineChart extends Component {
 
     result += '<p class="line-chart-month-label" ';
     result += `style="width: 40px; bottom:${-20}px; left:${left - 11}px;"`;
-    result += `>${i} 월</p>`;
+    result += `>${this.props.spendDate[i]} 월</p>`;
     return result;
   }
 
   defineTemplate() {
-    const monthlySpendAmount = [38900, 21020, 300010, 20300, 9400, 67000];
+    const monthlySpendAmount = this.props.spendData;
     const maxAmount = Math.max(...monthlySpendAmount);
 
     const width = LINE_CHART.WIDTH;

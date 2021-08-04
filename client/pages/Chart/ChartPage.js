@@ -13,7 +13,7 @@ export default class ChartPage extends Component {
       ...params,
       componentName: 'chart-page',
       componentState: {
-        selectedCategory: '식비',
+        selectedCategory: '',
       },
       modelState: {
         date: {
@@ -73,14 +73,14 @@ export default class ChartPage extends Component {
   }
 
   preTemplate() {
-    new LineChart({
-      parent: this,
-      keyword: 'line-chart',
+    this.addEvent('.pie-chart-section-container', 'click', () => {
+      // TODO : Pie Chart에서 각 부분 누르면 text 전해주기.
+      this.setComponentState({ selectedCategory: '식비' });
     });
   }
 
   defineTemplate() {
-    const categoryText = this.props.categoryText || '생활';
+    const categoryText = this.componentState.selectedCategory;
 
     const nowHistoryData = this.getNowHistoryData();
     const filteredData = this.filterCategoryOption(nowHistoryData);
@@ -94,7 +94,26 @@ export default class ChartPage extends Component {
         },
       });
     });
+    new LineChart({
+      parent: this,
+      keyword: 'line-chart',
+      props: {
+        spendData: [38900, 21020, 300010, 20300, 9400, 67000],
+        spendDate: ['3월', '4월', '5월', '6월', '7월', '8월'],
+      },
+    });
+
+    if (categoryText.length === 0) {
+      return `
+      <div class="pie-chart-section-container">
+  
+      </div>`;
+    }
+
     return `
+    <div class="pie-chart-section-container">
+
+    </div>
     <div class="line-chart-section-container">
       <p class="line-chart-section-header">${categoryText} 카테고리 소비 추이</p>
       ${this.resolveChild('line-chart')}

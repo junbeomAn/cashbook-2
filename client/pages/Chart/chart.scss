@@ -1,8 +1,23 @@
 @import '../../pages/color';
 @import '../../pages/size';
 
-.line-chart-section-container {
+.pie-chart-section-container {
   margin-top: -144px;
+  margin-bottom: 16px;
+  width: 744px;
+  height: 450px;
+  border-radius: 10px;
+  background-color: $background-white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid $line-grey;
+  padding: 32px 40px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.line-chart-section-container {
   width: 744px;
   height: 450px;
   border-radius: 10px;
