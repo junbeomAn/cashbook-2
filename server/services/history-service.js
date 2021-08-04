@@ -1,5 +1,3 @@
-const { QueryTypes } = require('sequelize');
-
 const { sequelize, Sequelize } = require('../db/models');
 
 const { History } = sequelize.models;
@@ -26,11 +24,10 @@ const getHistoriesOfOneMonth = async (whereOptions) => {
       order: [['date', 'DESC']],
     });
     const result = arrangeByDate(histories);
-
     return { result };
   } catch (err) {
     console.error(err);
-    return { err };
+    return { err: err.message };
   }
 };
 
@@ -47,7 +44,7 @@ const getHistoriesOfSixMonth = async (whereOptions) => {
     return { result };
   } catch (err) {
     console.error(err);
-    return { err };
+    return { err: err.message };
   }
 };
 
@@ -57,7 +54,7 @@ const createHistory = async (data) => {
     return { result };
   } catch (err) {
     console.error(err);
-    return { err };
+    return { err: err.message };
   }
 };
 
@@ -67,7 +64,7 @@ const updateHistory = async (newData, whereOptions) => {
     return { result };
   } catch (err) {
     console.error(err);
-    return { err };
+    return { err: err.message };
   }
 };
 
