@@ -3,7 +3,7 @@ import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
-import Modal from '@/components/Modal/Modal';
+import PaymentModal from '@/components/Modal/PaymentModal';
 import { objectToList } from '@/util/util';
 import {
   PAYMENT_MODAL_TITLE,
@@ -163,9 +163,9 @@ export default class MainPage extends Component {
         selectedData,
         popUpModal: () => {
           const $modalParent = document.querySelector('.app-background');
-          const $modal = new Modal({
+          const $modal = new PaymentModal({
             parent: null,
-            keyword: 'alert-modal',
+            keyword: 'payment-modal',
             props: {
               title: PAYMENT_MODAL_TITLE,
               cancelText: PAYMENT_MODAL_CANCEL_TEXT,

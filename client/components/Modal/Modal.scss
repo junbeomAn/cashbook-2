@@ -44,6 +44,9 @@
   background-color: $off-white;
   padding: 40px;
   transform: scale(0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .modal-container-start {
@@ -132,5 +135,83 @@
   }
   &-mint{
     color: $baemin-primary;
+  }
+}
+
+.modal-payment-color {
+  &-container {
+    width: 342px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  &-selector {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    margin: 0px 15px;
+    transition-duration: .3s;
+  }
+  &-selector:hover {
+    width: 28px;
+    height: 28px;
+    border-radius: 28px;
+    margin: -4px 11px;
+  }
+  &-selected {
+    & {
+      width: 28px;
+      height: 28px;
+      border-radius: 28px;
+      margin: -4px 11px;
+    }
+    &.modal-payment-color-selector:first-child {
+      margin-left: -4px;
+    }
+    &.modal-payment-color-selector:last-child {
+      margin-right: -4px;
+    }
+  }
+  &-selector:first-child {
+    margin-left: 0px;
+  }
+  &-selector:last-child {
+    margin-right: 0px;
+  }
+  &-selector:first-child:hover {
+    margin-left: -4px;
+  }
+  &-selector:last-child:hover {
+    margin-right: -4px;
+  }
+  &-red {
+    background-color: $payment-red;
+    border: 1px solid darken($payment-red, 10%);
+  }
+  &-orange {
+    background-color: $payment-orange;
+    border: 1px solid darken($payment-orange, 10%);
+  }
+  &-yellow {
+    background-color: $payment-yellow;
+    border: 1px solid darken($payment-yellow, 10%);
+  }
+  &-green {
+    background-color: $payment-green;
+    border: 1px solid darken($payment-green, 10%);
+  }
+  &-blue {
+    background-color: $payment-blue;
+    border: 1px solid darken($payment-blue, 10%);
+  }
+  &-purple {
+    background-color: $payment-purple;
+    border: 1px solid darken($payment-purple, 10%);
+  }
+  &-grey {
+    background-color: $payment-grey;
+    border: 1px solid darken($payment-grey, 10%);
   }
 }
