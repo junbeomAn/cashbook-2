@@ -21,8 +21,12 @@ export default class ChartPage extends Component {
   }
 
   defineTemplate() {
+    const categoryText = this.props.categoryText || '생활';
     return `
-    ${this.resolveChild('line-chart')}
+    <div class="line-chart-section-container">
+      <p class="line-chart-section-header">${categoryText} 카테고리 소비 추이</p>
+      ${this.resolveChild('line-chart')}
+    </div>
     `;
   }
 }

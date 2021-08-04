@@ -1,11 +1,9 @@
 @import '../../pages/color';
 @import '../../pages/size';
 
-
 .line-chart-container {
   width: 100%;
-  height: 300px;
-  margin: 20px;
+  height: 100%;
   position: relative;
   display: flex;
   align-items: center;
@@ -24,19 +22,19 @@
 
 @keyframes hlOn {
   0% {
-    stroke-dasharray: 0px 600px;
+    stroke-dasharray: 0px 720px;
   }
   100% {
-    stroke-dasharray: 600px 0px;
+    stroke-dasharray: 720px 0px;
   }
 }
 
 @keyframes vlOn {
   0% {
-    stroke-dasharray: 0px 300px;
+    stroke-dasharray: 0px 330px;
   }
   100% {
-    stroke-dasharray: 300px 0px;
+    stroke-dasharray: 330px 0px;
   }
 }
 
@@ -56,14 +54,16 @@
 }
 
 .line-chart-label {
-  position: absolute;
-  opacity: 0;
-  animation-name: pointOn;
-  animation-duration: .5s;
-  transition-duration: .5s;
-  animation-fill-mode: forwards;
-  color: $body-grey;
-  @include bold-small();
+  & {
+    position: absolute;
+    opacity: 0;
+    animation-name: pointOn;
+    animation-duration: .5s;  
+    transition-duration: .5s;
+    animation-fill-mode: forwards;
+    color: $body-grey;
+    @include bold-small();
+  }
 }
 
 .line-chart-month-label {
@@ -89,5 +89,5 @@
 }
 
 .line-chart-dot-container {
-  transform: translate3D(-602px, 152px, 0px);
+  transform: translate3D(-722px, 167px, 0px);
 }

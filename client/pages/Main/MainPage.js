@@ -214,7 +214,7 @@ export default class MainPage extends Component {
       },
     });
     let result = '';
-    if (!isLogin()) {
+    if (isLogin()) {
       result += this.resolveChild('login-modal');
     }
     return `${result}
