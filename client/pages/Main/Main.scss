@@ -29,3 +29,50 @@
     object-fit: contain;
   }
 }
+
+.main-empty-text-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;;
+  align-items: center;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.main-empty-text{ 
+  &-first{
+    @include display-large();
+    margin-right: 12px;
+    transform: scale(2);
+    animation-name: textLarger;
+    animation-duration: 1s;
+    transform-origin: center;
+    animation-fill-mode: forwards;
+  }
+  &-second {
+    @include display-large();
+  }
+}
+
+@keyframes textLarger {
+  0%{
+    margin-right: 12px;
+    transform: scale(1);
+  }
+  70%{
+    margin-right: 26px;
+    transform: scale(2.2);
+  }
+  80%{
+    margin-right: 26px;
+    transform: scale(2.2) rotate(30deg);
+  }
+  90%{
+    margin-right: 24px;
+    transform: scale(2) rotate(-30deg);
+  }
+  100%{
+    margin-right: 24px;
+    transform: scale(2);
+  }
+}

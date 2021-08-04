@@ -118,6 +118,13 @@ export default class MainPage extends Component {
     filteredData.forEach((histories, index) => {
       historyTemplate += this.resolveChild(`history-container-${index}`);
     });
+    if (filteredData.length === 0) {
+      return `
+      <div class="main-empty-text-container">
+        <p class="main-empty-text-first">텅</p>
+        <p class="main-empty-text-second">비었어요!</p>
+      </div>`;
+    }
     return historyTemplate;
   }
 
