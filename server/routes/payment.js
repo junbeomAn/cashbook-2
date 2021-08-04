@@ -1,50 +1,56 @@
 const router = require('express').Router();
-const { sequelize } = require('../db/models');
-const { PAYMENT_FETCH_SUCCESS, PAYMENT_POST_SUCCESS, PAYMENT_DELETE_SUCCESS } = require('../utils/constant');
-
-const { Payment } = sequelize.models
+const {
+  getAllPayments,
+  registerPayment,
+  deletePayment,
+} = require('../services/payment-service');
+const {
+  PAYMENT_FETCH_SUCCESS,
+  PAYMENT_POST_SUCCESS,
+  PAYMENT_DELETE_SUCCESS,
+} = require('../utils/constant');
 
 router.get('/', async (req, res) => {
   // 로그인 검증 프로세스 필요함.
   const { userId } = req.query;
-  try {
-    const result = await Payment.findAll({
-      where: {
-        UserId: userId
-      },
-    });
+  const whereOptions = {
+    UserId: userId,
+  };
+
+  const { result, err } = await getAllPayments(whereOptions);
+  if (!err) {
     res.send({ ok: true, result, message: PAYMENT_FETCH_SUCCESS });
-  } catch(err) {
-    console.error(err);
+  } else {
+    res.send({ ok: false, err });
   }
-})
+});
 
 router.post('/', async (req, res) => {
   const { userId, method } = req.body;
-  try {
-    await Payment.create({
-      method,
-      UserId: userId
-    });
+  const data = {
+    method,
+    UserId: userId,
+  };
+  const { err } = await registerPayment(data);
+  if (!err) {
     res.send({ ok: true, message: PAYMENT_POST_SUCCESS });
-  } catch(err) {
-    console.error(err);
+  } else {
+    res.send({ ok: false, err });
   }
-})
+});
 
 router.delete('/', async (req, res) => {
   const { userId, method } = req.body;
-  try {
-    await Payment.destroy({
-      where: {
-        UserId: userId,
-        method
-      }
-    })
-    res.send({ ok: true, message: PAYMENT_DELETE_SUCCESS })
-  } catch(err) {
-    console.error(err);
+  const whereOptions = {
+    UserId: userId,
+    method,
+  };
+  const { err } = await deletePayment(whereOptions);
+  if (!err) {
+    res.send({ ok: true, message: PAYMENT_DELETE_SUCCESS });
+  } else {
+    res.send({ ok: false, err });
   }
-})
+});
 
 module.exports = router;

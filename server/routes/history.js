@@ -5,8 +5,8 @@ const {
   getHistoriesOfSixMonth,
   createHistory,
   updateHistory,
-} = require('../services/historyService');
-const { getPaymentId } = require('../services/paymentService');
+} = require('../services/history-service');
+const { getPaymentId } = require('../services/payment-service');
 const {
   HISTORIES_FETCH_SUCCESS,
   HISTORIES_POST_SUCCESS,
