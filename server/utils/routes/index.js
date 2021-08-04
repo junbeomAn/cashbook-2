@@ -68,21 +68,19 @@ const arrangeByDate = (histories) => {
   return injectDayTotal(result);
 };
 
-function padZero(month) {
-  return `${month}`.padStart(2, '0');
-}
+const padZero = (month) => `${month}`.padStart(2, '0');
 
-function toMySqlDateFormat(dateString) {
+const toMySqlDateFormat = (dateString) => {
   return dateString.toISOString().slice(0, 19).replace('T', ' ');
-}
-
+};
 const getDateRange = (currentYear, currentMonth, range) => {
-  let startDate, endDate;
+  let startDate = '';
+  let endDate = '';
   const lastMonth = 12;
   let startMonth = 0;
-  let endMonth = currentMonth;
+  const endMonth = currentMonth;
   let startYear = currentYear;
-  let endYear = currentYear;
+  const endYear = currentYear;
 
   if (currentMonth - range < 0) {
     startMonth = lastMonth - (range - currentMonth) + 1;
@@ -108,13 +106,16 @@ const formatDate = (date) => {
   }, '');
 };
 
-function encodeHTML(s) {
+const encodeHTML = (s) => {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-}
+};
+
+const getAccessToken = (response) => response.split('&')[0].split('=')[1];
 
 module.exports = {
   arrangeByDate,
   getDateRange,
   formatDate,
   encodeHTML,
+  getAccessToken,
 };
