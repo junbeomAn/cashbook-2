@@ -87,7 +87,7 @@ export default class InputBar extends Component {
     const { selectedData, selectedDate } = this.props;
     let date = getToday();
     let category = '선택하세요';
-    let content = '';
+    let contents = '';
     let payment = '선택하세요';
     let amount = '';
     let togglePlus = this.componentState.sign
@@ -99,7 +99,7 @@ export default class InputBar extends Component {
     if (selectedDate.year) {
       date = this.makeDate(selectedDate);
       category = selectedData.category;
-      content = selectedData.content;
+      contents = selectedData.contents;
       payment = selectedData.payment;
       if (selectedData.amount > 0) {
         togglePlus = 'input-bar-toggle-selected';
@@ -127,7 +127,7 @@ export default class InputBar extends Component {
       <div class="input-bar-vertical-line"></div>
       <div class="input-bar-section contents-section">
         <p>내용</p>
-        <input type="text" placeholder="입력하세요" value=${content}>
+        <input type="text" placeholder="입력하세요" value=${contents}>
       </div>
       <div class="input-bar-vertical-line"></div>
       <div class="input-bar-section">
