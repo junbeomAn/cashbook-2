@@ -5,7 +5,8 @@ import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import categoryInfo from '@/util/category';
 import PaymentModal from '@/components/Modal/PaymentModal';
-import { objectToList } from '@/util/util';
+import { isLogin, objectToList } from '@/util/util';
+import LoginModal from '@/components/Modal/LoginModal';
 import {
   PAYMENT_MODAL_TITLE,
   PAYMENT_MODAL_CANCEL_TEXT,
@@ -19,6 +20,10 @@ import '@/pages/global.scss';
 const PAYMENT_ADD_EVENT = 'PAYMENT_ADD_EVENT';
 const PAYMENT_DEL_EVENT = 'PAYMENT_DEL_EVENT';
 const HISTORY_ADD_EVENT = 'HISTORY_ADD_EVENT';
+const SET_HISTORY_DATA = 'SET_HISTORY_DATA';
+const LOGIN_MODAL_TITLE =
+  '우아한 가계부를 사용하기 위해선 로그인이 필요합니다.';
+const LOGIN_MODAL_CANCEL_TEXT = '데모 계정으로 진행';
 
 export default class MainPage extends Component {
   constructor(params) {
@@ -243,7 +248,32 @@ export default class MainPage extends Component {
     });
 
     const { selectedData, selectedDate, selectInfo } = this.componentState;
+    this.registerControllerEvent(SET_HISTORY_DATA, async () => {
+      // TODO : 이 이벤트를 호출하면 History Data를 갱신.
+      const state = { data: historyData };
+      const e = {
+        state,
+        key: 'date',
+      };
 
+      return e;
+    });
+
+    new LoginModal({
+      parent: this,
+      keyword: 'login-modal',
+      props: {
+        title: LOGIN_MODAL_TITLE,
+        cancelText: LOGIN_MODAL_CANCEL_TEXT,
+        onLogin: () => {
+          console.log('TODO : redirect to github login.');
+          // window.location.href = 'http://www.abc.com/';
+        },
+        onCancelClick: () => {
+          this.controller.emitEvent(SET_HISTORY_DATA);
+        },
+      },
+    });
     new InputBar({
       parent: this,
       keyword: 'input-bar',
@@ -298,13 +328,17 @@ export default class MainPage extends Component {
         },
       },
     });
-    return `
-      ${this.resolveChild('input-bar')}
-      ${this.resolveChild('info-bar')}
-      ${this.assembleHistoryData()}
-      <div class="main-totop-button">
-        <img src="${arrow}"/>
-      </div>
-    `;
+    let result = '';
+    if (isLogin()) {
+      result += this.resolveChild('login-modal');
+    }
+    return `${result}
+        ${this.resolveChild('input-bar')}
+        ${this.resolveChild('info-bar')}
+        ${this.assembleHistoryData()}
+        <div class="main-totop-button">
+          <img src="${arrow}"/>
+        </div>
+      `;
   }
 }
