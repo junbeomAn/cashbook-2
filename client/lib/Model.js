@@ -1,4 +1,4 @@
-import { deepCopy } from '@/util/util';
+import { deepCopy, deepCompare } from '@/util/util';
 
 export default class Model {
   constructor() {
@@ -10,10 +10,14 @@ export default class Model {
   }
 
   setModelState(key, newState) {
+    const prevState = this._data[key];
     this._data[key] = { ...this._data[key], ...newState };
-    document.dispatchEvent(
-      new CustomEvent(key, { detail: this.modelState[key] })
-    );
+    const nowState = this._data[key];
+    if (!deepCompare(prevState, nowState)) {
+      document.dispatchEvent(
+        new CustomEvent(key, { detail: this.modelState[key] })
+      );
+    }
   }
 
   initData(key, state) {
@@ -21,6 +25,15 @@ export default class Model {
     // key : [String] 각 페이지를 구분하는 값.
     if (!this._data[key]) {
       this._data[key] = { ...state, ...this._data[key] };
+      return {
+        result: true,
+      };
     }
+    const obj = {};
+    obj[key] = this._data[key];
+    return {
+      result: false,
+      data: obj,
+    };
   }
 }
