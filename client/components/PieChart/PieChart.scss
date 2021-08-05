@@ -6,6 +6,12 @@ g {
 
 svg {
   .circle-part {
-    transition: stroke-dashoffset $pie-chart-transition-duration;
+    animation: fillup 2s forwards;
+  }
+}
+
+@keyframes fillup {
+  to {
+    stroke-dashoffset: 0;
   }
 }
