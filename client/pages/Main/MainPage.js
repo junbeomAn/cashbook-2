@@ -5,8 +5,9 @@ import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import PaymentModal from '@/components/Modal/PaymentModal';
-import { isLogin, objectToList, needFetchHistory } from '@/util/util';
 import LoginModal from '@/components/Modal/LoginModal';
+import HistoryModal from '@/components/Modal/HistoryModal';
+import { isLogin, objectToList, needFetchHistory } from '@/util/util';
 import {
   PAYMENT_MODAL_TITLE,
   PAYMENT_MODAL_CANCEL_TEXT,
@@ -298,11 +299,21 @@ export default class MainPage extends Component {
       });
     }
 
+    new HistoryModal({
+      parent: this,
+      keyword: 'history-modal',
+      props: {
+        onLogin: () => {},
+        onCancelClick: () => {},
+      },
+    });
+
     let result = '';
     if (!isLogin() && !this.isLoading()) {
       result += this.resolveChild('login-modal');
     }
     return `${result}
+        ${this.resolveChild('history-modal')}
         ${this.resolveChild('input-bar')}
         ${this.resolveChild('info-bar')}
         ${this.assembleHistoryData()}
