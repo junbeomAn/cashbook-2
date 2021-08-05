@@ -28,7 +28,7 @@ export default class InfoBar extends Component {
         props: {
           historyIndex: this.props.historyIndex,
           contentsIndex: key,
-          onClick: this.props.onClick,
+          onModify: this.props.onModify,
           history,
         },
       });

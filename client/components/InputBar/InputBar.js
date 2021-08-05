@@ -76,9 +76,7 @@ export default class InputBar extends Component {
         return false;
       }
       return true;
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
     return false;
   }
 

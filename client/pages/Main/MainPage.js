@@ -35,8 +35,6 @@ export default class MainPage extends Component {
       ...params,
       componentName: 'main-page',
       componentState: {
-        selectedData: {},
-        selectedDate: {},
         inputToggle: true,
         outageToggle: true,
       },
@@ -161,14 +159,11 @@ export default class MainPage extends Component {
       return e;
     });
 
-    const { selectedData, selectedDate } = this.componentState;
     new InputBar({
       parent: this,
       keyword: 'input-bar',
       controller: this.controller,
       props: {
-        selectedDate,
-        selectedData,
         onDelete: (kind) => {
           // kind : "", paymentColor: ""
           this.controller.emitEvent(PAYMENT_DEL_EVENT, {
@@ -257,11 +252,28 @@ export default class MainPage extends Component {
         props: {
           data: histories,
           historyIndex: index,
-          onClick: (historyIndex, contentsIndex) => {
-            this.setComponentState({
-              selectedDate: nowHistoryData[historyIndex].date,
-              selectedData: nowHistoryData[historyIndex].history[contentsIndex],
+          onModify: (selectedData) => {
+            // ID를 찾아서 던져주던가...
+            const pData = this.modelState.payment.data;
+            let paymentColor = 'grey';
+            for (const key in pData) {
+              if (pData[key].kind === selectedData.payment) {
+                paymentColor = pData[key].paymentColor;
+              }
+            }
+
+            const $historyModal = new HistoryModal({
+              parent: null,
+              props: {
+                selectedData,
+                paymentColor,
+                onSubmit: () => {},
+                onDelete: () => {},
+                onCancel: () => {},
+              },
             });
+            const $modalParent = document.querySelector('.app-background');
+            $modalParent.appendChild($historyModal.innerNode);
           },
         },
       });
@@ -271,7 +283,7 @@ export default class MainPage extends Component {
       // TODO : 더미 데이터용 아이디를 만들어서 넣어주기
       /*
       localStorage.setItem('nickname', 'sshrik');
-      localStorage.setItem('userId', -20);
+      localStorage.setItem('userId', 2);
       */
       const state = { data: historyData };
       const e = {
@@ -298,22 +310,11 @@ export default class MainPage extends Component {
         },
       });
     }
-
-    new HistoryModal({
-      parent: this,
-      keyword: 'history-modal',
-      props: {
-        onLogin: () => {},
-        onCancelClick: () => {},
-      },
-    });
-
     let result = '';
     if (!isLogin() && !this.isLoading()) {
       result += this.resolveChild('login-modal');
     }
     return `${result}
-        ${this.resolveChild('history-modal')}
         ${this.resolveChild('input-bar')}
         ${this.resolveChild('info-bar')}
         ${this.assembleHistoryData()}
