@@ -127,6 +127,7 @@ router.post('/', async (req, res) => {
     PaymentId,
     UserId: userId,
   };
+  console.log(data);
 
   const { err: historyErr } = await createHistory(data);
   if (!historyErr) {
