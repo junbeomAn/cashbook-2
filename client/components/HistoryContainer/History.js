@@ -24,7 +24,7 @@ export default class History extends Component {
         <div class="history-category history-category-${history.categoryColor}">
           <p>${history.category}</p>
         </div>
-        <p class="history-content">${history.content}</p>
+        <p class="history-content">${history.contents}</p>
         <p class="history-payment">${history.payment}</p>
         <div class="history-amount">
           <p>${moneyFormat(history.amount)}</p>

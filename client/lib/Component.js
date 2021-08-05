@@ -66,7 +66,6 @@ export default class Component {
         changedState[key] = e.detail;
         this._modelState = { ...this._modelState, ...changedState };
         const newState = this.modelState;
-
         // Check if state updatable.
         this.update(prevState, newState);
       });
@@ -120,7 +119,6 @@ export default class Component {
       if (this.$target && this.innerNode && $this) {
         this.$target.replaceChild(this.innerNode, $this);
       }
-
       // Event 재등록
       this.setEvent(this.innerNode);
       Object.keys(this.childs).forEach((el) => {
