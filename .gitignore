@@ -4,3 +4,4 @@ public/dist/index.js
 public/dist
 .env
 server/db/config/config.json
+.DS_Store
