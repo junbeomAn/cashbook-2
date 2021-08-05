@@ -1,9 +1,11 @@
 import Component from '@/lib/Component';
 import { MODAL_ANIMATION_TIME } from '@/util/constant';
 import github1 from '@/asset/github/github1.png';
-import { API_END_POINT } from '../../config';
+import { API_END_POINT, API_KEY } from '../../config';
 
 import './Modal.scss';
+
+const githubUrl = `https://github.com/login/oauth/authorize?client_id=${API_KEY}&redirect_uri=${API_END_POINT}`;
 
 export default class Modal extends Component {
   constructor(params) {
@@ -26,21 +28,18 @@ export default class Modal extends Component {
     setTimeout(() => {
       const $this = document.querySelector(`#${this.id}`);
       $this.parentNode.removeChild($this);
+      if (this.props.onCancelClick) {
+        this.props.onCancelClick();
+      }
     }, MODAL_ANIMATION_TIME);
   }
 
   preTemplate() {
     this.addEvent('.modal-cancel-text', 'click', async () => {
-      await this.outAnimation();
-      if (this.props.onCancelClick) {
-        this.props.onCancelClick();
-      }
+      this.outAnimation(this.props.onCancelClick);
     });
     this.addEvent('.modal-login-button', 'click', async () => {
-      await this.outAnimation();
-      // if (this.props.onLogin) {
-      //   this.props.onLogin();
-      // }
+      window.location.href = githubUrl;
     });
   }
 
@@ -48,7 +47,6 @@ export default class Modal extends Component {
     const title = this.props.title || '';
     const cancelText = this.props.cancelText || '';
     const cancelColor = this.props.cancelColor || 'grey';
-    const githubUrl = `https://github.com/login/oauth/authorize?client_id=dabad929ed882e0eb261&redirect_uri=${API_END_POINT}`;
     return `
     <div class="modal-background-black modal-background-black-start">
       <div class="modal-container modal-container-start">

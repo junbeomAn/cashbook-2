@@ -272,12 +272,15 @@ export default class MainPage extends Component {
 
     const { selectedData, selectedDate, selectInfo } = this.componentState;
     this.registerControllerEvent(SET_HISTORY_DATA, async () => {
-      console.log('SET_HISTORY_DATA');
-      // TODO : 이 이벤트를 호출하면 History Data를 갱신.
+      // TODO : 더미 데이터용 아이디를 만들어서 넣어주기
+      /*
+      localStorage.setItem('nickname', 'sshrik');
+      localStorage.setItem('userId', -20);
+      */
       const state = { data: historyData };
       const e = {
         state,
-        key: 'date',
+        key: 'historyData',
       };
 
       return e;
