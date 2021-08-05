@@ -2,6 +2,8 @@ import Component from '@/lib/Component';
 import LineChart from '@/components/LineChart/LineChart';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
+import PieChart from '@/components/PieChart/PieChart';
+
 import { objectToList } from '@/util/util';
 
 import './chart.scss';
@@ -102,17 +104,35 @@ export default class ChartPage extends Component {
         spendDate: ['3', '4', '5', '6', '7', '8'],
       },
     });
+    const data = [
+      { item: '생활', ratio: 0.3 },
+      { item: '쇼핑/뷰티', ratio: 0.25 },
+      { item: '교통', ratio: 0.15 },
+      { item: '문화/여가', ratio: 0.2 },
+      { item: '식비', ratio: 0.1 },
+    ];
 
+    new PieChart({
+      parent: this,
+      keyword: 'pie-chart',
+      props: {
+        data,
+        width: 400,
+        height: 400,
+      },
+    });
+    // const pie = PieChart(data, '480', '480');
+    // console.log(pie);
     if (categoryText.length === 0) {
       return `
       <div class="pie-chart-section-container">
-  
+        ${this.resolveChild('pie-chart')}
       </div>`;
     }
 
     return `
     <div class="pie-chart-section-container">
-
+      ${this.resolveChild('pie-chart')}
     </div>
     <div class="line-chart-section-container">
       <p class="line-chart-section-header">${categoryText} 카테고리 소비 추이</p>
