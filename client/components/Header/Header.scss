@@ -95,3 +95,25 @@
 .header-nav-container>div:first-child{
   margin-left: -10px;
 }
+
+.header-nav-profile-image {
+  & {
+    margin-right: -30px;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  & > img {
+    width: 38px;
+    height: 38px;
+    border-radius: 38px;
+    border: 2px solid $baemin-third;
+    cursor: pointer;
+  }
+  & > p {
+    @include bold-small();
+    color: $background-white;
+  }
+}

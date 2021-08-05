@@ -215,6 +215,10 @@ export default class Header extends Component {
           ${this.resolveChild('history')}
           ${this.resolveChild('calendar')}
           ${this.resolveChild('chart')}
+          <div class="header-nav-profile-image">
+            <img src="${localStorage.getItem('avatar')}" />
+            <p>${localStorage.getItem('nickname')} 님!</p>
+          </div>
         </div>
       </div>
     </div>

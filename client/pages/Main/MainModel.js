@@ -49,7 +49,7 @@ const model = {
       state: result,
       key: 'user',
     };
-
+    localStorage.setItem('avatar', result.avatar);
     localStorage.setItem('nickname', result.nickname);
     localStorage.setItem('userId', result.userId);
     window.history.replaceState({}, '', '/');
