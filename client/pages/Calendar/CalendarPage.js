@@ -62,6 +62,7 @@ export default class CalendarPage extends Component {
     const { data } = this.modelState.historyData;
     const newData = this.processCalendarData(data);
     const [totalIncome, totalExpenditure, sum] = this.getTotalResults(newData);
+    console.log(newData);
     new Calendar({
       parent: this,
       keyword: 'calendar',
