@@ -1,3 +1,4 @@
+import arrow from '@/asset/arrow.svg';
 import Component from '@/lib/Component';
 import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
@@ -17,11 +18,13 @@ import {
   LOGIN_MODAL_TITLE,
   LOGIN_MODAL_CANCEL_TEXT,
   OAUTH_CODE_SEP,
+  PAYMENT_ADD_EVENT,
+  PAYMENT_DEL_EVENT,
+  HISTORY_ADD_EVENT,
 } from '@/util/constant';
 import mainModel from './MainModel';
 
 import './Main.scss';
-import arrow from '@/asset/arrow.svg';
 import '@/pages/global.scss';
 
 export default class MainPage extends Component {
@@ -35,7 +38,7 @@ export default class MainPage extends Component {
         selectInfo: {
           category: '',
           categoryColor: '',
-          content: '',
+          contents: '',
           payment: '',
           amount: 0,
           sign: false,
@@ -57,12 +60,14 @@ export default class MainPage extends Component {
             { kind: '현대카드', paymentColor: 'yellow' },
             { kind: '비씨카드', paymentColor: 'green' },
           ],
+        },
         user: {
           id: '',
           nickname: localStorage.getItem('nickname') || '',
         },
       },
     });
+
     this.toggleInput = this.toggleInput.bind(this);
     this.toggleOutage = this.toggleOutage.bind(this);
   }
@@ -143,7 +148,7 @@ export default class MainPage extends Component {
     this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
     if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
     this.controller.emitEvent(SET_USER_DATA);
-    
+
     this.addEvent('.main-totop-button', 'click', () => {
       const scrollInterval = setInterval(() => {
         document.documentElement.scrollTop -= 30;
