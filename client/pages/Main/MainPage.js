@@ -3,9 +3,10 @@ import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
-import Modal from '@/components/Modal/Modal';
-import LoginModal from '@/components/Modal/LoginModal';
+import categoryInfo from '@/util/category';
+import PaymentModal from '@/components/Modal/PaymentModal';
 import { isLogin, objectToList } from '@/util/util';
+import LoginModal from '@/components/Modal/LoginModal';
 import {
   PAYMENT_MODAL_TITLE,
   PAYMENT_MODAL_CANCEL_TEXT,
@@ -20,6 +21,7 @@ import {
 import mainModel from './MainModel';
 
 import './Main.scss';
+import arrow from '@/asset/arrow.svg';
 import '@/pages/global.scss';
 
 export default class MainPage extends Component {
@@ -30,6 +32,14 @@ export default class MainPage extends Component {
       componentState: {
         selectedData: {},
         selectedDate: {},
+        selectInfo: {
+          category: '',
+          categoryColor: '',
+          content: '',
+          payment: '',
+          amount: 0,
+          sign: false,
+        },
         inputToggle: true,
         outageToggle: true,
       },
@@ -41,6 +51,12 @@ export default class MainPage extends Component {
         historyData: {
           data: historyData,
         },
+        payment: {
+          data: [
+            { kind: '현금', paymentColor: 'red' },
+            { kind: '현대카드', paymentColor: 'yellow' },
+            { kind: '비씨카드', paymentColor: 'green' },
+          ],
         user: {
           id: '',
           nickname: localStorage.getItem('nickname') || '',
@@ -109,6 +125,13 @@ export default class MainPage extends Component {
     filteredData.forEach((histories, index) => {
       historyTemplate += this.resolveChild(`history-container-${index}`);
     });
+    if (filteredData.length === 0) {
+      return `
+      <div class="main-empty-text-container">
+        <p class="main-empty-text-first">텅</p>
+        <p class="main-empty-text-second">비었어요!</p>
+      </div>`;
+    }
     return historyTemplate;
   }
 
@@ -120,6 +143,67 @@ export default class MainPage extends Component {
     this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
     if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
     this.controller.emitEvent(SET_USER_DATA);
+    
+    this.addEvent('.main-totop-button', 'click', () => {
+      const scrollInterval = setInterval(() => {
+        document.documentElement.scrollTop -= 30;
+        if (document.documentElement.scrollTop <= 0) {
+          clearInterval(scrollInterval);
+        }
+      }, 10);
+    });
+    this.registerControllerEvent(PAYMENT_ADD_EVENT, (addInfo) => {
+      const paymentData = [];
+      const { data } = this.modelState.payment;
+      for (const key in data) {
+        if (data[key]) {
+          paymentData.push(data[key]);
+        }
+      }
+      paymentData.push(addInfo);
+      const state = { data: paymentData };
+      const e = {
+        state,
+        key: 'payment',
+      };
+
+      return e;
+    });
+
+    this.registerControllerEvent(PAYMENT_DEL_EVENT, (deleteKey) => {
+      const paymentData = this.modelState.payment.data;
+      for (const key in paymentData) {
+        if (paymentData[key].kind === deleteKey) {
+          delete paymentData[key];
+          break;
+        }
+      }
+      const state = { data: paymentData };
+      const e = {
+        state,
+        key: 'payment',
+      };
+
+      return e;
+    });
+
+    this.registerControllerEvent(HISTORY_ADD_EVENT, (/* addData */) => {
+      /*
+      const { date, history } = addData;
+      const year = Number(date.subString(0, 4));
+      const month = Number(date.subString(4, 6));
+      const day = Number(date.subString(6, 8));
+      const historyData = this.modelState.historyData.data;
+      */
+      console.log(this.modelState.historyData.data);
+      const state = { data: this.modelState.historyData.data };
+      const e = {
+        state,
+        key: 'historyData',
+      };
+
+      return e;
+    });
   }
 
   defineTemplate() {
@@ -173,6 +257,7 @@ export default class MainPage extends Component {
       });
     });
 
+    const { selectedData, selectedDate, selectInfo } = this.componentState;
     this.registerControllerEvent(SET_HISTORY_DATA, async () => {
       // TODO : 이 이벤트를 호출하면 History Data를 갱신.
       const state = { data: historyData };
@@ -184,7 +269,6 @@ export default class MainPage extends Component {
       return e;
     });
 
-    const { selectedData, selectedDate } = this.componentState;
     if (!this.modelState.user.nickname && !this.isLoading()) {
       new LoginModal({
         parent: this,
@@ -208,11 +292,37 @@ export default class MainPage extends Component {
       props: {
         selectedDate,
         selectedData,
+        selectInfo,
+        categoryInfo,
+        payment: this.modelState.payment.data,
+        setSelectInfo: (data) => {
+          this.setComponentState({
+            selectInfo: { ...this.componentState.selectInfo, ...data },
+          });
+        },
+        onDelete: (kind) => {
+          // kind : "", paymentColor: ""
+          this.controller.emitEvent(PAYMENT_DEL_EVENT, kind);
+        },
+        onSubmit: (data) => {
+          // this.controller.emitEvent(HISTORY_ADD_EVENT, data);
+          console.log(data);
+          this.setComponentState({
+            selectInfo: {
+              category: '',
+              categoryColor: '',
+              content: '',
+              payment: '',
+              amount: 0,
+              sign: false,
+            },
+          });
+        },
         popUpModal: () => {
           const $modalParent = document.querySelector('.app-background');
-          const $modal = new Modal({
+          const $modal = new PaymentModal({
             parent: null,
-            keyword: 'alert-modal',
+            keyword: 'payment-modal',
             props: {
               title: PAYMENT_MODAL_TITLE,
               cancelText: PAYMENT_MODAL_CANCEL_TEXT,
@@ -220,7 +330,8 @@ export default class MainPage extends Component {
               placeholder: PAYMENT_MODAL_PLACEHOLDER,
               submitColor: 'mint',
               onSubmitClick: (data) => {
-                console.log(data);
+                // kind : "", paymentColor: ""
+                this.controller.emitEvent(PAYMENT_ADD_EVENT, data);
               },
             },
           });
@@ -237,6 +348,9 @@ export default class MainPage extends Component {
         ${this.resolveChild('input-bar')}
         ${this.resolveChild('info-bar')}
         ${this.assembleHistoryData()}
+        <div class="main-totop-button">
+          <img src="${arrow}"/>
+        </div>
       `;
   }
 }
