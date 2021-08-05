@@ -133,14 +133,6 @@ export default class InputBar extends Component {
       this.setComponentState({ amount });
     });
 
-    /*
-    this.addEvent('.input-bar-amount-input', 'input', () => {
-      const $contents = this.querySelector('.input-bar-amount-input');
-      const numberValue = commaAmountToNumer($contents.value);
-      $contents.value = getAmountWithComma(numberValue);
-    });
-    */
-
     // Category Dropdown 관련 이벤트
     this.addEvent('.input-bar-dropdown-section-category', 'click', () => {
       const $parent = this.querySelector('.classification-section');

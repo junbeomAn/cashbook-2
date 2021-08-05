@@ -264,11 +264,22 @@ export default class MainPage extends Component {
 
             const $historyModal = new HistoryModal({
               parent: null,
+              controller: this.controller,
               props: {
                 selectedData,
                 paymentColor,
-                onSubmit: () => {},
-                onDelete: () => {},
+                onSubmit: () => {
+                  this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+                    year: this.modelState.date.year,
+                    month: this.modelState.date.month,
+                  });
+                },
+                onDelete: () => {
+                  this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+                    year: this.modelState.date.year,
+                    month: this.modelState.date.month,
+                  });
+                },
                 onCancel: () => {},
               },
             });

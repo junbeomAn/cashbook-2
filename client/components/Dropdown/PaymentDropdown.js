@@ -18,7 +18,7 @@ export default class Dropdown extends Component {
         parent: this,
         keyword: `list-${index}`,
         props: {
-          end: itemList.length - 1 === index,
+          end: itemInfo.kind === '추가하기',
           text: itemInfo.kind,
           paymentColor: itemInfo.paymentColor,
           popUpPaymentModal: this.props.popUpModal,
