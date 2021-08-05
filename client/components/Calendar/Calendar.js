@@ -18,9 +18,7 @@ export default class Calendar extends Component {
   }
 
   defineTemplate() {
-    const mockIncome = 1822480;
-    const mockExpendit = 834640;
-    const mockTotal = 987840;
+    const { totalIncome, totalExpenditure, sum } = this.props;
     return `
       <section class="cashbook-calendar">
         <div class="calendar-day-bar">
@@ -35,10 +33,10 @@ export default class Calendar extends Component {
         ${this.resolveChild('table')}
         <div class="calendar-total">
           <div class="left">
-            <p>총 수입: ${getAmountWithComma(mockIncome)}</p>
-            <p>총 지출: ${getAmountWithComma(mockExpendit)}</p>
+            <p>총 수입: ${getAmountWithComma(totalIncome)}</p>
+            <p>총 지출: ${getAmountWithComma(totalExpenditure)}</p>
           </div>
-          <p class="right">총계: ${getAmountWithComma(mockTotal)}</p>
+          <p class="right">총계: ${getAmountWithComma(sum)}</p>
         </div>
       </section>
     `;

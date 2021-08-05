@@ -5,3 +5,4 @@ public/dist
 .env
 server/db/config/config.json
 .DS_Store
+

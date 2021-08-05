@@ -190,6 +190,10 @@ export default class Header extends Component {
 
       return e;
     });
+    this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+      year: this.modelState.date.year,
+      month: this.modelState.date.month,
+    });
   }
 
   defineTemplate() {

@@ -59,10 +59,15 @@ const model = {
       `${API_END_POINT}/history?year=${year}&month=${month}&userId=${userId}`,
       options
     );
+    const e = {
+      state: { data: [] },
+      key: 'historyData',
+    };
     if (res.ok) {
       const state = {
         data: processData({ data: res.result, year, month }),
       };
+<<<<<<< HEAD
       const e = {
         state,
         key: 'historyData',
@@ -70,7 +75,11 @@ const model = {
       return e;
     } else {
       return false;
+=======
+      e.state = state;
+>>>>>>> dev
     }
+    return e;
   },
 };
 export default model;

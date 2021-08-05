@@ -1,4 +1,17 @@
+$pie-chart-transition-duration: 2s;
 g {
   transform: rotate(-90deg);
   transform-origin: center;
+}
+
+svg {
+  .circle-part {
+    animation: fillup 2s forwards;
+  }
+}
+
+@keyframes fillup {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
