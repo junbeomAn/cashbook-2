@@ -3,8 +3,10 @@ import LineChart from '@/components/LineChart/LineChart';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import PieChart from '@/components/PieChart/PieChart';
-
+import Statistic from '@/components/Statistic/Statistic';
 import { objectToList } from '@/util/util';
+import { GET_LINE_CHART_DATA, PIE_CHART_SIZE } from '@/util/constant';
+import chartModel from './chartModel';
 
 import './chart.scss';
 import '@/pages/global.scss';
@@ -24,6 +26,10 @@ export default class ChartPage extends Component {
         },
         historyData: {
           data: historyData,
+        },
+        lineChartData: {
+          monthTotalList: [],
+          monthList: [],
         },
       },
     });
@@ -74,10 +80,78 @@ export default class ChartPage extends Component {
     return historyTemplate;
   }
 
+  getStatisticData(data) {
+    let totalExpenditure = 0;
+    const categorySum = {};
+    const categoryColorMap = {};
+
+    const dataObjs = Object.values(data);
+    dataObjs.forEach((dataByDate) => {
+      totalExpenditure += dataByDate.expenditure;
+      const historyValues = Object.values(dataByDate.history);
+      historyValues.forEach(({ category, categoryColor, amount }) => {
+        if (categorySum[category]) {
+          categorySum[category] += amount < 0 ? amount : 0;
+        } else {
+          categorySum[category] = amount < 0 ? amount : 0;
+        }
+        categoryColorMap[category] = categoryColor;
+      });
+    });
+    const result = this.addRatioData(categorySum, totalExpenditure);
+    const sortedCategorySum = this.sortStatisticByRatio(result);
+
+    return {
+      totalExpenditure,
+      categorySum: sortedCategorySum,
+      categoryColorMap,
+    };
+  }
+
+  addRatioData(categorySum, total) {
+    const result = [];
+    Object.entries(categorySum).forEach(([key, value]) => {
+      const item = {};
+      item.category = key;
+      item.ratio = Math.abs(value / total);
+      item.categoryTotal = value;
+      result.push(item);
+    });
+    return result;
+  }
+
+  sortStatisticByRatio(data) {
+    const result = [...data];
+    result.sort((a, b) => b.ratio - a.ratio);
+    return result;
+  }
+
+  lineChartObjectToList(lineChartData) {
+    const spendData = Object.values(lineChartData.monthTotalList).map(Number);
+    const spendDate = Object.values(lineChartData.monthList).map(Number);
+    return { spendData, spendDate };
+  }
+
   preTemplate() {
-    this.addEvent('.pie-chart-section-container', 'click', () => {
+    this.registerControllerEvent(
+      GET_LINE_CHART_DATA,
+      chartModel.getLineChartData
+    );
+    this.addEvent('.pie-chart-section-container', 'click', async (e) => {
       // TODO : Pie Chart에서 각 부분 누르면 text 전해주기.
-      this.setComponentState({ selectedCategory: '식비' });
+      if (!e.target.closest('.stat-item')) return;
+      const $statListItem = e.target.closest('.stat-item');
+      const $categoryName = $statListItem.querySelector('.category-name');
+      const [_, categoryClass] = $categoryName.classList;
+      const categoryId = categoryClass.split('-')[1];
+      const category = $categoryName.innerText;
+      const { year, month } = this.modelState.date;
+      await this.controller.emitEvent(GET_LINE_CHART_DATA, {
+        year,
+        month,
+        categoryId,
+      });
+      this.setComponentState({ selectedCategory: category });
     });
   }
 
@@ -85,6 +159,10 @@ export default class ChartPage extends Component {
     const categoryText = this.componentState.selectedCategory;
 
     const nowHistoryData = this.getNowHistoryData();
+    const monthData = this.modelState.historyData.data[0];
+    const { categoryColorMap, categorySum, totalExpenditure } =
+      this.getStatisticData(monthData.historyData);
+    const { lineChartData } = this.modelState;
     const filteredData = this.filterCategoryOption(nowHistoryData);
     filteredData.forEach((histories, index) => {
       new HistoryContainer({
@@ -96,43 +174,50 @@ export default class ChartPage extends Component {
         },
       });
     });
+    const { spendData, spendDate } = this.lineChartObjectToList(lineChartData);
+
     new LineChart({
       parent: this,
       keyword: 'line-chart',
       props: {
-        spendData: [38900, 21020, 300010, 20300, 9400, 67000],
-        spendDate: ['3', '4', '5', '6', '7', '8'],
+        spendData,
+        spendDate,
       },
     });
-    const data = [
-      { item: '생활', ratio: 0.3 },
-      { item: '쇼핑/뷰티', ratio: 0.25 },
-      { item: '교통', ratio: 0.15 },
-      { item: '문화/여가', ratio: 0.2 },
-      { item: '식비', ratio: 0.1 },
-    ];
 
     new PieChart({
       parent: this,
       keyword: 'pie-chart',
       props: {
-        data,
-        width: 400,
-        height: 400,
+        data: categorySum,
+        width: PIE_CHART_SIZE,
+        height: PIE_CHART_SIZE,
       },
     });
-    // const pie = PieChart(data, '480', '480');
-    // console.log(pie);
+    new Statistic({
+      parent: this,
+      keyword: 'statistic',
+      props: {
+        data: {
+          list: categorySum,
+          totalExpenditure,
+        },
+        categoryColorMap,
+      },
+    });
+
     if (categoryText.length === 0) {
       return `
       <div class="pie-chart-section-container">
         ${this.resolveChild('pie-chart')}
+        ${this.resolveChild('statistic')}
       </div>`;
     }
 
     return `
     <div class="pie-chart-section-container">
       ${this.resolveChild('pie-chart')}
+      ${this.resolveChild('statistic')}
     </div>
     <div class="line-chart-section-container">
       <p class="line-chart-section-header">${categoryText} 카테고리 소비 추이</p>
