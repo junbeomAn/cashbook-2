@@ -95,6 +95,70 @@ function appendDataToHistory(historyData, appendData) {
 }
 
 const model = {
+  handleAddPayment: async ({ source, add }) => {
+    const paymentData = [];
+    Object.keys(source).forEach((key) => {
+      paymentData.push(source[key]);
+    });
+    paymentData.push(add);
+    console.group('ADD_PAYMENT');
+    console.log(source, add);
+    console.log(paymentData);
+    console.groupEnd();
+
+    const body = {
+      method: add.kind,
+      color: add.paymentColor,
+      userId: localStorage.getItem('userId'),
+    };
+    const { apiResult } = await api.requestJSON(`${API_END_POINT}/payment`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(apiResult);
+
+    const e = {
+      state: { data: paymentData },
+      key: 'payment',
+    };
+
+    return e;
+  },
+  handleDelPayment: async ({ source, deleteKey }) => {
+    const paymentData = source;
+    const delObj = {};
+    for (const key in paymentData) {
+      if (paymentData[key].kind === deleteKey) {
+        delObj.method = paymentData[key].kind;
+        delObj.color = paymentData[key].componentColor;
+        delete paymentData[key];
+        break;
+      }
+    }
+    const body = {
+      method: delObj.method,
+      color: delObj.color,
+      userId: localStorage.getItem('userId'),
+    };
+    const { apiResult } = await api.requestJSON(`${API_END_POINT}/payment`, {
+      method: 'DELETE',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(apiResult);
+
+    const e = {
+      state: { data: paymentData },
+      key: 'payment',
+    };
+
+    return e;
+  },
   handleDataPost: async ({ source, add }) => {
     const historyData = source;
     const data = add;

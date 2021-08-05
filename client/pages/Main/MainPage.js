@@ -13,6 +13,7 @@ import {
   PAYMENT_MODAL_SUBMIT_TEXT,
   PAYMENT_MODAL_PLACEHOLDER,
   SET_USER_DATA,
+  SET_USER_META_DATA,
   SET_HISTORY_DATA,
   LOGIN_MODAL_TITLE,
   LOGIN_MODAL_CANCEL_TEXT,
@@ -47,11 +48,7 @@ export default class MainPage extends Component {
           data: [] /* historyData 를 빼고 빈값을 채워넣음 */,
         },
         payment: {
-          data: [
-            { kind: '현금', paymentColor: 'red' },
-            { kind: '현대카드', paymentColor: 'yellow' },
-            { kind: '비씨카드', paymentColor: 'green' },
-          ],
+          data: [],
         },
         user: {
           id: '',
@@ -146,41 +143,6 @@ export default class MainPage extends Component {
       }, 10);
     });
 
-    this.registerControllerEvent(PAYMENT_ADD_EVENT, (addInfo) => {
-      const paymentData = [];
-      const { data } = this.modelState.payment;
-      for (const key in data) {
-        if (data[key]) {
-          paymentData.push(data[key]);
-        }
-      }
-      paymentData.push(addInfo);
-      const state = { data: paymentData };
-      const e = {
-        state,
-        key: 'payment',
-      };
-
-      return e;
-    });
-
-    this.registerControllerEvent(PAYMENT_DEL_EVENT, (deleteKey) => {
-      const paymentData = this.modelState.payment.data;
-      for (const key in paymentData) {
-        if (paymentData[key].kind === deleteKey) {
-          delete paymentData[key];
-          break;
-        }
-      }
-      const state = { data: paymentData };
-      const e = {
-        state,
-        key: 'payment',
-      };
-
-      return e;
-    });
-
     this.registerControllerEvent(HISTORY_ADD_EVENT, (/* addData */) => {
       /*
       const { date, history } = addData;
@@ -206,10 +168,12 @@ export default class MainPage extends Component {
       props: {
         selectedDate,
         selectedData,
-        payment: this.modelState.payment.data,
         onDelete: (kind) => {
           // kind : "", paymentColor: ""
-          this.controller.emitEvent(PAYMENT_DEL_EVENT, kind);
+          this.controller.emitEvent(PAYMENT_DEL_EVENT, {
+            source: this.modelState.payment.data,
+            deleteKey: kind,
+          });
         },
         popUpModal: () => {
           const $modalParent = document.querySelector('.app-background');
@@ -224,7 +188,10 @@ export default class MainPage extends Component {
               submitColor: 'mint',
               onSubmitClick: (data) => {
                 // kind : "", paymentColor: ""
-                this.controller.emitEvent(PAYMENT_ADD_EVENT, data);
+                this.controller.emitEvent(PAYMENT_ADD_EVENT, {
+                  source: this.modelState.payment.data,
+                  add: data,
+                });
               },
             },
           });
@@ -234,6 +201,8 @@ export default class MainPage extends Component {
     });
 
     this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
+    this.registerControllerEvent(SET_USER_META_DATA, mainModel.handleMetaFetch);
+    this.controller.emitEvent(SET_USER_META_DATA);
     if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
     this.controller.emitEvent(SET_USER_DATA);
   }

@@ -8,6 +8,8 @@ import saveChecked from '@/asset/saveChecked.png';
 import {
   INPUT_DROPDOWN_ANIMATION_TIME,
   HISTORY_ADD_EVENT,
+  PAYMENT_ADD_EVENT,
+  PAYMENT_DEL_EVENT,
 } from '@/util/constant';
 import {
   getAmountWithComma,
@@ -33,6 +35,9 @@ export default class InputBar extends Component {
       },
       modelState: {
         historyData: {
+          data: [],
+        },
+        payment: {
           data: [],
         },
       },
@@ -179,9 +184,28 @@ export default class InputBar extends Component {
       }
     });
 
+    this.registerControllerEvent(PAYMENT_ADD_EVENT, model.handleAddPayment);
+    this.registerControllerEvent(PAYMENT_DEL_EVENT, model.handleDelPayment);
+  }
+
+  pullUp(dest, count) {
+    dest.animate(
+      [{ marginTop: '0px' }, { marginTop: `${-1 * count * 57}px` }],
+      { duration: INPUT_DROPDOWN_ANIMATION_TIME }
+    );
+  }
+
+  pullDown(dest, count) {
+    dest.animate(
+      [{ marginTop: `${-1 * count * 57}px` }, { marginTop: '0px' }],
+      { duration: INPUT_DROPDOWN_ANIMATION_TIME }
+    );
+  }
+
+  defineTemplate() {
     const paymentItemList = [];
-    Object.keys(this.props.payment).forEach((key) => {
-      paymentItemList.push(this.props.payment[key]);
+    Object.keys(this.modelState.payment.data).forEach((key) => {
+      paymentItemList.push(this.modelState.payment.data[key]);
     });
     paymentItemList.push({ kind: '추가하기', paymentColor: 'none' });
 
@@ -235,23 +259,7 @@ export default class InputBar extends Component {
         }, INPUT_DROPDOWN_ANIMATION_TIME);
       }
     });
-  }
 
-  pullUp(dest, count) {
-    dest.animate(
-      [{ marginTop: '0px' }, { marginTop: `${-1 * count * 57}px` }],
-      { duration: INPUT_DROPDOWN_ANIMATION_TIME }
-    );
-  }
-
-  pullDown(dest, count) {
-    dest.animate(
-      [{ marginTop: `${-1 * count * 57}px` }, { marginTop: '0px' }],
-      { duration: INPUT_DROPDOWN_ANIMATION_TIME }
-    );
-  }
-
-  defineTemplate() {
     const date = getToday();
     const category = this.componentState.category || '선택하세요';
     const contents = this.componentState.contents || '';
