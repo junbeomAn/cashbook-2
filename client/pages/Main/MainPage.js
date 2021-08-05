@@ -6,7 +6,7 @@ import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
 import categoryInfo from '@/util/category';
 import PaymentModal from '@/components/Modal/PaymentModal';
-import { isLogin, objectToList } from '@/util/util';
+import { isLogin, objectToList, needFetchHistory } from '@/util/util';
 import LoginModal from '@/components/Modal/LoginModal';
 import {
   PAYMENT_MODAL_TITLE,
@@ -21,6 +21,7 @@ import {
   PAYMENT_ADD_EVENT,
   PAYMENT_DEL_EVENT,
   HISTORY_ADD_EVENT,
+  GET_HISTORIES_BY_DATE,
 } from '@/util/constant';
 import mainModel from './MainModel';
 
@@ -52,7 +53,7 @@ export default class MainPage extends Component {
           month: new Date().getMonth() + 1,
         },
         historyData: {
-          data: historyData,
+          data: [] /* historyData 를 빼고 빈값을 채워넣음 */,
         },
         payment: {
           data: [
@@ -200,7 +201,6 @@ export default class MainPage extends Component {
       const day = Number(date.subString(6, 8));
       const historyData = this.modelState.historyData.data;
       */
-      console.log(this.modelState.historyData.data);
       const state = { data: this.modelState.historyData.data };
       const e = {
         state,
@@ -212,10 +212,18 @@ export default class MainPage extends Component {
   }
 
   defineTemplate() {
+    if (
+      isLogin() &&
+      needFetchHistory(this.modelState.historyData.data, this.modelState.date)
+    ) {
+      this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+        year: this.modelState.date.year,
+        month: this.modelState.date.month,
+      });
+    }
     let totalIncome = 0;
     let totalOutage = 0;
     let totalCount = 0;
-    console.log(this.modelState.historyData);
     const nowHistoryData = this.getNowHistoryData();
     const filteredData = this.filterToggleOption(nowHistoryData);
     nowHistoryData.forEach((histories) => {
@@ -264,6 +272,7 @@ export default class MainPage extends Component {
 
     const { selectedData, selectedDate, selectInfo } = this.componentState;
     this.registerControllerEvent(SET_HISTORY_DATA, async () => {
+      console.log('SET_HISTORY_DATA');
       // TODO : 이 이벤트를 호출하면 History Data를 갱신.
       const state = { data: historyData };
       const e = {
@@ -311,7 +320,6 @@ export default class MainPage extends Component {
         },
         onSubmit: (data) => {
           // this.controller.emitEvent(HISTORY_ADD_EVENT, data);
-          console.log(data);
           this.setComponentState({
             selectInfo: {
               category: '',

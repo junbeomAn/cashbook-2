@@ -88,6 +88,20 @@ function getCategoryColor(name) {
   return false;
 }
 
+function needFetchHistory(historyState, dateState) {
+  const { month, year } = dateState;
+
+  for (const key in historyState) {
+    if (
+      historyState[key].currentMonth === month &&
+      historyState[key].currentYear === year
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export {
   deepCopy,
   deepCompare,
@@ -99,4 +113,5 @@ export {
   getToday,
   objectToList,
   getCategoryColor,
+  needFetchHistory,
 };

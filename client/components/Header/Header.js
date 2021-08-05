@@ -2,7 +2,6 @@ import Component from '@/lib/Component';
 import leftArrow from '@/asset/left-arrow.svg';
 import rightArrow from '@/asset/right-arrow.svg';
 import Button from '@/components/Button/Button';
-import historyData from '@/util/tempHistory';
 import {
   CALENDAR_NUMBER_CHANGE_ANIMATION_TIME,
   HEADER_TEXT,
@@ -26,7 +25,7 @@ export default class Header extends Component {
           month: new Date().getMonth() + 1,
         },
         historyData: {
-          data: historyData,
+          data: [],
         },
       },
     });
