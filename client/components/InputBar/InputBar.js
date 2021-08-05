@@ -162,7 +162,7 @@ export default class InputBar extends Component {
     const { selectedData, selectedDate, selectInfo } = this.props;
     let date = getToday();
     let category = selectInfo.category || '선택하세요';
-    let content = selectInfo.content || '';
+    let contents = selectInfo.contents || '';
     let payment = selectInfo.payment || '선택하세요';
     let amount = selectInfo.amount || '';
     let togglePlus = selectInfo.sign
