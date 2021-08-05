@@ -2,15 +2,17 @@ import Component from '@/lib/Component';
 import leftArrow from '@/asset/left-arrow.svg';
 import rightArrow from '@/asset/right-arrow.svg';
 import Button from '@/components/Button/Button';
+import historyData from '@/util/tempHistory';
 import {
   CALENDAR_NUMBER_CHANGE_ANIMATION_TIME,
   HEADER_TEXT,
+  DATE_DOWN_EVENT,
+  DATE_UP_EVENT,
+  GET_HISTORIES_BY_DATE,
 } from '@/util/constant';
 import './Header.scss';
 import router from '@/lib/router';
-
-const DATE_UP_EVENT = 'DATE_UP_EVENT';
-const DATE_DOWN_EVENT = 'DATE_DOWN_EVENT';
+import headerModel from './headerModel';
 
 export default class Header extends Component {
   constructor(params) {
@@ -22,6 +24,9 @@ export default class Header extends Component {
         date: {
           year: new Date().getFullYear(),
           month: new Date().getMonth() + 1,
+        },
+        historyData: {
+          data: historyData,
         },
       },
     });
@@ -131,6 +136,10 @@ export default class Header extends Component {
         onClick: () => {
           this.controller.emitEvent(DATE_DOWN_EVENT);
           const changedDate = this.getChangedDate(-1);
+          this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+            year: changedDate.year,
+            month: changedDate.month,
+          });
           const $month = this.querySelector('.header-date-month');
           $month.innerText = `${changedDate.month}월`;
           const $year = this.querySelector('.header-date-year');
@@ -146,6 +155,10 @@ export default class Header extends Component {
         onClick: () => {
           this.controller.emitEvent(DATE_UP_EVENT);
           const changedDate = this.getChangedDate(1);
+          this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+            year: changedDate.year,
+            month: changedDate.month,
+          });
           const $month = this.querySelector('.header-date-month');
           $month.innerText = `${changedDate.month}월`;
           const $year = this.querySelector('.header-date-year');
@@ -153,6 +166,11 @@ export default class Header extends Component {
         },
       },
     });
+
+    this.registerControllerEvent(
+      GET_HISTORIES_BY_DATE,
+      headerModel.getHistories
+    );
 
     this.registerControllerEvent(DATE_UP_EVENT, () => {
       const state = this.changeDate(1);

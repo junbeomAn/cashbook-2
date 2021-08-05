@@ -15,12 +15,12 @@ export default class LineChart extends Component {
   preTemplate() {}
 
   horizonLine(sx, sy, ex, ey) {
-    return `<path class="line-chart-horizon-line" d="M${sx},${sy}L${ex},${ey}" stroke="#aaa" stroke-width="0.5" stroke-linejoin="round"/>
+    return `<path class="line-chart-horizon-line" d="M ${sx}, ${sy} L${ex}, ${ey}" stroke="#aaa" stroke-width="0.5" stroke-linejoin="round"/>
     `;
   }
 
-  vertiCalLine(sx, sy, ex, ey) {
-    return `<path class="line-chart-vertical-line" d="M${sx},${sy}L${ex},${ey}" stroke="#aaa" stroke-width="0.5" stroke-linejoin="round"/>
+  verticalLine(sx, sy, ex, ey) {
+    return `<path class="line-chart-vertical-line" d="M ${sx}, ${sy} L${ex}, ${ey}" stroke="#aaa" stroke-width="0.5" stroke-linejoin="round"/>
     `;
   }
 
@@ -76,7 +76,7 @@ export default class LineChart extends Component {
     return result;
   }
 
-  makePoint(bottom, left, i, amount) {
+  makePoint(bottom, left, i, amount, isEnd) {
     let result = '<div class="line-chart-spend-point" ';
     result += `style="bottom:${bottom}px; left:${left}px;`;
     result += `animation-delay: ${
@@ -91,19 +91,22 @@ export default class LineChart extends Component {
         left - 3 * amount.length + 3
       }px;`;
     }
+    if (isEnd) {
+      result += 'color:#2ac1bc;';
+    }
     result += `animation-delay: ${
       LINE_CHART.POINT_WAIT_TIME + LINE_CHART.POINT_WAIT_INTERVAL * i
     }s;"`;
     result += `>${amount}</p>`;
 
-    result += '<p class="line-chart-label" ';
-    result += `style="width: 40px; bottom:${-20}px; left:${left - 18}px;"`;
-    result += `>${i} 월</p>`;
+    result += '<p class="line-chart-month-label" ';
+    result += `style="width: 40px; bottom:${-20}px; left:${left - 11}px;"`;
+    result += `>${this.props.spendDate[i]} 월</p>`;
     return result;
   }
 
   defineTemplate() {
-    const monthlySpendAmount = [38900, 21020, 300010, 20300, 9400, 67000];
+    const monthlySpendAmount = this.props.spendData;
     const maxAmount = Math.max(...monthlySpendAmount);
 
     const width = LINE_CHART.WIDTH;
@@ -114,15 +117,15 @@ export default class LineChart extends Component {
     <div class="line-chart-container">
       <svg 
         class="line-chart" 
-        width="${width + 2}" height="${height + 2}" 
-        viewBox="-1 -1 ${width + 2} ${height + 2}" 
+        width="${width}" height="${height}" 
+        viewBox="0 0 ${width} ${height}" 
         fill="none" xmlns="http://www.w3.org/2000/svg">`;
 
     for (let i = 0; i < height / interval + 1; i += 1) {
       result += this.horizonLine(0, i * interval, width, i * interval);
     }
     for (let i = 0; i < width / interval + 1; i += 1) {
-      result += this.vertiCalLine(i * interval, height, i * interval, 0);
+      result += this.verticalLine(i * interval, height, i * interval, 0);
     }
 
     const coordList = [];
@@ -144,11 +147,11 @@ export default class LineChart extends Component {
         height - coordList[i].y,
         coordList[i].x,
         i,
-        moneyFormat(monthlySpendAmount[i])
+        moneyFormat(monthlySpendAmount[i]),
+        monthlySpendAmount.length === i + 1
       );
     }
     result += '</div>';
-
     result += '</svg></div>';
     return result;
   }

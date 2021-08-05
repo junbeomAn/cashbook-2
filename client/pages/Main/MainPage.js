@@ -12,18 +12,17 @@ import {
   PAYMENT_MODAL_CANCEL_TEXT,
   PAYMENT_MODAL_SUBMIT_TEXT,
   PAYMENT_MODAL_PLACEHOLDER,
+  SET_USER_DATA,
+  SET_HISTORY_DATA,
+  LOGIN_MODAL_TITLE,
+  LOGIN_MODAL_CANCEL_TEXT,
+  OAUTH_CODE_SEP,
 } from '@/util/constant';
+import mainModel from './MainModel';
+
 import './Main.scss';
 import arrow from '@/asset/arrow.svg';
 import '@/pages/global.scss';
-
-const PAYMENT_ADD_EVENT = 'PAYMENT_ADD_EVENT';
-const PAYMENT_DEL_EVENT = 'PAYMENT_DEL_EVENT';
-const HISTORY_ADD_EVENT = 'HISTORY_ADD_EVENT';
-const SET_HISTORY_DATA = 'SET_HISTORY_DATA';
-const LOGIN_MODAL_TITLE =
-  '우아한 가계부를 사용하기 위해선 로그인이 필요합니다.';
-const LOGIN_MODAL_CANCEL_TEXT = '데모 계정으로 진행';
 
 export default class MainPage extends Component {
   constructor(params) {
@@ -58,6 +57,9 @@ export default class MainPage extends Component {
             { kind: '현대카드', paymentColor: 'yellow' },
             { kind: '비씨카드', paymentColor: 'green' },
           ],
+        user: {
+          id: '',
+          nickname: localStorage.getItem('nickname') || '',
         },
       },
     });
@@ -133,7 +135,15 @@ export default class MainPage extends Component {
     return historyTemplate;
   }
 
+  isLoading() {
+    return window.location.search !== '';
+  }
+
   preTemplate() {
+    this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
+    if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
+    this.controller.emitEvent(SET_USER_DATA);
+    
     this.addEvent('.main-totop-button', 'click', () => {
       const scrollInterval = setInterval(() => {
         document.documentElement.scrollTop -= 30;
@@ -200,7 +210,7 @@ export default class MainPage extends Component {
     let totalIncome = 0;
     let totalOutage = 0;
     let totalCount = 0;
-
+    console.log(this.modelState.historyData);
     const nowHistoryData = this.getNowHistoryData();
     const filteredData = this.filterToggleOption(nowHistoryData);
     nowHistoryData.forEach((histories) => {
@@ -259,21 +269,23 @@ export default class MainPage extends Component {
       return e;
     });
 
-    new LoginModal({
-      parent: this,
-      keyword: 'login-modal',
-      props: {
-        title: LOGIN_MODAL_TITLE,
-        cancelText: LOGIN_MODAL_CANCEL_TEXT,
-        onLogin: () => {
-          console.log('TODO : redirect to github login.');
-          // window.location.href = 'http://www.abc.com/';
+    if (!this.modelState.user.nickname && !this.isLoading()) {
+      new LoginModal({
+        parent: this,
+        keyword: 'login-modal',
+        props: {
+          title: LOGIN_MODAL_TITLE,
+          cancelText: LOGIN_MODAL_CANCEL_TEXT,
+          onLogin: () => {
+            console.log('TODO : redirect to github login.');
+            // window.location.href = 'http://www.abc.com/';
+          },
+          onCancelClick: () => {
+            this.controller.emitEvent(SET_HISTORY_DATA);
+          },
         },
-        onCancelClick: () => {
-          this.controller.emitEvent(SET_HISTORY_DATA);
-        },
-      },
-    });
+      });
+    }
     new InputBar({
       parent: this,
       keyword: 'input-bar',
@@ -329,7 +341,7 @@ export default class MainPage extends Component {
       },
     });
     let result = '';
-    if (isLogin()) {
+    if (!isLogin() && !this.isLoading()) {
       result += this.resolveChild('login-modal');
     }
     return `${result}

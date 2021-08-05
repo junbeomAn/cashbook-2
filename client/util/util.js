@@ -34,8 +34,8 @@ function deepCompare(prev, next) {
 
 function isLogin() {
   // TODO : Login 정보 확인 로직이  필요
-  const nickName = localStorage.getItem('nickName');
-  if (!nickName) {
+  const nickname = localStorage.getItem('nickname');
+  if (!nickname) {
     return false;
   }
   return true;
