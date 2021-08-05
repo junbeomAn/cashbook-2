@@ -2,12 +2,13 @@ import Component from '@/lib/Component';
 import { MODAL_ANIMATION_TIME, ALERT_OUT_TIME } from '@/util/constant';
 import './Alert.scss';
 
-export default class Alert extends Component {
+export default class AlertUp extends Component {
   constructor(params) {
     super({
       ...params,
       componentName: 'alert',
     });
+
     this.outAnimation = this.outAnimation.bind(this);
     this.timeout = setTimeout(() => {
       this.outAnimation();

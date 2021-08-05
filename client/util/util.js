@@ -108,6 +108,20 @@ function needFetchHistory(historyState, dateState) {
   return true;
 }
 
+function alertUp(AlertUp, title, contents, titleColor = 'red') {
+  const $alert = new AlertUp({
+    parent: null,
+    keyword: 'alert-ex',
+    props: {
+      title,
+      titleColor,
+      contents,
+    },
+  });
+  const $parent = document.querySelector('.app-background');
+  $parent.appendChild($alert.innerNode);
+}
+
 export {
   deepCopy,
   deepCompare,
@@ -121,4 +135,5 @@ export {
   objectToList,
   getCategoryColor,
   needFetchHistory,
+  alertUp,
 };
