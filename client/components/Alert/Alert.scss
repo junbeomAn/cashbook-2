@@ -1,0 +1,130 @@
+@import '../../pages/color.scss';
+@import '../../pages/size.scss';
+
+.alert-container{ 
+  z-index: 20;
+  position: fixed;
+  top: 80px;
+  width: 330px;
+  height: 148px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: $off-white;
+
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+}
+
+@keyframes tadaEvent {
+  0% {
+    left: -400px;
+  }
+  80%{
+    left: 170px;
+  }
+  90% {
+    left: 60px;
+  }
+  100% {
+    left: 80px;
+  }
+}
+
+@keyframes tadaOutEvent {
+  0% {
+    left: 80px;
+  }
+  20%{
+    left: 170px;
+  }
+  100% {
+    left: -400px;
+  }
+}
+
+.alert-back-in {
+  animation-name: tadaEvent;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+.alert-back-out {
+  animation-name: tadaOutEvent;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+.alert-title-text {
+  & {
+    @include body-large();
+    margin-bottom: 18px;
+  }
+  &-red{
+    color: $baemin-error;
+  }
+  &-mint{
+    color: $baemin-primary;
+  }
+  &-black{
+    color: $title-active-black;
+  }
+  &-blue {
+    color: #3586FF;
+  }
+}
+.alert-contents-text {
+  & {
+    @include body-medium();
+  }
+}
+
+.alert-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.alert-timer-background {
+  width: 34px;
+  height: 34px;
+  border-radius: 34px;
+  background-color: $baemin-primary;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-submit-button {
+  @include body-medium();
+  color: $baemin-primary;
+  cursor: pointer;
+}
+
+.timer-white {
+  stroke-dasharray: 0px 70px;
+  transform-origin: center;
+  transform: rotate(-90deg);
+
+  animation-name: timerEvent;
+  animation-duration: 3s;
+  animation-delay: .5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+  stroke-width: 3px;
+}
+
+@keyframes timerEvent {
+  0%{
+    stroke-dasharray: 0px 75px;
+  }
+  50%{
+    stroke-dasharray: 75px 0px;
+    stroke-dashoffset: 0px;
+  }
+  100%{
+    stroke-dasharray: 75px 150px;
+    stroke-dashoffset: -75px;
+  }
+}

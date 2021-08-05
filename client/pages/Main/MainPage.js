@@ -304,7 +304,6 @@ export default class MainPage extends Component {
 
       return e;
     });
-
     if (!this.modelState.user.nickname && !this.isLoading()) {
       new LoginModal({
         parent: this,
