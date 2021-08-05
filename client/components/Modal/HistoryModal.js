@@ -1,11 +1,17 @@
 import Component from '@/lib/Component';
 import categoryInfo from '@/util/category';
 import {
+  HISTORY_MODIFY_EVENT,
+  HISTORY_DELETE_EVENT,
+  MODAL_ANIMATION_TIME,
+} from '@/util/constant';
+import {
   objectToList,
   getAmountWithComma,
   commaAmountToNumer,
 } from '@/util/util';
-import { MODAL_ANIMATION_TIME } from '@/util/constant';
+
+import model from './HistoryModalModel';
 import './Modal.scss';
 
 /**
@@ -67,6 +73,8 @@ export default class HistoryModal extends Component {
         this.props.onDelete();
       }
     });
+    this.registerControllerEvent(HISTORY_MODIFY_EVENT, model.handleModifyEvent);
+    this.registerControllerEvent(HISTORY_DELETE_EVENT, model.handleDeleteEvent);
 
     this.addEvent('.history-modal-cancle-text', 'click', async () => {
       await this.outAnimation();
@@ -77,8 +85,8 @@ export default class HistoryModal extends Component {
 
     this.addEvent('.history-modal-submit-text', 'click', async () => {
       await this.outAnimation();
-      console.log(this.componentState);
       if (this.props.onSubmit) {
+        this.controller.emitEvent(HISTORY_MODIFY_EVENT, this.componentState);
         this.props.onSubmit();
       }
     });
@@ -114,7 +122,6 @@ export default class HistoryModal extends Component {
           });
           const $dest = this.querySelector('.history-modal-payment-text');
           $dest.innerText = this.componentState.payment;
-          console.log(this.componentState.paymentColor);
           $colorDiv.classList.add(
             `modal-payment-color-${this.componentState.paymentColor}`
           );
@@ -139,7 +146,10 @@ export default class HistoryModal extends Component {
   }
 
   defineTemplate() {
-    const dateText = this.props.text || '2021년 08월 05일';
+    const dateParse = this.componentState.date.split('T')[0];
+    const splitDate = dateParse.split('-');
+    const formatDate = `${splitDate[0]}년 ${splitDate[1]}월 ${splitDate[2]}일`;
+    const dateText = formatDate;
     const dropdown = '바꾸려면 클릭!';
     const { category, contents, payment, amount } = this.componentState;
     const paymentClass = this.props.paymentColor || 'grey';
