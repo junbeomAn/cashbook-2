@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "1q2w3e4r5t",
+    "password": "Band6015@",
     "database": "cashbook",
     "host": "127.0.0.1",
     "dialect": "mysql"

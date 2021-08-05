@@ -1,5 +1,5 @@
 import Component from '@/lib/Component';
-import DropdownItem from '@/components/DropdownItem/DropdownItem';
+import PaymentDropdownItem from '@/components/DropdownItem/PaymentDropdownItem';
 import './dropdown.scss';
 
 export default class Dropdown extends Component {
@@ -13,14 +13,20 @@ export default class Dropdown extends Component {
   preTemplate() {
     const { itemList } = this.props;
 
-    itemList.forEach((text, index) => {
-      new DropdownItem({
+    itemList.forEach((itemInfo, index) => {
+      new PaymentDropdownItem({
         parent: this,
         keyword: `list-${index}`,
         props: {
-          text,
-          onClick: (textValue) => {
-            this.props.onClick(textValue);
+          end: itemList.length - 1 === index,
+          text: itemInfo.kind,
+          paymentColor: itemInfo.paymentColor,
+          popUpPaymentModal: this.props.popUpModal,
+          onDelete: (text) => {
+            this.props.onDelete(text);
+          },
+          onClick: (text) => {
+            this.props.onClick(text);
           },
         },
       });
@@ -37,7 +43,7 @@ export default class Dropdown extends Component {
 
   defineTemplate() {
     return `
-      <div class="category-drop-down-container">
+      <div class="payment-drop-down-container">
         <div class="drop-down-animator-down">
           ${this.assembleLists()}
         </div>

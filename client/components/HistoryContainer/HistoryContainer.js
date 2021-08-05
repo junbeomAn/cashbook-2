@@ -48,11 +48,13 @@ export default class InfoBar extends Component {
         expenditure += history[key].amount;
       }
     });
-    if (income !== 0) {
-      amountText += `<p>수입</p><p>${moneyFormat(income)}</p>`;
-    }
-    if (expenditure !== 0) {
-      amountText += `<p>지출</p><p>${moneyFormat(expenditure)}</p>`;
+    if (this.props.onClick) {
+      if (income !== 0) {
+        amountText += `<p>수입</p><p>${moneyFormat(income)}</p>`;
+      }
+      if (expenditure !== 0) {
+        amountText += `<p>지출</p><p>${moneyFormat(expenditure)}</p>`;
+      }
     }
 
     return `
