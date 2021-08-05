@@ -99,7 +99,7 @@ export default class ChartPage extends Component {
       keyword: 'line-chart',
       props: {
         spendData: [38900, 21020, 300010, 20300, 9400, 67000],
-        spendDate: ['3월', '4월', '5월', '6월', '7월', '8월'],
+        spendDate: ['3', '4', '5', '6', '7', '8'],
       },
     });
 
