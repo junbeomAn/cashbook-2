@@ -3,13 +3,13 @@ const { sequelize } = require('./models');
 const { History, Category, Payment, User } = sequelize.models;
 
 const categoryMockData = [
-  { name: '식비' },
-  { name: '생활' },
+  { name: '의료/건강' },
   { name: '쇼핑/뷰티' },
   { name: '교통' },
-  { name: '의료/건강' },
+  { name: '식비' },
   { name: '문화/여가' },
   { name: '미분류' },
+  { name: '생활' },
   { name: '월급' },
   { name: '용돈' },
   { name: '기타 수입' },

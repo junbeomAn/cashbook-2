@@ -60,20 +60,20 @@ router.post('/githubLogin', async (req, res) => {
     };
     const userInfo = await api.requestJson(`${userInfoUrl}`, getOptions);
     const result = {
-      id: userInfo.id,
+      githubUserId: userInfo.id,
       nickname: userInfo.login,
       avatar: userInfo.avatar_url,
     };
-    const { err } = await createUser(result);
+    const { err, user } = await createUser(result);
+
     if (err) {
       res.send({ ok: false, err });
     }
-
+    result.userId = user[0].dataValues.id;
     const token = auth.sign(result);
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
     });
     res.send({ ok: true, result, message: LOGIN_SUCCESS });
   } catch (err) {
