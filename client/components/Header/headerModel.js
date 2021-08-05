@@ -66,6 +66,8 @@ const model = {
         key: 'historyData',
       };
       return e;
+    } else {
+      return false;
     }
   },
 };
