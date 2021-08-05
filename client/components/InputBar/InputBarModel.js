@@ -1,4 +1,5 @@
 import { API_END_POINT } from '@/config';
+import categoryInfo from '@/util/category';
 import api from '@/lib/api';
 
 const dayString = ['일', '월', '화', '수', '목', '금', '토'];
@@ -94,6 +95,13 @@ function appendDataToHistory(historyData, appendData) {
   return result;
 }
 
+function getCategoryId(catData) {
+  for (let i = 0; i < categoryInfo.length; i += 1) {
+    if (categoryInfo[i].name === catData) return categoryInfo[i].number;
+  }
+  return 1;
+}
+
 const model = {
   handleAddPayment: async ({ source, add }) => {
     const paymentData = [];
@@ -101,24 +109,19 @@ const model = {
       paymentData.push(source[key]);
     });
     paymentData.push(add);
-    console.group('ADD_PAYMENT');
-    console.log(source, add);
-    console.log(paymentData);
-    console.groupEnd();
 
     const body = {
       method: add.kind,
       color: add.paymentColor,
       userId: localStorage.getItem('userId'),
     };
-    const { apiResult } = await api.requestJSON(`${API_END_POINT}/payment`, {
+    await api.requestJSON(`${API_END_POINT}/payment`, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log(apiResult);
 
     const e = {
       state: { data: paymentData },
@@ -143,14 +146,13 @@ const model = {
       color: delObj.color,
       userId: localStorage.getItem('userId'),
     };
-    const { apiResult } = await api.requestJSON(`${API_END_POINT}/payment`, {
+    await api.requestJSON(`${API_END_POINT}/payment`, {
       method: 'DELETE',
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log(apiResult);
 
     const e = {
       state: { data: paymentData },
@@ -162,9 +164,8 @@ const model = {
   handleDataPost: async ({ source, add }) => {
     const historyData = source;
     const data = add;
-    const { date, categoryColor, cotnents, payment, amount } = data;
-    const categoryId = categoryColor[categoryColor.legnth - 1];
-
+    const { date, category, contents, payment, amount } = data;
+    const categoryId = getCategoryId(category);
     const result = appendDataToHistory(historyData, data);
 
     const e = {
@@ -175,7 +176,7 @@ const model = {
     const body = {
       date,
       categoryId,
-      cotnents,
+      contents,
       payment,
       amount,
       userId: localStorage.getItem('userId'),
@@ -187,7 +188,6 @@ const model = {
         'Content-Type': 'application/json',
       },
     });
-    console.log(apiResult);
 
     // TODO : ERROR 처리
     if (!apiResult) console.log(apiResult);

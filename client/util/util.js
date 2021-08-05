@@ -4,7 +4,9 @@ const RANDOM_ID_NUMBER_COUNT = 8;
 
 function deepCopy(obj) {
   const clone = {};
-
+  if (obj === null) {
+    return null;
+  }
   Object.keys(obj).forEach((key) => {
     if (typeof obj[key] === 'object') {
       clone[key] = deepCopy(obj[key]);

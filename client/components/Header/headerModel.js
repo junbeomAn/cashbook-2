@@ -15,7 +15,7 @@ const createNewHistory = (history) => {
     '기타 수입',
   ];
   return history.map((item) => {
-    const category = categories[item.CategoryId];
+    const category = categories[item.CategoryId - 1];
     const categoryColor = `category-${item.CategoryId}`;
     return {
       ...item,
@@ -34,7 +34,9 @@ const processData = ({ year, month, data }) => {
   };
   const historyData = data.map((item) => {
     const [y, m, d] = item.date.split('-');
-    const dayIdx = new Date(item.date).getDay();
+    const nowTime = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+    const dayIdx = new Date(nowTime).getDay();
+
     return {
       ...item,
       date: { year: y, month: m, day: d, dow: days[dayIdx] },
