@@ -4,7 +4,9 @@ const RANDOM_ID_NUMBER_COUNT = 8;
 
 function deepCopy(obj) {
   const clone = {};
-
+  if (obj === null) {
+    return null;
+  }
   Object.keys(obj).forEach((key) => {
     if (typeof obj[key] === 'object') {
       clone[key] = deepCopy(obj[key]);
@@ -59,6 +61,10 @@ const $ = {
 
 const getAmountWithComma = (amount) => Number(amount).toLocaleString();
 
+const commaAmountToNumer = (str) => {
+  return str.split(',').join('');
+};
+
 function getToday() {
   const nowDate = new Date();
   return `
@@ -88,15 +94,31 @@ function getCategoryColor(name) {
   return false;
 }
 
+function needFetchHistory(historyState, dateState) {
+  const { month, year } = dateState;
+
+  for (const key in historyState) {
+    if (
+      historyState[key].currentMonth === month &&
+      historyState[key].currentYear === year
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export {
   deepCopy,
   deepCompare,
   isLogin,
   moneyFormat,
   getAmountWithComma,
+  commaAmountToNumer,
   $,
   getUniqueId,
   getToday,
   objectToList,
   getCategoryColor,
+  needFetchHistory,
 };

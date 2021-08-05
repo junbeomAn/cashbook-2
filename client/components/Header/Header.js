@@ -2,7 +2,7 @@ import Component from '@/lib/Component';
 import leftArrow from '@/asset/left-arrow.svg';
 import rightArrow from '@/asset/right-arrow.svg';
 import Button from '@/components/Button/Button';
-import historyData from '@/util/tempHistory';
+import Alert from '@/components/Alert/Alert';
 import {
   CALENDAR_NUMBER_CHANGE_ANIMATION_TIME,
   HEADER_TEXT,
@@ -26,7 +26,7 @@ export default class Header extends Component {
           month: new Date().getMonth() + 1,
         },
         historyData: {
-          data: historyData,
+          data: [],
         },
       },
     });
@@ -198,8 +198,18 @@ export default class Header extends Component {
   }
 
   defineTemplate() {
+    new Alert({
+      parent: this,
+      keyword: 'alert-ex',
+      props: {
+        title: '첫 사용자! 반갑습니다~',
+        titleColor: 'mint',
+        contents: '위협하는 내용',
+      },
+    });
     return `
-    <div class="header-container">
+    ${this.resolveChild('alert-ex')} 
+    <div class="header-container"> 
       <div class="header-contents-container">
         <div class="logo-container">
           <p class="logo-text">${HEADER_TEXT}</p>
@@ -216,6 +226,10 @@ export default class Header extends Component {
           ${this.resolveChild('history')}
           ${this.resolveChild('calendar')}
           ${this.resolveChild('chart')}
+          <div class="header-nav-profile-image">
+            <img src="${localStorage.getItem('avatar')}" />
+            <p>${localStorage.getItem('nickname')} 님!</p>
+          </div>
         </div>
       </div>
     </div>

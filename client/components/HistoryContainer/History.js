@@ -11,8 +11,8 @@ export default class History extends Component {
 
   preTemplate() {
     this.addEvent('.history-container', 'click', () => {
-      if (this.props.onClick) {
-        this.props.onClick(this.props.historyIndex, this.props.contentsIndex);
+      if (this.props.onModify) {
+        this.props.onModify(this.props.history);
       }
     });
   }

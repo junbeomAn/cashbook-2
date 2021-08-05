@@ -1,5 +1,5 @@
-'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Payment extends Model {
     /**
@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   Payment.init(
     {
       method: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      color: {
         type: DataTypes.TEXT,
         allowNull: false,
       },

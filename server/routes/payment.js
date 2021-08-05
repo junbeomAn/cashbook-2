@@ -26,9 +26,10 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { userId, method } = req.body;
+  const { userId, method, color } = req.body;
   const data = {
     method,
+    color,
     UserId: userId,
   };
   const { err } = await registerPayment(data);
