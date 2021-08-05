@@ -2,9 +2,20 @@ import Component from '@/lib/Component';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import PaymentDropdown from '@/components/Dropdown/PaymentDropdown';
 import down from '@/asset/down.svg';
+import categoryInfo from '@/util/category';
 import saveEmpty from '@/asset/saveEmpty.png';
-import { INPUT_DROPDOWN_ANIMATION_TIME } from '@/util/constant';
-import { moneyFormat, getToday, getCategoryColor } from '@/util/util';
+import saveChecked from '@/asset/saveChecked.png';
+import {
+  INPUT_DROPDOWN_ANIMATION_TIME,
+  HISTORY_ADD_EVENT,
+} from '@/util/constant';
+import {
+  getAmountWithComma,
+  getToday,
+  getCategoryColor,
+  commaAmountToNumer,
+} from '@/util/util';
+import model from './InputBarModel';
 import './InputBar.scss';
 
 export default class InputBar extends Component {
@@ -12,6 +23,19 @@ export default class InputBar extends Component {
     super({
       ...params,
       componentName: 'input-bar',
+      componentState: {
+        category: '',
+        categoryColor: '',
+        contents: '',
+        payment: '',
+        amount: 0,
+        sign: false,
+      },
+      modelState: {
+        historyData: {
+          data: [],
+        },
+      },
     });
   }
 
@@ -23,17 +47,86 @@ export default class InputBar extends Component {
     )}${`${selectedDate.day}`.padStart(2, '0')}`;
   }
 
+  checkSaveAvailable() {
+    try {
+      let amount = this.querySelector('.input-bar-amount-input').value;
+      amount = Number(commaAmountToNumer(amount));
+
+      if (amount === 0) return false;
+      if (
+        !this.componentState.category ||
+        this.componentState.category.length === 0
+      ) {
+        return false;
+      }
+      if (
+        !this.componentState.payment ||
+        this.componentState.payment.length === 0
+      ) {
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.log(err);
+    }
+    return false;
+  }
+
   preTemplate() {
     this.addEvent('.input-bar-plus-sign', 'click', () => {
-      this.props.setSelectInfo({ sign: true });
+      this.setComponentState({ sign: true });
     });
     this.addEvent('.input-bar-minus-sign', 'click', () => {
-      this.props.setSelectInfo({ sign: false });
+      this.setComponentState({ sign: false });
+    });
+    this.registerControllerEvent(HISTORY_ADD_EVENT, model.handleDataPost);
+
+    // Send Button Click
+    this.addEvent('.input-bar-save-img', 'click', () => {
+      if (this.checkSaveAvailable()) {
+        let amount = this.querySelector('.input-bar-amount-input').value;
+        amount = Number(commaAmountToNumer(amount));
+        if (!this.componentState.sign) amount *= -1;
+
+        this.controller.emitEvent(HISTORY_ADD_EVENT, {
+          source: this.modelState.historyData.data,
+          add: {
+            date: `${getToday().trim()}`,
+            category: this.componentState.category,
+            categoryColor: this.componentState.categoryColor,
+            contents: this.componentState.contents,
+            payment: this.componentState.payment,
+            amount,
+          },
+        });
+        this.setComponentState({
+          category: '',
+          categoryColor: '',
+          contents: '',
+          payment: '',
+          amount: 0,
+          sign: false,
+        });
+      }
     });
 
-    this.addEvent('.input-bar-save-img', 'click', () => {
-      this.props.onSubmit('정보들');
+    this.addEvent('.input-bar-contents-input', 'change', () => {
+      const contents = this.querySelector('.input-bar-contents-input').value;
+      this.setComponentState({ contents });
     });
+
+    this.addEvent('.input-bar-amount-input', 'change', () => {
+      const amount = this.querySelector('.input-bar-amount-input').value;
+      this.setComponentState({ amount });
+    });
+
+    /*
+    this.addEvent('.input-bar-amount-input', 'input', () => {
+      const $contents = this.querySelector('.input-bar-amount-input');
+      const numberValue = commaAmountToNumer($contents.value);
+      $contents.value = getAmountWithComma(numberValue);
+    });
+    */
 
     // Category Dropdown 관련 이벤트
     this.addEvent('.input-bar-dropdown-section-category', 'click', () => {
@@ -41,8 +134,8 @@ export default class InputBar extends Component {
       const $dropdown = $parent.querySelector('.category-drop-down-container');
 
       const categoryItemList = [];
-      Object.keys(this.props.categoryInfo).forEach((key) => {
-        categoryItemList.push(this.props.categoryInfo[key].name);
+      Object.keys(categoryInfo).forEach((key) => {
+        categoryItemList.push(categoryInfo[key].name);
       });
       // 없을때만 붙인다.
       if (!$dropdown) {
@@ -59,7 +152,7 @@ export default class InputBar extends Component {
               const $dropdownAll = this.querySelector(`#${dropdown.id}`);
               setTimeout(() => {
                 $parent.removeChild($dropdownAll);
-                this.props.setSelectInfo({
+                this.setComponentState({
                   category: text,
                   categoryColor: getCategoryColor(text),
                 });
@@ -117,7 +210,7 @@ export default class InputBar extends Component {
               const $dropdownAll = this.querySelector(`#${dropdown.id}`);
               setTimeout(() => {
                 $parent.removeChild($dropdownAll);
-                this.props.setSelectInfo({
+                this.setComponentState({
                   payment: text,
                 });
               }, INPUT_DROPDOWN_ANIMATION_TIME);
@@ -159,37 +252,23 @@ export default class InputBar extends Component {
   }
 
   defineTemplate() {
-    const { selectedData, selectedDate, selectInfo } = this.props;
-    let date = getToday();
-    let category = selectInfo.category || '선택하세요';
-    let contents = selectInfo.contents || '';
-    let payment = selectInfo.payment || '선택하세요';
-    let amount = selectInfo.amount || '';
-    let togglePlus = selectInfo.sign
+    const date = getToday();
+    const category = this.componentState.category || '선택하세요';
+    const contents = this.componentState.contents || '';
+    const payment = this.componentState.payment || '선택하세요';
+    const amount = this.componentState.amount || '';
+    const togglePlus = this.componentState.sign
       ? 'input-bar-toggle-selected'
       : 'input-bar-toggle-non-selected';
-    let toggleMinus = !selectInfo.sign
+    const toggleMinus = !this.componentState.sign
       ? 'input-bar-toggle-selected'
       : 'input-bar-toggle-non-selected';
-    if (selectedDate.year) {
-      date = this.makeDate(selectedDate);
-      category = selectedData.category;
-      contents = selectedData.contents;
-      payment = selectedData.payment;
-      if (selectedData.amount > 0) {
-        togglePlus = 'input-bar-toggle-selected';
-        toggleMinus = 'input-bar-toggle-non-selected';
-      } else {
-        togglePlus = 'input-bar-toggle-non-selected';
-        toggleMinus = 'input-bar-toggle-selected';
-      }
-      amount = `${moneyFormat(Math.abs(selectedData.amount))}`;
-    }
+    const sendImage = this.checkSaveAvailable() ? saveChecked : saveEmpty;
     return `
     <div class="input-bar-background">
       <div class="input-bar-section date-section">
         <p>일자</p>
-        <input type="text" placeholder="ex ) 20210720" value=${date}>
+        <p class="input-bar-date-text">${date}</p>
       </div>
       <div class="input-bar-vertical-line"></div>
       <div class="input-bar-section classification-section">
@@ -202,7 +281,7 @@ export default class InputBar extends Component {
       <div class="input-bar-vertical-line"></div>
       <div class="input-bar-section contents-section">
         <p>내용</p>
-        <input type="text" placeholder="입력하세요" value=${contents}>
+        <input class="input-bar-contents-input" type="text" placeholder="입력하세요" value="${contents}">
       </div>
       <div class="input-bar-vertical-line"></div>
       <div class="input-bar-section payment-section">
@@ -224,12 +303,14 @@ export default class InputBar extends Component {
               <p> - </p>
             </div>
           </div>
-          <input type="text" placeholder="입력하세요" value=${amount}>
+          <input class="input-bar-amount-input" type="text" placeholder="입력하세요" value="${getAmountWithComma(
+            amount
+          )}">
           <p>원</p>
         </div>
       </div>
       <div class="input-bar-save-container">
-        <img class="input-bar-save-img" src="${saveEmpty}"/>
+        <img class="input-bar-save-img" src="${sendImage}"/>
       </div>
     </div>`;
   }

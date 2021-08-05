@@ -59,6 +59,10 @@ const $ = {
 
 const getAmountWithComma = (amount) => Number(amount).toLocaleString();
 
+const commaAmountToNumer = (str) => {
+  return str.split(',').join('');
+};
+
 function getToday() {
   const nowDate = new Date();
   return `
@@ -108,6 +112,7 @@ export {
   isLogin,
   moneyFormat,
   getAmountWithComma,
+  commaAmountToNumer,
   $,
   getUniqueId,
   getToday,

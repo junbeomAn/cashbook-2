@@ -13,7 +13,7 @@
   @include box-shadow();
   border-radius: 10px;
   background-color: $off-white;
-  padding: 16px 32px 16px 32px;
+  padding: 16px;
 
   display: flex;
   flex-direction: row;
@@ -56,6 +56,10 @@
     line-height: 17px;
     margin-bottom: 4px;
     width: 100px;
+  }
+  .input-bar-date-text {
+    @include body-regular();
+    color: $title-active-black;
   }
 
   & input {

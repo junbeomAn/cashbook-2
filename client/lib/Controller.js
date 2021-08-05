@@ -14,9 +14,13 @@ export default class Controller {
         - state : [Object] ModelState에 들어갈 변경된 State.
         - key : [String] ModelState에서 바뀐 state의 key.
      */
-    
+
     const e = await this.eventList[type].callback(args);
     this.model.setModelState(e.key, e.state);
+    console.group('EMIT_EVENT : STATE');
+    console.log(this.model);
+    console.log(e.state);
+    console.groupEnd();
   }
 
   addEventCallback(key, callback) {

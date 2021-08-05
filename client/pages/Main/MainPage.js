@@ -4,7 +4,6 @@ import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
 import historyData from '@/util/tempHistory';
-import categoryInfo from '@/util/category';
 import PaymentModal from '@/components/Modal/PaymentModal';
 import { isLogin, objectToList, needFetchHistory } from '@/util/util';
 import LoginModal from '@/components/Modal/LoginModal';
@@ -36,14 +35,6 @@ export default class MainPage extends Component {
       componentState: {
         selectedData: {},
         selectedDate: {},
-        selectInfo: {
-          category: '',
-          categoryColor: '',
-          contents: '',
-          payment: '',
-          amount: 0,
-          sign: false,
-        },
         inputToggle: true,
         outageToggle: true,
       },
@@ -146,10 +137,6 @@ export default class MainPage extends Component {
   }
 
   preTemplate() {
-    this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
-    if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
-    this.controller.emitEvent(SET_USER_DATA);
-
     this.addEvent('.main-totop-button', 'click', () => {
       const scrollInterval = setInterval(() => {
         document.documentElement.scrollTop -= 30;
@@ -158,6 +145,7 @@ export default class MainPage extends Component {
         }
       }, 10);
     });
+
     this.registerControllerEvent(PAYMENT_ADD_EVENT, (addInfo) => {
       const paymentData = [];
       const { data } = this.modelState.payment;
@@ -209,6 +197,45 @@ export default class MainPage extends Component {
 
       return e;
     });
+
+    const { selectedData, selectedDate } = this.componentState;
+    new InputBar({
+      parent: this,
+      keyword: 'input-bar',
+      controller: this.controller,
+      props: {
+        selectedDate,
+        selectedData,
+        payment: this.modelState.payment.data,
+        onDelete: (kind) => {
+          // kind : "", paymentColor: ""
+          this.controller.emitEvent(PAYMENT_DEL_EVENT, kind);
+        },
+        popUpModal: () => {
+          const $modalParent = document.querySelector('.app-background');
+          const $modal = new PaymentModal({
+            parent: null,
+            keyword: 'payment-modal',
+            props: {
+              title: PAYMENT_MODAL_TITLE,
+              cancelText: PAYMENT_MODAL_CANCEL_TEXT,
+              submitText: PAYMENT_MODAL_SUBMIT_TEXT,
+              placeholder: PAYMENT_MODAL_PLACEHOLDER,
+              submitColor: 'mint',
+              onSubmitClick: (data) => {
+                // kind : "", paymentColor: ""
+                this.controller.emitEvent(PAYMENT_ADD_EVENT, data);
+              },
+            },
+          });
+          $modalParent.appendChild($modal.innerNode);
+        },
+      },
+    });
+
+    this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
+    if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
+    this.controller.emitEvent(SET_USER_DATA);
   }
 
   defineTemplate() {
@@ -270,7 +297,6 @@ export default class MainPage extends Component {
       });
     });
 
-    const { selectedData, selectedDate, selectInfo } = this.componentState;
     this.registerControllerEvent(SET_HISTORY_DATA, async () => {
       // TODO : 더미 데이터용 아이디를 만들어서 넣어주기
       /*
@@ -303,59 +329,7 @@ export default class MainPage extends Component {
         },
       });
     }
-    new InputBar({
-      parent: this,
-      keyword: 'input-bar',
-      props: {
-        selectedDate,
-        selectedData,
-        selectInfo,
-        categoryInfo,
-        payment: this.modelState.payment.data,
-        setSelectInfo: (data) => {
-          this.setComponentState({
-            selectInfo: { ...this.componentState.selectInfo, ...data },
-          });
-        },
-        onDelete: (kind) => {
-          // kind : "", paymentColor: ""
-          this.controller.emitEvent(PAYMENT_DEL_EVENT, kind);
-        },
-        onSubmit: (data) => {
-          // this.controller.emitEvent(HISTORY_ADD_EVENT, data);
-          this.setComponentState({
-            selectInfo: {
-              category: '',
-              categoryColor: '',
-              content: '',
-              payment: '',
-              amount: 0,
-              sign: false,
-            },
-          });
-        },
-        popUpModal: () => {
-          const $modalParent = document.querySelector('.app-background');
-          const $modal = new PaymentModal({
-            parent: null,
-            keyword: 'payment-modal',
-            props: {
-              title: PAYMENT_MODAL_TITLE,
-              cancelText: PAYMENT_MODAL_CANCEL_TEXT,
-              submitText: PAYMENT_MODAL_SUBMIT_TEXT,
-              placeholder: PAYMENT_MODAL_PLACEHOLDER,
-              submitColor: 'mint',
-              onSubmitClick: (data) => {
-                // kind : "", paymentColor: ""
-                this.controller.emitEvent(PAYMENT_ADD_EVENT, data);
-              },
-            },
-          });
 
-          $modalParent.appendChild($modal.innerNode);
-        },
-      },
-    });
     let result = '';
     if (!isLogin() && !this.isLoading()) {
       result += this.resolveChild('login-modal');
