@@ -3,4 +3,4 @@ node_modules
 public/dist/index.js
 public/dist
 .env
-
+server/db/config/config.json

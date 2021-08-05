@@ -1,8 +1,4 @@
-import {
-  COLOR_CONSTANT,
-  PIE_CHART_TRANSITION_WAIT,
-  PIE_CHART_TRANSITION_DURATION,
-} from '@/util/constant';
+import { COLOR_CONSTANT, PIE_CHART_TRANSITION_WAIT } from '@/util/constant';
 
 import './PieChart.scss';
 /**
@@ -26,15 +22,8 @@ import './PieChart.scss';
 
 // const svg = initPieChart(data, '480', '480');
 
-function genSvgTagByName({ tag, ...otherOptions }) {
-  const $el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-  Object.entries(otherOptions).forEach(([prop, value]) => {
-    $el.setAttribute(prop, value);
-  });
-  return $el;
-}
+import Component from '@/lib/Component';
 
-let accRatio = 0;
 const {
   CATEGORY_7,
   CATEGORY_4,
@@ -61,47 +50,45 @@ const colorTable = {
   기타수입: CATEGORY_10,
 };
 
-function initPieChart(data, width, height) {
-  const r = String(Number(width) / 4);
-  const cx = String(Number(width) / 2);
-  const cy = cx;
+class PieChart extends Component {
+  preTemplate() {}
 
-  const $svg = genSvgTagByName({
-    tag: 'svg',
-    width,
-    height,
-    viewBox: `0 0 ${width} ${height}`,
-  });
-  const $g = genSvgTagByName({
-    tag: 'g',
-    fill: 'transparent',
-    'stroke-width': r,
-  });
-
-  const circles = [];
-
-  data.forEach(({ item, ratio }) => {
-    accRatio += ratio;
-    const $circle = genSvgTagByName({
-      tag: 'circle',
-      r,
-      cx,
-      cy,
-      stroke: colorTable[item],
-      'stroke-dasharray': `calc(${accRatio} * calc(2 * 3.14 * ${r})) calc(2 * 3.14 * ${r} * 2)`,
-      'stroke-dashoffset': `calc(2 * 3.14 * ${r})`,
-    });
-    $circle.style.transition = `stroke-dashoffset ${PIE_CHART_TRANSITION_DURATION}ms`;
-    setTimeout(() => {
-      $circle.style['stroke-dashoffset'] = 0;
-    }, PIE_CHART_TRANSITION_WAIT);
-    circles.unshift($circle);
-  });
-
-  $g.append(...circles);
-  $svg.append($g);
-
-  return $svg;
+  defineTemplate() {
+    const { width, height, data } = this.props;
+    const r = width / 4;
+    const cx = width / 2;
+    const cy = cx;
+    let accRatio = 0;
+    return `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+        <g fill="transparent" stroke-width="${r}">
+          ${data
+            .map((value, i) => {
+              const { item, ratio } = value;
+              accRatio += ratio;
+              // setTimeout(() => {
+              //   const $circle = document.getElementById(`circle-${i}`);
+              //   $circle.style['stroke-dashoffset'] = 0;
+              // }, PIE_CHART_TRANSITION_WAIT);
+              return `
+              <circle
+                class="circle-part"
+                id="circle-${i}"
+                r="${r}"
+                cx="${cx}"
+                cy="${cy}"
+                stroke="${colorTable[item]}"
+                stroke-dashoffset="calc(2 * 3.14 * ${r})"
+                stroke-dasharray="calc(${accRatio} * calc(2 * 3.14 * ${r})) calc(2 * 3.14 * ${r} * 2)"
+                >
+              </circle>
+            `;
+            })
+            .reverse()
+            .join('')}
+        </g>
+      </svg>
+    `;
+  }
 }
-
-export default initPieChart;
+export default PieChart;
