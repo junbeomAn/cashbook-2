@@ -67,19 +67,9 @@ const model = {
       const state = {
         data: processData({ data: res.result, year, month }),
       };
-<<<<<<< HEAD
-      const e = {
-        state,
-        key: 'historyData',
-      };
-      return e;
-    } else {
-      return false;
-=======
       e.state = state;
->>>>>>> dev
+      return e;
     }
-    return e;
   },
 };
 export default model;
