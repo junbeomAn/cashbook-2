@@ -10,6 +10,7 @@ import {
   HISTORY_ADD_EVENT,
   PAYMENT_ADD_EVENT,
   PAYMENT_DEL_EVENT,
+  GET_HISTORIES_BY_DATE,
 } from '@/util/constant';
 import {
   getAmountWithComma,
@@ -39,6 +40,10 @@ export default class InputBar extends Component {
         },
         payment: {
           data: [],
+        },
+        date: {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
         },
       },
     });
@@ -111,6 +116,11 @@ export default class InputBar extends Component {
           payment: '',
           amount: 0,
           sign: false,
+        });
+
+        this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
+          year: this.modelState.date.year,
+          month: this.modelState.date.month,
         });
       }
     });
