@@ -66,10 +66,10 @@ class PieChart extends Component {
             .map((value, i) => {
               const { item, ratio } = value;
               accRatio += ratio;
-              // setTimeout(() => {
-              //   const $circle = document.getElementById(`circle-${i}`);
-              //   $circle.style['stroke-dashoffset'] = 0;
-              // }, PIE_CHART_TRANSITION_WAIT);
+              setTimeout(() => {
+                const $circle = document.getElementById(`circle-${i}`);
+                $circle.style['stroke-dashoffset'] = 0;
+              }, PIE_CHART_TRANSITION_WAIT);
               return `
               <circle
                 class="circle-part"
