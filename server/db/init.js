@@ -15,8 +15,8 @@ const categoryMockData = [
   { name: '기타 수입' },
 ];
 const paymentMockData = [
-  { method: '현금', UserId: 1 },
-  { method: '현대카드', UserId: 1 },
+  { method: '현금', UserId: 1, color: 'yellow' },
+  { method: '현대카드', UserId: 1, color: 'blue' },
 ];
 const userMockData = {
   email: '123@naver.com',
