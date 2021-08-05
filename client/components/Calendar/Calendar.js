@@ -10,20 +10,9 @@ export default class Calendar extends Component {
       parent: this,
       keyword: 'table',
       props: {
-        currentMonth: 7,
-        currentYear: 2021,
-        histories: [
-          {
-            date: '2021-07-03',
-            income: 1500000,
-            expenditure: -32000,
-          },
-          {
-            date: '2021-07-08',
-            income: 0,
-            expenditure: -80000,
-          },
-        ],
+        currentMonth: this.props.currentMonth,
+        currentYear: this.props.currentYear,
+        histories: this.props.histories,
       },
     });
   }

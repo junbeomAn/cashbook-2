@@ -10,17 +10,38 @@ export default class CalendarPage extends Component {
       ...params,
       componentName: 'calendar-page',
       componentState: { selectedData: {}, selectedDate: {} },
+      modelState: {
+        date: {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+        },
+      },
     });
   }
 
-  preTemplate() {
+  preTemplate() {}
+
+  defineTemplate() {
     new Calendar({
       parent: this,
       keyword: 'calendar',
+      props: {
+        currentMonth: this.modelState.date.month,
+        currentYear: this.modelState.date.year,
+        histories: [
+          {
+            date: '2021-07-03',
+            income: 1500000,
+            expenditure: -32000,
+          },
+          {
+            date: '2021-07-08',
+            income: 0,
+            expenditure: -80000,
+          },
+        ],
+      },
     });
-  }
-
-  defineTemplate() {
     return `
        ${this.resolveChild('calendar')}
       `;
