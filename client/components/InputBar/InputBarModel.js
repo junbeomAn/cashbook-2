@@ -1,5 +1,5 @@
-// import { API_END_POINT } from '@/config';
-// import api from '@/lib/api';
+import { API_END_POINT } from '@/config';
+import api from '@/lib/api';
 
 const dayString = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -96,10 +96,10 @@ function appendDataToHistory(historyData, appendData) {
 
 const model = {
   handleDataPost: async ({ source, add }) => {
-    // const { date, categoryColor, cotnents, payment, amount } = data;
-    // const categoryId = categoryColor[categoryColor.legnth - 1];
     const historyData = source;
     const data = add;
+    const { date, categoryColor, cotnents, payment, amount } = data;
+    const categoryId = categoryColor[categoryColor.legnth - 1];
 
     const result = appendDataToHistory(historyData, data);
 
@@ -107,27 +107,27 @@ const model = {
       state: { data: result },
       key: 'historyData',
     };
-    return e;
 
-    /*
     const body = {
       date,
       categoryId,
       cotnents,
       payment,
       amount,
+      userId: localStorage.getItem('userId'),
     };
-    const { result } = await api.requestJSON(`${API_END_POINT}/history`, {
+    const { apiResult } = await api.requestJSON(`${API_END_POINT}/history`, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
       },
     });
+    console.log(apiResult);
 
     // TODO : ERROR 처리
-    if (!result) console.log(result);
-  */
+    if (!apiResult) console.log(apiResult);
+    return e;
   },
 };
 export default model;
