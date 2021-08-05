@@ -289,7 +289,6 @@ export default class MainPage extends Component {
           title: LOGIN_MODAL_TITLE,
           cancelText: LOGIN_MODAL_CANCEL_TEXT,
           onLogin: () => {
-            console.log('TODO : redirect to github login.');
             // window.location.href = 'http://www.abc.com/';
           },
           onCancelClick: () => {

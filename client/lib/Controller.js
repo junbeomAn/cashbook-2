@@ -17,10 +17,6 @@ export default class Controller {
 
     const e = await this.eventList[type].callback(args);
     this.model.setModelState(e.key, e.state);
-    console.group('EMIT_EVENT : STATE');
-    console.log(this.model);
-    console.log(e.state);
-    console.groupEnd();
   }
 
   addEventCallback(key, callback) {
