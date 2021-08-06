@@ -157,7 +157,6 @@ export default class ChartPage extends Component {
 
   defineTemplate() {
     const categoryText = this.componentState.selectedCategory;
-
     const nowHistoryData = this.getNowHistoryData();
     const monthData = this.modelState.historyData.data[0];
     const { categoryColorMap, categorySum, totalExpenditure } =

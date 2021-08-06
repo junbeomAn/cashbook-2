@@ -8,6 +8,7 @@ import {
   DATE_DOWN_EVENT,
   DATE_UP_EVENT,
   GET_HISTORIES_BY_DATE,
+  CLEAN_UP_DATA,
 } from '@/util/constant';
 import './Header.scss';
 import router from '@/lib/router';
@@ -138,6 +139,7 @@ export default class Header extends Component {
       props: {
         imgSrc: leftArrow,
         onClick: () => {
+          this.controller.emitEvent(CLEAN_UP_DATA);
           this.controller.emitEvent(DATE_DOWN_EVENT);
           const changedDate = this.getChangedDate(-1);
           this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
@@ -157,6 +159,7 @@ export default class Header extends Component {
       props: {
         imgSrc: rightArrow,
         onClick: () => {
+          this.controller.emitEvent(CLEAN_UP_DATA);
           this.controller.emitEvent(DATE_UP_EVENT);
           const changedDate = this.getChangedDate(1);
           this.controller.emitEvent(GET_HISTORIES_BY_DATE, {
@@ -175,6 +178,21 @@ export default class Header extends Component {
       GET_HISTORIES_BY_DATE,
       headerModel.getHistories
     );
+
+    this.registerControllerEvent(CLEAN_UP_DATA, () => {
+      const e = {
+        state: {
+          data: [
+            {
+              historyData: {},
+            },
+          ],
+        },
+        key: 'historyData',
+      };
+      console.log('cleanup');
+      return e;
+    });
 
     this.registerControllerEvent(DATE_UP_EVENT, () => {
       const state = this.changeDate(1);
