@@ -113,7 +113,7 @@ export default class ChartPage extends Component {
     Object.entries(categorySum).forEach(([key, value]) => {
       const item = {};
       item.category = key;
-      item.ratio = Math.abs(value / total).toFixed(1);
+      item.ratio = Number(Math.abs(value / total).toFixed(1));
       item.categoryTotal = value;
       result.push(item);
     });
