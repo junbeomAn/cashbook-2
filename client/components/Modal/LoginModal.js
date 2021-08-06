@@ -1,7 +1,7 @@
 import Component from '@/lib/Component';
 import { MODAL_ANIMATION_TIME } from '@/util/constant';
 import github1 from '@/asset/github/github1.png';
-import { API_END_POINT, API_KEY } from '../../config';
+import { API_END_POINT, API_KEY } from '@/config';
 
 import './Modal.scss';
 
