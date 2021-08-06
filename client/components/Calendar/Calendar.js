@@ -1,5 +1,5 @@
 import Component from '@/lib/Component';
-import { getAmountWithComma } from '../../util/util';
+import { getAmountWithComma } from '@/util/util';
 import Table from '../Table/Table';
 
 import './Calendar.scss';
