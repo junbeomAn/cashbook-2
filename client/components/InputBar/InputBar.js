@@ -5,6 +5,7 @@ import down from '@/asset/down.svg';
 import categoryInfo from '@/util/category';
 import saveEmpty from '@/asset/saveEmpty.png';
 import saveChecked from '@/asset/saveChecked.png';
+import AlertUp from '@/components/AlertUp/AlertUp';
 import {
   INPUT_DROPDOWN_ANIMATION_TIME,
   HISTORY_ADD_EVENT,
@@ -17,6 +18,7 @@ import {
   getToday,
   getCategoryColor,
   commaAmountToNumer,
+  alertUp,
 } from '@/util/util';
 import model from './InputBarModel';
 import './InputBar.scss';
@@ -91,11 +93,11 @@ export default class InputBar extends Component {
 
     // Send Button Click
     this.addEvent('.input-bar-save-img', 'click', () => {
-      if (this.checkSaveAvailable()) {
-        let amount = this.querySelector('.input-bar-amount-input').value;
-        amount = Number(commaAmountToNumer(amount));
-        if (!this.componentState.sign) amount *= -1;
+      let amount = this.querySelector('.input-bar-amount-input').value;
+      amount = Number(commaAmountToNumer(amount));
+      if (!this.componentState.sign) amount *= -1;
 
+      if (this.checkSaveAvailable()) {
         this.controller.emitEvent(HISTORY_ADD_EVENT, {
           source: this.modelState.historyData.data,
           add: {
@@ -120,6 +122,26 @@ export default class InputBar extends Component {
           year: this.modelState.date.year,
           month: this.modelState.date.month,
         });
+      } else if (amount === 0) {
+        alertUp(AlertUp, '돈은 반드시 입력해야합니다.', '돈을 입력해주세요!');
+      } else if (
+        !this.componentState.category ||
+        this.componentState.category.length === 0
+      ) {
+        alertUp(
+          AlertUp,
+          '분류는 반드시 입력해야합니다.',
+          '분류를 입력해주세요!'
+        );
+      } else if (
+        !this.componentState.payment ||
+        this.componentState.payment.length === 0
+      ) {
+        alertUp(
+          AlertUp,
+          '지불수단은 반드시 입력해야합니다.',
+          '지불수단을 입력해주세요!'
+        );
       }
     });
 

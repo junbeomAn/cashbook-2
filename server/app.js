@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use('/', indexRouter);
+app.use('/api/v1', indexRouter);
 
 app.get('*', (_, res) => {
   res.sendFile('/index.html');
@@ -36,7 +36,11 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  res.send('Server Error Occured..');
+  if (err.status === 404) {
+    res.sendFile('/404.html', { root: path.join(__dirname, '../public') });
+  } else {
+    res.send('Server Error Occured..');
+  }
 });
 
 app.listen(process.env.PORT || 5000, () => {

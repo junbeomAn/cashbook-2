@@ -50,8 +50,9 @@ export default class MainPage extends Component {
           data: [],
         },
         user: {
-          id: '',
+          userId: localStorage.getItem('userId') || '',
           nickname: localStorage.getItem('nickname') || '',
+          avatar: localStorage.getItem('avatar') || '',
         },
       },
     });
