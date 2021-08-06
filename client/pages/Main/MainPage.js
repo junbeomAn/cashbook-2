@@ -3,7 +3,6 @@ import Component from '@/lib/Component';
 import InfoBar from '@/components/InfoBar/InfoBar';
 import InputBar from '@/components/InputBar/InputBar';
 import HistoryContainer from '@/components/HistoryContainer/HistoryContainer';
-import historyData from '@/util/tempHistory';
 import PaymentModal from '@/components/Modal/PaymentModal';
 import LoginModal from '@/components/Modal/LoginModal';
 import HistoryModal from '@/components/Modal/HistoryModal';
@@ -24,8 +23,8 @@ import {
   HISTORY_ADD_EVENT,
   GET_HISTORIES_BY_DATE,
 } from '@/util/constant';
+import { REDIRECT_URI } from '@/config';
 import mainModel from './MainModel';
-
 import './Main.scss';
 import '@/pages/global.scss';
 
@@ -144,13 +143,6 @@ export default class MainPage extends Component {
     });
 
     this.registerControllerEvent(HISTORY_ADD_EVENT, (/* addData */) => {
-      /*
-      const { date, history } = addData;
-      const year = Number(date.subString(0, 4));
-      const month = Number(date.subString(4, 6));
-      const day = Number(date.subString(6, 8));
-      const historyData = this.modelState.historyData.data;
-      */
       const state = { data: this.modelState.historyData.data };
       const e = {
         state,
@@ -199,6 +191,9 @@ export default class MainPage extends Component {
 
     this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
     this.registerControllerEvent(SET_USER_META_DATA, mainModel.handleMetaFetch);
+    if (isLogin()) {
+      this.controller.emitEvent(SET_USER_META_DATA);
+    }
     if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
     this.controller.emitEvent(SET_USER_DATA);
     this.controller.emitEvent(SET_USER_META_DATA);
@@ -291,21 +286,9 @@ export default class MainPage extends Component {
       });
     });
 
-    this.registerControllerEvent(SET_HISTORY_DATA, async () => {
-      // TODO : 더미 데이터용 아이디를 만들어서 넣어주기
-      /*
-      localStorage.setItem('nickname', 'sshrik');
-      localStorage.setItem('userId', 2);
-      */
-      const state = { data: historyData };
-      const e = {
-        state,
-        key: 'historyData',
-      };
-
-      return e;
-    });
-    if (!this.modelState.user.nickname && !this.isLoading()) {
+    this.registerControllerEvent(SET_HISTORY_DATA, mainModel.handleDemoLogin);
+    let result = '';
+    if (!isLogin() && !this.isLoading()) {
       new LoginModal({
         parent: this,
         keyword: 'login-modal',
@@ -317,12 +300,10 @@ export default class MainPage extends Component {
           },
           onCancelClick: () => {
             this.controller.emitEvent(SET_HISTORY_DATA);
+            window.location.href = REDIRECT_URI;
           },
         },
       });
-    }
-    let result = '';
-    if (!isLogin() && !this.isLoading()) {
       result += this.resolveChild('login-modal');
     }
     return `${result}
