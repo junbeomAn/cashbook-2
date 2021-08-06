@@ -199,9 +199,9 @@ export default class MainPage extends Component {
 
     this.registerControllerEvent(SET_USER_DATA, mainModel.handleGithubLogin);
     this.registerControllerEvent(SET_USER_META_DATA, mainModel.handleMetaFetch);
-    this.controller.emitEvent(SET_USER_META_DATA);
     if (!window.location.search.startsWith(OAUTH_CODE_SEP)) return;
     this.controller.emitEvent(SET_USER_DATA);
+    this.controller.emitEvent(SET_USER_META_DATA);
   }
 
   defineTemplate() {
