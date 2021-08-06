@@ -27,6 +27,11 @@ export default class Header extends Component {
         historyData: {
           data: [],
         },
+        user: {
+          userId: localStorage.getItem('userId') || '',
+          nickname: localStorage.getItem('nickname') || '',
+          avatar: localStorage.getItem('avatar') || '',
+        },
       },
     });
     this.changeDate = this.changeDate.bind(this);
@@ -197,6 +202,15 @@ export default class Header extends Component {
   }
 
   defineTemplate() {
+    const { avatar, nickname } = this.modelState.user;
+    let profileImageSection = '';
+    if (avatar.length !== 0) {
+      profileImageSection = `
+      <div class="header-nav-profile-image">
+        <img src="${avatar}" />
+        <p>${nickname} 님!</p>
+      </div>`;
+    }
     return `
     <div class="header-container"> 
       <div class="header-contents-container">
@@ -215,10 +229,7 @@ export default class Header extends Component {
           ${this.resolveChild('history')}
           ${this.resolveChild('calendar')}
           ${this.resolveChild('chart')}
-          <div class="header-nav-profile-image">
-            <img src="${localStorage.getItem('avatar')}" />
-            <p>${localStorage.getItem('nickname')} 님!</p>
-          </div>
+          ${profileImageSection}
         </div>
       </div>
     </div>
