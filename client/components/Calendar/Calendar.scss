@@ -6,11 +6,12 @@ $calendar-height: 604px;
 $calendar-day-bar-height: 48px;
 $box-radius: 10px;
 $item-gap: 20px;
+$calendar-margin-top: -85px;
 
 .cashbook-calendar {
   width: $calendar-width;
   height: $calendar-height;
-  margin-top: -140px;
+  margin-top: $calendar-margin-top;
 
   .calendar-day-bar {
     width: 100%;
@@ -29,7 +30,8 @@ $item-gap: 20px;
       justify-content: center;
       align-items: center;
       @include body-regular();
-      &:first-child, &:last-child {
+      &:first-child,
+      &:last-child {
         border-radius: $box-radius;
       }
     }
@@ -49,5 +51,4 @@ $item-gap: 20px;
       }
     }
   }
- 
 }
