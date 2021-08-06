@@ -55,5 +55,30 @@ const model = {
     window.history.replaceState({}, '', '/');
     return e;
   },
+  handleDemoLogin: async () => {
+    const state = {
+      userId: 2,
+      nickname: 'sshrik',
+      avatar: 'https://avatars.githubusercontent.com/u/20200204?v=4',
+    };
+    localStorage.setItem('nickname', state.nickname);
+    localStorage.setItem('userId', state.userId);
+    localStorage.setItem('avatar', state.avatar);
+
+    await api.requestJSON(`${API_END_POINT}/users/demo`, {
+      method: 'POST',
+      body: JSON.stringify(state),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const e = {
+      state,
+      key: 'user',
+    };
+
+    return e;
+  },
 };
 export default model;
