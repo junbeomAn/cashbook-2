@@ -47,6 +47,13 @@ $category-name-padding: 8px 33px;
           margin-left: $stat-item-padding;
         }
         .category-name {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 5px;
+          width: 80px;
+          border-radius: 999px;
+          color: #fcfcfc;
           @include align-center();
           padding: $category-name-padding;
           border-radius: $category-name-border-radius;
