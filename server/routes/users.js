@@ -27,6 +27,7 @@ router.get('/login', (req, res, next) => {
       res.send({ ok: true, message: LOGIN_SUCCESS });
     }
   }
+console.log(process.env);
   res.redirect(
     `${oAuthUrl}?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}`
   );

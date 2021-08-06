@@ -24,7 +24,7 @@ import github21 from '@/asset/github/github21.png';
 import github22 from '@/asset/github/github22.png';
 import github23 from '@/asset/github/github23.png';
 import github24 from '@/asset/github/github24.png';
-import { API_END_POINT, API_KEY } from '../../config';
+import { API_END_POINT, API_KEY, REDIRECT_URI } from '../../config';
 
 import './Modal.scss';
 
@@ -55,7 +55,7 @@ const animationImages = [
   github24,
 ];
 
-const githubUrl = `https://github.com/login/oauth/authorize?client_id=${API_KEY}&redirect_uri=${API_END_POINT}`;
+const githubUrl = `https://github.com/login/oauth/authorize?client_id=${API_KEY}&redirect_uri=${REDIRECT_URI}`;
 
 export default class Modal extends Component {
   constructor(params) {
