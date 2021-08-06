@@ -4,7 +4,7 @@
 .pie-chart-section-container {
   margin-top: -85px;
   margin-bottom: 16px;
-  width: 744px;
+  min-width: 744px;
   min-height: 450px;
   border-radius: 10px;
   background-color: $background-white;
