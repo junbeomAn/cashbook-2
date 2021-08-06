@@ -1,0 +1,99 @@
+@import '../../pages/color';
+@import '../../pages/size';
+
+$stat-list-margin-top: 30px;
+$stat-item-height: 60px;
+$stat-item-padding: 20px;
+$stat-item-width: 90%;
+$category-name-border-radius: 999px;
+$category-name-padding: 8px 33px;
+
+@mixin align-center() {
+  display: flex;
+  align-items: center;
+}
+
+.statistic-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .total-expenditure {
+    padding: 0 $stat-item-padding;
+
+    @include display-small();
+  }
+  .statistic-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: $stat-list-margin-top;
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 $stat-item-padding;
+      width: $stat-item-width;
+      min-height: $stat-item-height;
+      border-bottom: 1px solid $line-grey;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba($line-grey, 0.4);
+      }
+      .item-left {
+        display: flex;
+        .category-occupancy {
+          @include align-center();
+          margin-left: $stat-item-padding;
+        }
+        .category-name {
+          @include align-center();
+          padding: $category-name-padding;
+          border-radius: $category-name-border-radius;
+          color: $off-white;
+        }
+      }
+      .sub-total {
+        @include align-center();
+        @include body-large();
+      }
+    }
+  }
+}
+
+// @for $i from 1 through 10 {
+//   .category-#{$i} {
+//     background-color: $category-#{$i};
+//   }
+// }
+
+.category-1 {
+  background-color: $category-1;
+}
+.category-2 {
+  background-color: $category-2;
+}
+.category-3 {
+  background-color: $category-3;
+}
+.category-4 {
+  background-color: $category-4;
+}
+.category-5 {
+  background-color: $category-5;
+}
+.category-6 {
+  background-color: $category-6;
+}
+.category-7 {
+  background-color: $category-7;
+}
+.category-8 {
+  background-color: $category-8;
+}
+.category-9 {
+  background-color: $category-9;
+}
+.category-10 {
+  background-color: $category-10;
+}

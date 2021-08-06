@@ -59,12 +59,13 @@ class PieChart extends Component {
     const cx = width / 2;
     const cy = cx;
     let accRatio = 0;
+    if (data.length === 0) return '';
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
         <g fill="transparent" stroke-width="${r}">
           ${data
             .map((value, i) => {
-              const { item, ratio } = value;
+              const { category, ratio } = value;
               accRatio += ratio;
               // setTimeout(() => {
               //   const $circle = document.getElementById(`circle-${i}`);
@@ -77,7 +78,7 @@ class PieChart extends Component {
                 r="${r}"
                 cx="${cx}"
                 cy="${cy}"
-                stroke="${colorTable[item]}"
+                stroke="${colorTable[category]}"
                 stroke-dashoffset="calc(2 * 3.14 * ${r})"
                 stroke-dasharray="calc(${accRatio} * calc(2 * 3.14 * ${r})) calc(2 * 3.14 * ${r} * 2)"
                 >

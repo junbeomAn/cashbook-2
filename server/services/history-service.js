@@ -34,7 +34,7 @@ const getHistoriesOfOneMonth = async (whereOptions) => {
 const getHistoriesOfSixMonth = async (whereOptions) => {
   const { UserId, CategoryId, date } = whereOptions;
   const [startDate, endDate] = date;
-  const selectSixMonthHistoriesQuery = `SELECT CategoryId, SUM(amount) AS total, MONTH(date) AS month FROM histories AS History WHERE History.UserId = ${UserId} AND History.CategoryId = ${CategoryId} AND History.amount < 0 AND History.date BETWEEN '${startDate}' AND '${endDate}' GROUP BY month ORDER BY month DESC`;
+  const selectSixMonthHistoriesQuery = `SELECT CategoryId, SUM(amount) AS total, MONTH(date) AS month FROM histories AS History WHERE History.UserId = ${UserId} AND History.CategoryId = ${CategoryId} AND History.amount < 0 AND History.date BETWEEN '${startDate}' AND '${endDate}' GROUP BY month ORDER BY month ASC`;
 
   try {
     const result = await sequelize.query(selectSixMonthHistoriesQuery, {
